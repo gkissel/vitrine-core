@@ -4,14 +4,24 @@ import { z } from "@medusajs/framework/zod";
 loadEnv(process.env.NODE_ENV || "development", process.cwd());
 
 const envSchema = z.object({
-	STORE_CORS: z.string().default("http://localhost:8000,https://docs.medusajs.com"),
-	ADMIN_CORS: z.string().default("http://localhost:5173,http://localhost:9000,https://docs.medusajs.com"),
+	STORE_CORS: z
+		.string()
+		.default("http://localhost:8000,https://docs.medusajs.com"),
+	ADMIN_CORS: z
+		.string()
+		.default(
+			"http://localhost:5173,http://localhost:9000,https://docs.medusajs.com",
+		),
 	AUTH_CORS: z
 		.string()
-		.default("http://localhost:5173,http://localhost:9000,http://localhost:8000,https://docs.medusajs.com"),
+		.default(
+			"http://localhost:5173,http://localhost:9000,http://localhost:8000,https://docs.medusajs.com",
+		),
 	JWT_SECRET: z.string().default("supersecret"),
 	COOKIE_SECRET: z.string().default("supersecret"),
-	DATABASE_URL: z.string().default("postgresql://postgres:docker@localhost:5435/medusa"),
+	DATABASE_URL: z
+		.string()
+		.default("postgresql://postgres:docker@localhost:5435/medusa"),
 });
 
 const runtimeEnv = {
@@ -25,6 +35,7 @@ const runtimeEnv = {
 
 const env = envSchema.parse({ runtimeEnv });
 
+// biome-ignore lint/style/noCommonJs: Medusa
 module.exports = defineConfig({
 	projectConfig: {
 		databaseUrl: env.DATABASE_URL,

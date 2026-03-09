@@ -1,6 +1,17 @@
-import type { CreateInventoryLevelInput, ExecArgs } from "@medusajs/framework/types";
-import { ContainerRegistrationKeys, Modules, ProductStatus } from "@medusajs/framework/utils";
-import { createWorkflow, transform, WorkflowResponse } from "@medusajs/framework/workflows-sdk";
+import type {
+	CreateInventoryLevelInput,
+	ExecArgs,
+} from "@medusajs/framework/types";
+import {
+	ContainerRegistrationKeys,
+	Modules,
+	ProductStatus,
+} from "@medusajs/framework/utils";
+import {
+	createWorkflow,
+	transform,
+	WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk";
 import {
 	createApiKeysWorkflow,
 	createInventoryLevelsWorkflow,
@@ -21,15 +32,20 @@ import type { ApiKey } from "../../.medusa/types/query-entry-points";
 
 const updateStoreCurrencies = createWorkflow(
 	"update-store-currencies",
-	(input: { supported_currencies: { currency_code: string; is_default?: boolean }[]; store_id: string }) => {
+	(input: {
+		supported_currencies: { currency_code: string; is_default?: boolean }[];
+		store_id: string;
+	}) => {
 		const normalizedInput = transform({ input }, (data) => {
 			return {
 				selector: { id: data.input.store_id },
 				update: {
-					supported_currencies: data.input.supported_currencies.map((currency) => ({
-						currency_code: currency.currency_code,
-						is_default: currency.is_default ?? false,
-					})),
+					supported_currencies: data.input.supported_currencies.map(
+						(currency) => ({
+							currency_code: currency.currency_code,
+							is_default: currency.is_default ?? false,
+						}),
+					),
 				},
 			};
 		});
@@ -77,7 +93,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
 
 	logger.info("Seeding dados da loja Brasil...");
 	const [store] = await storeModuleService.listStores();
-	const currentStore = assertExists(store, "Nenhuma loja encontrada para executar o seed.");
+	const currentStore = assertExists(
+		store,
+		"Nenhuma loja encontrada para executar o seed.",
+	);
 
 	let salesChannels = await salesChannelModuleService.listSalesChannels({
 		name: "Canal de Vendas Brasil",
@@ -97,7 +116,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
 		salesChannels = result;
 	}
 
-	const salesChannel = assertExists(salesChannels[0], "Canal de vendas padrão não encontrado.");
+	const salesChannel = assertExists(
+		salesChannels[0],
+		"Canal de vendas padrão não encontrado.",
+	);
 
 	await updateStoreCurrencies(container).run({
 		input: {
@@ -148,7 +170,9 @@ export default async function seedDemoData({ container }: ExecArgs) {
 	logger.info("Finished seeding tax regions.");
 
 	logger.info("Seeding stock location data...");
-	const { result: stockLocationResult } = await createStockLocationsWorkflow(container).run({
+	const { result: stockLocationResult } = await createStockLocationsWorkflow(
+		container,
+	).run({
 		input: {
 			locations: [
 				{
@@ -163,7 +187,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
 		},
 	});
 
-	const stockLocation = assertExists(stockLocationResult[0], "Local de estoque não foi criado.");
+	const stockLocation = assertExists(
+		stockLocationResult[0],
+		"Local de estoque não foi criado.",
+	);
 
 	await updateStoresWorkflow(container).run({
 		input: {
@@ -202,7 +229,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
 			},
 		});
 
-		shippingProfile = assertExists(result[0], "Perfil de frete não foi criado.");
+		shippingProfile = assertExists(
+			result[0],
+			"Perfil de frete não foi criado.",
+		);
 	}
 
 	const fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
@@ -221,7 +251,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
 		],
 	});
 
-	const serviceZone = assertExists(fulfillmentSet.service_zones[0], "Zona de serviço não encontrada.");
+	const serviceZone = assertExists(
+		fulfillmentSet.service_zones[0],
+		"Zona de serviço não encontrada.",
+	);
 
 	await link.create({
 		[Modules.STOCK_LOCATION]: {
@@ -342,7 +375,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
 			},
 		});
 
-		publishableApiKey = assertExists(result[0] as ApiKey | undefined, "API key publishable não foi criada.");
+		publishableApiKey = assertExists(
+			result[0] as ApiKey | undefined,
+			"API key publishable não foi criada.",
+		);
 	}
 
 	await linkSalesChannelsToApiKeyWorkflow(container).run({
@@ -356,7 +392,9 @@ export default async function seedDemoData({ container }: ExecArgs) {
 
 	logger.info("Seeding product data...");
 
-	const { result: categoryResult } = await createProductCategoriesWorkflow(container).run({
+	const { result: categoryResult } = await createProductCategoriesWorkflow(
+		container,
+	).run({
 		input: {
 			product_categories: [
 				{
@@ -457,7 +495,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
 				{
 					title: "Erva-Mate Composta com Menta",
 					category_ids: [getCategoryId("Compostas")],
-					description: "Blend de erva-mate com menta, refrescante e aromático, ideal para consumo diário.",
+					description:
+						"Blend de erva-mate com menta, refrescante e aromático, ideal para consumo diário.",
 					handle: "erva-mate-composta-menta",
 					weight: 1000,
 					status: ProductStatus.PUBLISHED,
@@ -465,15 +504,18 @@ export default async function seedDemoData({ container }: ExecArgs) {
 					metadata: buildProductMetadata({
 						ptBR: {
 							title: "Erva-Mate Composta com Menta",
-							description: "Blend de erva-mate com menta, refrescante e aromático, ideal para consumo diário.",
+							description:
+								"Blend de erva-mate com menta, refrescante e aromático, ideal para consumo diário.",
 						},
 						en: {
 							title: "Yerba Mate Blend with Mint",
-							description: "A refreshing and aromatic yerba mate blend with mint, ideal for everyday consumption.",
+							description:
+								"A refreshing and aromatic yerba mate blend with mint, ideal for everyday consumption.",
 						},
 						es: {
 							title: "Yerba Mate Compuesta con Menta",
-							description: "Mezcla de yerba mate con menta, refrescante y aromática, ideal para el consumo diario.",
+							description:
+								"Mezcla de yerba mate con menta, refrescante y aromática, ideal para el consumo diario.",
 						},
 					}),
 					options: [
@@ -519,7 +561,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
 				{
 					title: "Erva-Mate Orgânica Premium",
 					category_ids: [getCategoryId("Orgânica")],
-					description: "Erva-mate orgânica selecionada, de alta qualidade, com perfil suave e fresco.",
+					description:
+						"Erva-mate orgânica selecionada, de alta qualidade, com perfil suave e fresco.",
 					handle: "erva-mate-organica-premium",
 					weight: 1000,
 					status: ProductStatus.PUBLISHED,
@@ -527,15 +570,18 @@ export default async function seedDemoData({ container }: ExecArgs) {
 					metadata: buildProductMetadata({
 						ptBR: {
 							title: "Erva-Mate Orgânica Premium",
-							description: "Erva-mate orgânica selecionada, de alta qualidade, com perfil suave e fresco.",
+							description:
+								"Erva-mate orgânica selecionada, de alta qualidade, com perfil suave e fresco.",
 						},
 						en: {
 							title: "Premium Organic Yerba Mate",
-							description: "Selected organic yerba mate of high quality, with a smooth and fresh profile.",
+							description:
+								"Selected organic yerba mate of high quality, with a smooth and fresh profile.",
 						},
 						es: {
 							title: "Yerba Mate Orgánica Premium",
-							description: "Yerba mate orgánica seleccionada, de alta calidad, con un perfil suave y fresco.",
+							description:
+								"Yerba mate orgánica seleccionada, de alta calidad, con un perfil suave y fresco.",
 						},
 					}),
 					options: [
@@ -581,7 +627,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
 				{
 					title: "Kit Chimarrão Iniciante",
 					category_ids: [getCategoryId("Acessórios")],
-					description: "Kit para iniciar no chimarrão com cuia, bomba e acessórios essenciais.",
+					description:
+						"Kit para iniciar no chimarrão com cuia, bomba e acessórios essenciais.",
 					handle: "kit-chimarrao-iniciante",
 					weight: 1500,
 					status: ProductStatus.PUBLISHED,
@@ -589,15 +636,18 @@ export default async function seedDemoData({ container }: ExecArgs) {
 					metadata: buildProductMetadata({
 						ptBR: {
 							title: "Kit Chimarrão Iniciante",
-							description: "Kit para iniciar no chimarrão com cuia, bomba e acessórios essenciais.",
+							description:
+								"Kit para iniciar no chimarrão com cuia, bomba e acessórios essenciais.",
 						},
 						en: {
 							title: "Beginner Chimarrão Kit",
-							description: "Starter kit for chimarrão with gourd, straw, and essential accessories.",
+							description:
+								"Starter kit for chimarrão with gourd, straw, and essential accessories.",
 						},
 						es: {
 							title: "Kit Inicial de Chimarrão",
-							description: "Kit para empezar con el chimarrão con mate, bombilla y accesorios esenciales.",
+							description:
+								"Kit para empezar con el chimarrão con mate, bombilla y accesorios esenciales.",
 						},
 					}),
 					options: [

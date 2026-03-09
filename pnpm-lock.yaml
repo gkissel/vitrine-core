@@ -38,9 +38,15 @@ importers:
         specifier: workspace:*
         version: link:../../packages/env
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.4.6
+        version: 2.4.6
       '@medusajs/test-utils':
         specifier: 2.13.1
         version: 2.13.1(@medusajs/core-flows@2.13.1(@medusajs/framework@2.13.1(@medusajs/cli@2.13.1(@types/node@20.19.37))(@types/node@20.19.37)(ioredis@5.10.0)(vite@5.4.21(@types/node@20.19.37))(zod@4.3.6)))(@medusajs/framework@2.13.1(@medusajs/cli@2.13.1(@types/node@20.19.37))(@types/node@20.19.37)(ioredis@5.10.0)(vite@5.4.21(@types/node@20.19.37))(zod@4.3.6))(@medusajs/medusa@2.13.1)
+      '@repo/biome-config':
+        specifier: workspace:*
+        version: link:../../packages/biome-config
       '@swc/core':
         specifier: ^1.7.28
         version: 1.15.18(@swc/helpers@0.5.19)
