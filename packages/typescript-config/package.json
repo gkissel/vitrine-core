@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"files": [
 		"next-js.json",
-		"node.json"
+		"node.json",
+		"medusa.json"
 	],
 	"devDependencies": {
 		"@total-typescript/ts-reset": "^0.6.1"
