@@ -1,0 +1,14 @@
+{
+	"name": "@repo/revalidation",
+	"version": "0.0.0",
+	"private": true,
+	"files": [
+		"index.ts"
+	],
+	"main": "index.ts",
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.6",
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "^25.3.3"
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"extends": "@repo/tsconfig/node.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"baseUrl": "./",
+		"target": "ES2021",
+		"esModuleInterop": true,
+		"module": "Node16",
+		"moduleResolution": "Node16",
+		"skipLibCheck": true,
+		"skipDefaultLibCheck": true,
+		"declaration": false,
+		"sourceMap": false,
+		"inlineSourceMap": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"checkJs": false,
+		"strictNullChecks": true,
+		"strict": true,
+		"pretty": true
+	},
+	"include": ["index.ts"]
+}

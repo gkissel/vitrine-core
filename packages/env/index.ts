@@ -12,6 +12,8 @@ const envSchema = z.object({
 	COOKIE_SECRET: z.string().default("supersecret"),
 	DATABASE_URL: z.string().default("postgresql://postgres:docker@localhost:5435/medusa"),
 	MEDUSA_ADMIN_ONBOARDING_NEXTJS_DIRECTORY: z.string().default("front-end"),
+	REVALIDATION_WEBHOOK_URL: z.string().default(""),
+	REVALIDATION_WEBHOOK_SECRET: z.string().default(""),
 	NODE_ENV: z.string().optional(),
 });
 
@@ -25,6 +27,8 @@ const runtimeEnv = {
 	COOKIE_SECRET: process.env.COOKIE_SECRET,
 	DATABASE_URL: process.env.DATABASE_URL,
 	MEDUSA_ADMIN_ONBOARDING_NEXTJS_DIRECTORY: process.env.MEDUSA_ADMIN_ONBOARDING_NEXTJS_DIRECTORY,
+	REVALIDATION_WEBHOOK_URL: process.env.REVALIDATION_WEBHOOK_URL,
+	REVALIDATION_WEBHOOK_SECRET: process.env.REVALIDATION_WEBHOOK_SECRET,
 	NODE_ENV: process.env.NODE_ENV,
 };
 

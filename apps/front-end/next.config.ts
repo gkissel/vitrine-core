@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   typedRoutes: true,
   cacheComponents: true,
+  transpilePackages: ["@repo/revalidation"],
 };
 
 export default nextConfig;
