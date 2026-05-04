@@ -4,7 +4,7 @@
 	"private": true,
 	"license": "MIT",
 	"files": [
-		"next-js.json",
+		"nextjs.json",
 		"node.json",
 		"medusa.json"
 	],

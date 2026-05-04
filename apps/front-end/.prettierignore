@@ -1,0 +1,8 @@
+.next
+node_modules
+coverage
+out
+build
+.playwright-newsletter-rate-limit
+playwright-report
+test-results

@@ -1,0 +1,483 @@
+"use server";
+
+import * as Sentry from "@sentry/nextjs";
+import type { HttpTypes } from "@medusajs/types";
+import { STRIPE_PROVIDER_ID, TAGS } from "lib/constants";
+import { sdk } from "lib/medusa";
+import { getAuthHeaders, getCartId, removeCartId } from "lib/medusa/cookies";
+import { medusaError } from "lib/medusa/error";
+import { trackServer } from "lib/analytics-server";
+import type {
+  AddressPayload,
+  CartCompletionResult,
+  SavedPaymentMethod,
+  ShippingOption,
+} from "lib/types";
+import { revalidatePath, revalidateTag } from "next/cache";
+import {
+  addressSchema,
+  emailSchema,
+  paymentDataSchema,
+  providerIdSchema,
+} from "lib/medusa/checkout-schemas";
+
+function revalidateCheckout(): void {
+  revalidateTag(TAGS.cart, "max");
+  revalidatePath("/", "layout");
+}
+
+async function assertSessionCart(cartId: string): Promise<void> {
+  const sessionCartId = await getCartId();
+  if (!sessionCartId || sessionCartId !== cartId) {
+    throw new Error("Cart not found");
+  }
+}
+
+// === Retrieve raw cart (not transformed) for checkout ===
+
+export async function getCheckoutCart(): Promise<HttpTypes.StoreCart | null> {
+  const cartId = await getCartId();
+  if (!cartId) return null;
+
+  const headers = await getAuthHeaders();
+
+  try {
+    const { cart } = await sdk.client
+      .fetch<{
+        cart: HttpTypes.StoreCart;
+      }>(`/store/carts/${cartId}`, {
+        method: "GET",
+        headers,
+        query: {
+          fields:
+            "*items,*items.product,*items.variant,*items.thumbnail,+items.total,*promotions,+shipping_methods.name,*payment_collection.payment_sessions",
+        },
+      })
+      .catch(medusaError);
+    // Strip sensitive payment provider data (e.g. Stripe client_secret) before
+    // serializing the cart into RSC props. Clients must call getPaymentClientSecret()
+    // via a dedicated server action to obtain the secret securely.
+    if (cart.payment_collection?.payment_sessions) {
+      cart.payment_collection.payment_sessions =
+        cart.payment_collection.payment_sessions.map((session) => {
+          const { data: _data, ...safeSession } = session;
+          return safeSession as HttpTypes.StorePaymentSession;
+        });
+    }
+    return cart;
+  } catch (error) {
+    Sentry.captureException(error, { tags: { action: "get_checkout_cart" } });
+    console.error("[checkout] Failed to fetch cart:", error);
+    return null;
+  }
+}
+
+/**
+ * Returns only the Stripe client_secret for the active payment session.
+ * Keeps sensitive payment data server-side — never serialized in RSC payload.
+ */
+export async function getPaymentClientSecret(
+  cartId: string,
+  providerId?: string,
+): Promise<string | null> {
+  try {
+    await assertSessionCart(cartId);
+  } catch {
+    return null;
+  }
+
+  const headers = await getAuthHeaders();
+  try {
+    const { cart } = await sdk.client
+      .fetch<{
+        cart: HttpTypes.StoreCart;
+      }>(`/store/carts/${cartId}`, {
+        method: "GET",
+        headers,
+        query: { fields: "*payment_collection.payment_sessions" },
+      })
+      .catch(medusaError);
+
+    const sessions = cart.payment_collection?.payment_sessions ?? [];
+    const session = providerId
+      ? (sessions.find((s) => s.provider_id === providerId) ?? null)
+      : (sessions[0] ?? null);
+    return (session?.data?.client_secret as string) ?? null;
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: { action: "get_payment_client_secret", cart_id: cartId },
+    });
+    return null;
+  }
+}
+
+// === Cart Email ===
+
+export async function setCartEmail(
+  cartId: string,
+  email: string,
+): Promise<string | null> {
+  const emailResult = emailSchema.safeParse(email);
+  if (!emailResult.success) {
+    return emailResult.error.issues[0]?.message ?? "Invalid email";
+  }
+  const normalizedEmail = emailResult.data; // trimmed + lowercased by schema
+
+  const headers = await getAuthHeaders();
+
+  try {
+    await assertSessionCart(cartId);
+    await sdk.store.cart
+      .update(cartId, { email: normalizedEmail }, {}, headers)
+      .catch(medusaError);
+    try {
+      await trackServer("checkout_step_completed", {
+        step_name: "email",
+        step_number: 1,
+      });
+    } catch {}
+  } catch (e) {
+    Sentry.captureException(e, {
+      tags: { action: "set_cart_email", cart_id: cartId },
+    });
+    return e instanceof Error ? e.message : "Error setting email";
+  } finally {
+    revalidateCheckout();
+  }
+
+  return null;
+}
+
+// === Addresses ===
+
+export async function setCartAddresses(
+  cartId: string,
+  shipping: AddressPayload,
+  billing?: AddressPayload,
+): Promise<string | null> {
+  const shippingResult = addressSchema.safeParse(shipping);
+  if (!shippingResult.success) {
+    return (
+      shippingResult.error.issues[0]?.message ?? "Invalid shipping address"
+    );
+  }
+  const validatedShipping = shippingResult.data;
+  let validatedBilling = validatedShipping;
+  if (billing !== undefined) {
+    const billingResult = addressSchema.safeParse(billing);
+    if (!billingResult.success) {
+      return (
+        billingResult.error.issues[0]?.message ?? "Invalid billing address"
+      );
+    }
+    validatedBilling = billingResult.data;
+  }
+
+  const headers = await getAuthHeaders();
+
+  try {
+    await assertSessionCart(cartId);
+    await sdk.store.cart
+      .update(
+        cartId,
+        {
+          shipping_address: validatedShipping,
+          billing_address: validatedBilling,
+        },
+        {},
+        headers,
+      )
+      .catch(medusaError);
+    try {
+      await trackServer("checkout_step_completed", {
+        step_name: "address",
+        step_number: 2,
+      });
+    } catch {}
+  } catch (e) {
+    Sentry.captureException(e, {
+      tags: { action: "set_cart_addresses", cart_id: cartId },
+    });
+    return e instanceof Error ? e.message : "Error setting addresses";
+  } finally {
+    revalidateCheckout();
+  }
+
+  return null;
+}
+
+// === Shipping Options ===
+
+export async function getShippingOptions(
+  cartId: string,
+): Promise<ShippingOption[]> {
+  const headers = await getAuthHeaders();
+
+  try {
+    const { shipping_options } = await sdk.client
+      .fetch<{
+        shipping_options: Array<{
+          id: string;
+          name: string;
+          price_type?: string;
+          amount?: number;
+          currency_code?: string;
+        }>;
+      }>("/store/shipping-options", {
+        method: "GET",
+        headers,
+        query: { cart_id: cartId },
+      })
+      .catch(medusaError);
+
+    return shipping_options.map((opt) => ({
+      id: opt.id,
+      name: opt.name,
+      price_type: (opt.price_type || "flat") as ShippingOption["price_type"],
+      amount: opt.amount ?? 0,
+      currency_code: opt.currency_code || "USD",
+    }));
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: { action: "get_shipping_options", cart_id: cartId },
+    });
+    console.error("[checkout] Failed to fetch shipping options:", error);
+    return [];
+  }
+}
+
+export async function setShippingMethod(
+  cartId: string,
+  optionId: string,
+): Promise<string | null> {
+  const headers = await getAuthHeaders();
+
+  try {
+    await assertSessionCart(cartId);
+    await sdk.store.cart
+      .addShippingMethod(cartId, { option_id: optionId }, {}, headers)
+      .catch(medusaError);
+    try {
+      await trackServer("checkout_step_completed", {
+        step_name: "shipping",
+        step_number: 3,
+      });
+    } catch {}
+  } catch (e) {
+    Sentry.captureException(e, {
+      tags: { action: "set_shipping_method", cart_id: cartId },
+    });
+    return e instanceof Error ? e.message : "Error setting shipping method";
+  } finally {
+    revalidateCheckout();
+  }
+
+  return null;
+}
+
+// === Payment ===
+
+export async function initializePaymentSession(
+  cartId: string,
+  providerId: string,
+  data?: Record<string, unknown>,
+): Promise<string | null> {
+  const providerResult = providerIdSchema.safeParse(providerId);
+  if (!providerResult.success) {
+    return providerResult.error.issues[0]?.message ?? "Invalid provider ID";
+  }
+  const dataResult = paymentDataSchema.safeParse(data);
+  if (!dataResult.success) {
+    return "Invalid payment data";
+  }
+
+  const headers = await getAuthHeaders();
+
+  try {
+    await assertSessionCart(cartId);
+    const { cart } = await sdk.client
+      .fetch<{
+        cart: HttpTypes.StoreCart;
+      }>(`/store/carts/${cartId}`, {
+        method: "GET",
+        headers,
+        query: { fields: "*payment_collection.payment_sessions" },
+      })
+      .catch(medusaError);
+
+    await sdk.store.payment
+      .initiatePaymentSession(
+        cart,
+        { provider_id: providerResult.data, data: dataResult.data },
+        {},
+        headers,
+      )
+      .catch(medusaError);
+    try {
+      await trackServer("checkout_step_completed", {
+        step_name: "payment",
+        step_number: 4,
+      });
+    } catch {}
+  } catch (e) {
+    Sentry.captureException(e, {
+      tags: {
+        action: "init_payment_session",
+        cart_id: cartId,
+        provider_id: providerId,
+      },
+    });
+    return e instanceof Error ? e.message : "Error initializing payment";
+  } finally {
+    revalidateCheckout();
+  }
+
+  return null;
+}
+
+// === Saved Payment Methods ===
+
+export async function getSavedPaymentMethods(
+  accountHolderId: string,
+): Promise<SavedPaymentMethod[]> {
+  const headers = await getAuthHeaders();
+
+  try {
+    const { payment_methods } = await sdk.client
+      .fetch<{
+        payment_methods: SavedPaymentMethod[];
+      }>(`/store/payment-methods/${accountHolderId}`, {
+        method: "GET",
+        headers,
+      })
+      .catch(medusaError);
+    return payment_methods;
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: { action: "get_saved_payment_methods" },
+    });
+    console.error("[checkout] Failed to fetch saved payment methods:", error);
+    return [];
+  }
+}
+
+// === Complete Cart ===
+
+export async function completeCart(
+  cartId: string,
+): Promise<CartCompletionResult> {
+  const headers = await getAuthHeaders();
+
+  try {
+    await assertSessionCart(cartId);
+    const result = await sdk.store.cart
+      .complete(cartId, {}, headers)
+      .catch(medusaError);
+
+    if (result.type === "order") {
+      await removeCartId();
+      try {
+        await trackServer("checkout_step_completed", {
+          step_name: "review",
+          step_number: 5,
+        });
+        await trackServer("order_completed", {
+          order_id: result.order.id,
+          order_total: result.order.total || 0,
+          item_count: result.order.items?.length || 0,
+          currency_code: result.order.currency_code || "usd",
+        });
+      } catch {}
+      return { type: "order", order: result.order };
+    }
+
+    return {
+      type: "cart",
+      error:
+        (typeof result.error === "string"
+          ? result.error
+          : result.error?.message) || "Payment could not be completed",
+    };
+  } catch (err) {
+    Sentry.captureException(err, {
+      tags: { action: "complete_cart", cart_id: cartId },
+      level: "error",
+    });
+    return {
+      type: "cart",
+      error: err instanceof Error ? err.message : "Error completing order",
+    };
+  } finally {
+    revalidateCheckout();
+  }
+}
+
+// === Express Checkout Composite ===
+
+/**
+ * Chains all steps needed for express checkout (Apple Pay / Google Pay):
+ * setCartEmail -> setCartAddresses -> getShippingOptions -> setShippingMethod -> initializePaymentSession
+ *
+ * Returns the updated cart on success, or throws on error.
+ */
+export async function applyExpressCheckoutData(
+  cartId: string,
+  email: string,
+  shipping: AddressPayload,
+  billing?: AddressPayload,
+): Promise<string> {
+  const emailError = await setCartEmail(cartId, email);
+  if (emailError) throw new Error(emailError);
+
+  const addressError = await setCartAddresses(cartId, shipping, billing);
+  if (addressError) throw new Error(addressError);
+
+  const options = await getShippingOptions(cartId);
+  if (options.length === 0) {
+    throw new Error("No shipping options available");
+  }
+
+  const shippingError = await setShippingMethod(cartId, options[0]!.id);
+  if (shippingError) throw new Error(shippingError);
+
+  const paymentError = await initializePaymentSession(
+    cartId,
+    STRIPE_PROVIDER_ID,
+  );
+  if (paymentError) throw new Error(paymentError);
+
+  // Fetch only the Stripe client_secret via the dedicated server action —
+  // getCheckoutCart() strips session data, so we can't read it from there.
+  // Pass STRIPE_PROVIDER_ID to guard against multi-provider ordering ambiguity.
+  const secret = await getPaymentClientSecret(cartId, STRIPE_PROVIDER_ID);
+  if (!secret)
+    throw new Error("Payment session created but no client secret found");
+  return secret;
+}
+
+// === Customer Addresses (for saved address picker) ===
+
+export async function getCustomerAddresses(): Promise<
+  HttpTypes.StoreCustomerAddress[]
+> {
+  const headers = await getAuthHeaders();
+  if (!("authorization" in headers)) return [];
+
+  try {
+    const { addresses } = await sdk.client
+      .fetch<{
+        addresses: HttpTypes.StoreCustomerAddress[];
+      }>("/store/customers/me/addresses", {
+        method: "GET",
+        headers,
+      })
+      .catch(medusaError);
+    return addresses;
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: { action: "get_customer_addresses" },
+    });
+    console.error("[checkout] Failed to fetch customer addresses:", error);
+    return [];
+  }
+}
