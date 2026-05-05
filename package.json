@@ -27,7 +27,19 @@
 					"zod": "3.25.76"
 				}
 			}
-		}
+		},
+		"onlyBuiltDependencies": [
+			"@medusajs/telemetry",
+			"@sentry-internal/node-cpu-profiler",
+			"@sentry/cli",
+			"@swc/core",
+			"core-js",
+			"esbuild",
+			"msgpackr-extract",
+			"protobufjs",
+			"sharp",
+			"unrs-resolver"
+		]
 	},
 	"engines": {
 		"node": ">=20"

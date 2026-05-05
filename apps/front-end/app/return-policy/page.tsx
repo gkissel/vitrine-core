@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { siteBrand } from "@repo/site-config";
 import { PolicyPage } from "components/legal/policy-page";
-import { RETURN_POLICY } from "lib/constants/legal-content";
+import { getReturnPolicy } from "lib/constants/legal-content";
 
 export const metadata: Metadata = {
   title: "Return Policy",
@@ -9,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function ReturnPolicyPage() {
-  return <PolicyPage {...RETURN_POLICY} />;
+  return <PolicyPage {...getReturnPolicy(siteBrand.locale)} />;
 }

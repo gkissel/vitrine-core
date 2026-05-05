@@ -8,13 +8,12 @@ services:
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: medusa
     volumes:
-      - ./data/paradedb_data:/var/lib/postgresql/
+      - ./.data/paradedb_data:/var/lib/postgresql/
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: '1G'
-
+          cpus: "0.25"
+          memory: "1G"
 
 volumes:
   paradedb_data:

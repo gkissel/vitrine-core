@@ -1,0 +1,73 @@
+{
+  "returnReasons": {
+    "domain": "Return Reasons",
+    "subtitle": "Manage reasons for returned items.",
+    "calloutHint": "Manage the reasons to categorize returns.",
+    "editReason": "Edit Return Reason",
+    "create": {
+      "header": "Add Return Reason",
+      "subtitle": "Specify the most common reasons for returns.",
+      "hint": "Create a new return reason to categorize returns.",
+      "successToast": "Return reason {{label}} was successfully created."
+    },
+    "edit": {
+      "header": "Edit Return Reason",
+      "subtitle": "Edit the value of the return reason.",
+      "successToast": "Return reason {{label}} was successfully updated."
+    },
+    "delete": {
+      "confirmation": "You are about to delete the return reason \"{{label}}\". This action cannot be undone.",
+      "successToast": "Return reason \"{{label}}\" was successfully deleted."
+    },
+    "fields": {
+      "value": {
+        "label": "Value",
+        "placeholder": "wrong_size",
+        "tooltip": "The value should be a unique identifier for the return reason."
+      },
+      "label": {
+        "label": "Label",
+        "placeholder": "Wrong size"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Customer received the wrong size"
+      }
+    }
+  },
+  "refundReasons": {
+    "domain": "Refund Reasons",
+    "subtitle": "Manage reasons for issuing refunds.",
+    "calloutHint": "Manage the reasons to categorize refunds.",
+    "editReason": "Edit Refund Reason",
+    "create": {
+      "header": "Add Refund Reason",
+      "subtitle": "Specify the most common reasons for refunds.",
+      "hint": "Create a new refund reason to categorize refunds.",
+      "successToast": "Refund reason {{label}} was successfully created."
+    },
+    "edit": {
+      "header": "Edit Refund Reason",
+      "subtitle": "Edit the value of the refund reason.",
+      "successToast": "Refund reason {{label}} was successfully updated."
+    },
+    "delete": {
+      "confirmation": "You are about to delete the refund reason \"{{label}}\". This action cannot be undone.",
+      "successToast": "Refund reason was successfully deleted."
+    },
+    "fields": {
+      "label": {
+        "label": "Label",
+        "placeholder": "Gesture of goodwill"
+      },
+      "code": {
+        "label": "Code",
+        "placeholder": "gesture_of_goodwill"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Customer had a bad shopping experience"
+      }
+    }
+  }
+}

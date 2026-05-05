@@ -162,7 +162,7 @@ export const TERMS_OF_SERVICE: PolicyPageProps = {
   ],
 };
 
-export const RETURN_POLICY: PolicyPageProps = {
+const RETURN_POLICY_EN: PolicyPageProps = {
   title: "Return Policy",
   effectiveDate: "Effective March 23, 2026",
   description:
@@ -228,6 +228,82 @@ export const RETURN_POLICY: PolicyPageProps = {
     },
   ],
 };
+
+const RETURN_POLICY_PT_BR: PolicyPageProps = {
+  title: "Política de Devolução",
+  effectiveDate: "Em vigor a partir de 23 de março de 2026",
+  description:
+    "Queremos que você fique completamente satisfeito com sua compra. Se não estiver feliz com o seu pedido, estamos aqui para ajudar.",
+  sections: [
+    {
+      heading: "Elegibilidade para Devolução",
+      content: [
+        "A maioria dos itens comprados em nossa loja pode ser devolvida em até 30 dias após a entrega para reembolso total ou troca, desde que as seguintes condições sejam atendidas:",
+        [
+          "O item esteja em sua condição original e sem uso",
+          "O item esteja na embalagem original com todas as etiquetas",
+          "Você tenha o recibo original ou comprovante de compra",
+          "O item não tenha sido personalizado, customizado ou alterado",
+          "O item não esteja na lista de itens sem devolução",
+        ],
+      ],
+    },
+    {
+      heading: "Processo de Devolução",
+      content: [
+        "Para iniciar uma devolução, entre em contato conosco pelos dados informados na página de Contato. Inclua o número do pedido, o(s) item(ns) que deseja devolver e o motivo da devolução. Nós enviaremos a autorização de devolução e as instruções para o envio do item.",
+        "Você é responsável pelos custos de frete da devolução, a menos que o item esteja com defeito ou tenhamos cometido um erro no seu pedido. Recomendamos o uso de um método de envio com rastreamento, pois não nos responsabilizamos por itens perdidos durante o transporte.",
+      ],
+    },
+    {
+      heading: "Reembolsos",
+      content: [
+        "Assim que recebermos e inspecionarmos o item devolvido, notificaremos você sobre a aprovação ou rejeição do reembolso. Se aprovado, o reembolso será processado para o método de pagamento original em até 5 a 10 dias úteis, dependendo do provedor de pagamento.",
+        "As taxas de envio originais não são reembolsáveis, exceto quando a devolução ocorrer por erro nosso ou por produto com defeito. Se o seu pedido teve frete grátis, o valor real do frete pode ser descontado do reembolso.",
+      ],
+    },
+    {
+      heading: "Trocas",
+      content: [
+        "Se você quiser trocar um item por outro tamanho, cor ou modelo, entre em contato para verificar a disponibilidade antes de iniciar a devolução. As trocas seguem as mesmas condições de elegibilidade das devoluções. Se o item de substituição tiver um preço diferente, cobraremos ou reembolsaremos a diferença.",
+      ],
+    },
+    {
+      heading: "Itens sem Devolução",
+      content: [
+        "Os seguintes itens não podem ser devolvidos nem trocados:",
+        [
+          "Cartões-presente e crédito em loja",
+          "Produtos digitais ou para download",
+          "Itens personalizados ou feitos sob medida",
+          "Produtos perecíveis",
+          "Itens marcados como venda final no momento da compra",
+        ],
+      ],
+    },
+    {
+      heading: "Itens Danificados ou com Defeito",
+      content: [
+        "Se você receber um item danificado ou com defeito, entre em contato imediatamente pelos dados informados na página de Contato. Inclua fotos do dano e o número do pedido. Vamos providenciar a substituição ou o reembolso total sem custo adicional.",
+      ],
+    },
+    {
+      heading: "Fale Conosco",
+      content: [
+        "Se você tiver dúvidas sobre nossa política de devolução ou precisar de ajuda com uma devolução, entre em contato usando os dados informados na página de Contato.",
+      ],
+    },
+  ],
+};
+
+export const RETURN_POLICY_BY_LOCALE: Record<string, PolicyPageProps> = {
+  en: RETURN_POLICY_EN,
+  "pt-BR": RETURN_POLICY_PT_BR,
+};
+
+export function getReturnPolicy(locale: string): PolicyPageProps {
+  return RETURN_POLICY_BY_LOCALE[locale] ?? RETURN_POLICY_BY_LOCALE["pt-BR"];
+}
 
 export const SHIPPING_POLICY: PolicyPageProps = {
   title: "Shipping Policy",

@@ -12,6 +12,10 @@ data/
 .env.test.local
 .env.production.local
 
+.data
+data/
+.data/
+
 # Testing
 coverage
 
