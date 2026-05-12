@@ -69,5 +69,61 @@
         "placeholder": "O cliente teve uma experiência ruim de compra"
       }
     }
+  },
+  "reviews": {
+    "pageTitle": "Avaliações",
+    "selectedLabel": "{{count}} selecionado(s)",
+    "commands": {
+      "approve": "Aprovar",
+      "flag": "Sinalizar"
+    },
+    "status": {
+      "pending": "Pendente",
+      "approved": "Aprovada",
+      "flagged": "Sinalizada"
+    },
+    "table": {
+      "id": "ID",
+      "title": "Título",
+      "rating": "Avaliação",
+      "content": "Conteúdo",
+      "status": "Status",
+      "response": "Resposta",
+      "verified": "Verificado",
+      "product": "Produto",
+      "responded": "Respondida",
+      "noResponse": "Sem resposta",
+      "verifiedPurchase": "Compra verificada",
+      "unverified": "Não verificado"
+    },
+    "detail": {
+      "title": "Detalhes da avaliação",
+      "rating": "Avaliação",
+      "titleLabel": "Título",
+      "content": "Conteúdo",
+      "purchase": "Compra",
+      "verifiedPurchase": "Compra verificada",
+      "notLinkedToPurchase": "Não vinculada a uma compra",
+      "adminResponse": "Resposta do admin",
+      "responsePlaceholder": "Escreva uma resposta para esta avaliação..."
+    },
+    "actions": {
+      "view": "Ver",
+      "cancel": "Cancelar",
+      "delete": "Excluir",
+      "saveResponse": "Salvar resposta",
+      "updateResponse": "Atualizar resposta"
+    },
+    "toasts": {
+      "status": {
+        "approved": "Avaliações aprovadas",
+        "flagged": "Avaliações sinalizadas"
+      },
+      "statusFailed": "Falha ao atualizar o status da avaliação",
+      "responseSaved": "Resposta salva",
+      "responseSaveFailed": "Falha ao salvar a resposta",
+      "responseDeleted": "Resposta excluída",
+      "responseDeleteFailed": "Falha ao excluir a resposta"
+    }
   }
 }

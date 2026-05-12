@@ -20,6 +20,7 @@ import {
 import { HttpTypes } from "@medusajs/framework/types";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { sdk } from "../../lib/sdk";
 
@@ -45,13 +46,14 @@ type Review = {
 const columnHelper = createDataTableColumnHelper<Review>();
 
 const commandHelper = createDataTableCommandHelper();
+type Translate = ReturnType<typeof useTranslation>["t"];
 
-const statusCommands = [
-  { label: "Approve", shortcut: "A", status: "approved" },
-  { label: "Flag", shortcut: "F", status: "flagged" },
-] as const;
+const useCommands = (refetch: () => void, t: Translate) => {
+  const statusCommands = [
+    { label: t("reviews.commands.approve"), shortcut: "A", status: "approved" },
+    { label: t("reviews.commands.flag"), shortcut: "F", status: "flagged" },
+  ] as const;
 
-const useCommands = (refetch: () => void) => {
   return statusCommands.map(({ label, shortcut, status }) =>
     commandHelper.command({
       label,
@@ -63,10 +65,10 @@ const useCommands = (refetch: () => void) => {
             method: "POST",
             body: { ids, status },
           });
-          toast.success(`Reviews ${status}`);
+          toast.success(t(`reviews.toasts.status.${status}`));
           refetch();
         } catch {
-          toast.error(`Failed to ${label.toLowerCase()} reviews`);
+          toast.error(t("reviews.toasts.statusFailed"));
         }
       },
     }),
@@ -91,11 +93,13 @@ const ReviewDetailDrawer = ({
   open,
   onClose,
   onResponseChange,
+  t,
 }: {
   review: Review | null;
   open: boolean;
   onClose: () => void;
   onResponseChange: () => void;
+  t: Translate;
 }) => {
   const [responseContent, setResponseContent] = useState(
     review?.response?.content || "",
@@ -110,11 +114,11 @@ const ReviewDetailDrawer = ({
         method: "POST",
         body: { content: responseContent },
       });
-      toast.success("Response saved");
+      toast.success(t("reviews.toasts.responseSaved"));
       onResponseChange();
       onClose();
     } catch {
-      toast.error("Failed to save response");
+      toast.error(t("reviews.toasts.responseSaveFailed"));
     } finally {
       setIsSaving(false);
     }
@@ -127,11 +131,11 @@ const ReviewDetailDrawer = ({
       await sdk.client.fetch(`/admin/reviews/${review.id}/response`, {
         method: "DELETE",
       });
-      toast.success("Response deleted");
+      toast.success(t("reviews.toasts.responseDeleted"));
       onResponseChange();
       onClose();
     } catch {
-      toast.error("Failed to delete response");
+      toast.error(t("reviews.toasts.responseDeleteFailed"));
     } finally {
       setIsSaving(false);
     }
@@ -146,42 +150,44 @@ const ReviewDetailDrawer = ({
     >
       <Drawer.Content>
         <Drawer.Header>
-          <Drawer.Title>Review Detail</Drawer.Title>
+          <Drawer.Title>{t("reviews.detail.title")}</Drawer.Title>
         </Drawer.Header>
         <Drawer.Body className="space-y-4">
           {review && (
             <>
               <div>
-                <Label>Rating</Label>
+                <Label>{t("reviews.detail.rating")}</Label>
                 <p className="txt-compact-small">{review.rating}/5</p>
               </div>
               {review.title && (
                 <div>
-                  <Label>Title</Label>
+                  <Label>{t("reviews.detail.titleLabel")}</Label>
                   <p className="txt-compact-small">{review.title}</p>
                 </div>
               )}
               <div>
-                <Label>Content</Label>
+                <Label>{t("reviews.detail.content")}</Label>
                 <p className="txt-compact-small">{review.content}</p>
               </div>
               <div>
-                <Label>Purchase</Label>
+                <Label>{t("reviews.detail.purchase")}</Label>
                 <p className="txt-compact-small">
                   {review.verified_purchase
-                    ? "Verified purchase"
-                    : "Not linked to a purchase"}
+                    ? t("reviews.detail.verifiedPurchase")
+                    : t("reviews.detail.notLinkedToPurchase")}
                 </p>
               </div>
               <div className="border-t pt-4">
-                <Label htmlFor="admin-response">Admin Response</Label>
+                <Label htmlFor="admin-response">
+                  {t("reviews.detail.adminResponse")}
+                </Label>
                 <Textarea
                   id="admin-response"
                   value={responseContent}
                   onChange={(e) => setResponseContent(e.target.value)}
                   rows={4}
                   className="mt-2"
-                  placeholder="Write a response to this review..."
+                  placeholder={t("reviews.detail.responsePlaceholder")}
                 />
               </div>
             </>
@@ -190,7 +196,7 @@ const ReviewDetailDrawer = ({
         <Drawer.Footer>
           <Drawer.Close asChild>
             <Button variant="secondary" size="small">
-              Cancel
+              {t("reviews.actions.cancel")}
             </Button>
           </Drawer.Close>
           {review?.response && (
@@ -200,7 +206,7 @@ const ReviewDetailDrawer = ({
               onClick={handleDelete}
               isLoading={isSaving}
             >
-              Delete
+              {t("reviews.actions.delete")}
             </Button>
           )}
           <Button
@@ -210,7 +216,9 @@ const ReviewDetailDrawer = ({
             disabled={isSaving || !responseContent.trim()}
             isLoading={isSaving}
           >
-            {review?.response ? "Update" : "Save"} Response
+            {review?.response
+              ? t("reviews.actions.updateResponse")
+              : t("reviews.actions.saveResponse")}
           </Button>
         </Drawer.Footer>
       </Drawer.Content>
@@ -219,6 +227,7 @@ const ReviewDetailDrawer = ({
 };
 
 const ReviewsPage = () => {
+  const { t } = useTranslation();
   const [pagination, setPagination] = useState<DataTablePaginationState>({
     pageSize: limit,
     pageIndex: 0,
@@ -233,47 +242,54 @@ const ReviewsPage = () => {
     () => [
       columnHelper.select(),
       columnHelper.accessor("id", {
-        header: "ID",
+        header: t("reviews.table.id"),
       }),
       columnHelper.accessor("title", {
-        header: "Title",
+        header: t("reviews.table.title"),
       }),
       columnHelper.accessor("rating", {
-        header: "Rating",
+        header: t("reviews.table.rating"),
       }),
       columnHelper.accessor("content", {
-        header: "Content",
+        header: t("reviews.table.content"),
       }),
       columnHelper.accessor("status", {
-        header: "Status",
+        header: t("reviews.table.status"),
         cell: ({ row }) => (
           <StatusBadge color={statusColor(row.original.status)}>
-            {row.original.status.charAt(0).toUpperCase() +
-              row.original.status.slice(1)}
+            {t(`reviews.status.${row.original.status}`)}
           </StatusBadge>
         ),
       }),
       columnHelper.accessor("response", {
-        header: "Response",
+        header: t("reviews.table.response"),
         cell: ({ row }) => {
           return row.original.response ? (
-            <StatusBadge color="green">Responded</StatusBadge>
+            <StatusBadge color="green">
+              {t("reviews.table.responded")}
+            </StatusBadge>
           ) : (
-            <StatusBadge color="grey">No response</StatusBadge>
+            <StatusBadge color="grey">
+              {t("reviews.table.noResponse")}
+            </StatusBadge>
           );
         },
       }),
       columnHelper.accessor("verified_purchase", {
-        header: "Verified",
+        header: t("reviews.table.verified"),
         cell: ({ row }) =>
           row.original.verified_purchase ? (
-            <StatusBadge color="green">Verified</StatusBadge>
+            <StatusBadge color="green">
+              {t("reviews.table.verifiedPurchase")}
+            </StatusBadge>
           ) : (
-            <StatusBadge color="grey">Unverified</StatusBadge>
+            <StatusBadge color="grey">
+              {t("reviews.table.unverified")}
+            </StatusBadge>
           ),
       }),
       columnHelper.accessor("product", {
-        header: "Product",
+        header: t("reviews.table.product"),
         cell: ({ row }) => {
           return (
             <Link to={`/products/${row.original.product_id}`}>
@@ -289,12 +305,12 @@ const ReviewsPage = () => {
             onClick={() => setSelectedReview(row.original)}
             className="text-sm text-blue-600 hover:underline"
           >
-            View
+            {t("reviews.actions.view")}
           </button>
         ),
       }),
     ],
-    [],
+    [t],
   );
 
   const offset = pagination.pageIndex * limit;
@@ -316,7 +332,7 @@ const ReviewsPage = () => {
       }),
   });
 
-  const commands = useCommands(refetch);
+  const commands = useCommands(refetch, t);
 
   const table = useDataTable({
     columns,
@@ -339,11 +355,13 @@ const ReviewsPage = () => {
     <Container>
       <DataTable instance={table}>
         <DataTable.Toolbar className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center">
-          <Heading>Reviews</Heading>
+          <Heading>{t("reviews.pageTitle")}</Heading>
         </DataTable.Toolbar>
         <DataTable.Table />
         <DataTable.Pagination />
-        <DataTable.CommandBar selectedLabel={(count) => `${count} selected`} />
+        <DataTable.CommandBar
+          selectedLabel={(count) => t("reviews.selectedLabel", { count })}
+        />
       </DataTable>
       <Toaster />
       <ReviewDetailDrawer
@@ -352,13 +370,15 @@ const ReviewsPage = () => {
         open={!!selectedReview}
         onClose={() => setSelectedReview(null)}
         onResponseChange={refetch}
+        t={t}
       />
     </Container>
   );
 };
 
 export const config = defineRouteConfig({
-  label: "Reviews",
+  label: "reviews.pageTitle",
+  translationNs: "translation",
   icon: ChatBubbleLeftRight,
 });
 

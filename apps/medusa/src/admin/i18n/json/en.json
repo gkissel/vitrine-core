@@ -69,5 +69,61 @@
         "placeholder": "Customer had a bad shopping experience"
       }
     }
+  },
+  "reviews": {
+    "pageTitle": "Reviews",
+    "selectedLabel": "{{count}} selected",
+    "commands": {
+      "approve": "Approve",
+      "flag": "Flag"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "flagged": "Flagged"
+    },
+    "table": {
+      "id": "ID",
+      "title": "Title",
+      "rating": "Rating",
+      "content": "Content",
+      "status": "Status",
+      "response": "Response",
+      "verified": "Verified",
+      "product": "Product",
+      "responded": "Responded",
+      "noResponse": "No response",
+      "verifiedPurchase": "Verified purchase",
+      "unverified": "Unverified"
+    },
+    "detail": {
+      "title": "Review Detail",
+      "rating": "Rating",
+      "titleLabel": "Title",
+      "content": "Content",
+      "purchase": "Purchase",
+      "verifiedPurchase": "Verified purchase",
+      "notLinkedToPurchase": "Not linked to a purchase",
+      "adminResponse": "Admin Response",
+      "responsePlaceholder": "Write a response to this review..."
+    },
+    "actions": {
+      "view": "View",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "saveResponse": "Save Response",
+      "updateResponse": "Update Response"
+    },
+    "toasts": {
+      "status": {
+        "approved": "Reviews approved",
+        "flagged": "Reviews flagged"
+      },
+      "statusFailed": "Failed to update review status",
+      "responseSaved": "Response saved",
+      "responseSaveFailed": "Failed to save response",
+      "responseDeleted": "Response deleted",
+      "responseDeleteFailed": "Failed to delete response"
+    }
   }
 }
