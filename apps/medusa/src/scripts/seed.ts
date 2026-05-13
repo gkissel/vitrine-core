@@ -192,25 +192,48 @@ export default async function seedDemoData({ container }: ExecArgs) {
 	const [store] = await storeModuleService.listStores();
 	const currentStore = assertExists(store, "Nenhuma loja encontrada para executar o seed.");
 
-	let salesChannels = await salesChannelModuleService.listSalesChannels({
-		name: "Canal de Vendas Aurea RS",
-	});
+	const existingSalesChannels: Array<{ id: string }> = [];
+	const pageSize = 100;
+	let skip = 0;
 
-	if (!salesChannels.length) {
-		const { result } = await createSalesChannelsWorkflow(container).run({
-			input: {
-				salesChannelsData: [
-					{
-						name: "Canal de Vendas Aurea RS",
-					},
-				],
+	while (true) {
+		const [salesChannelsPage] = await salesChannelModuleService.listAndCountSalesChannels(
+			{},
+			{
+				take: pageSize,
+				skip,
 			},
-		});
+		);
 
-		salesChannels = result;
+		if (!salesChannelsPage.length) {
+			break;
+		}
+
+		existingSalesChannels.push(...salesChannelsPage.map((salesChannel) => ({ id: salesChannel.id })));
+
+		if (salesChannelsPage.length < pageSize) {
+			break;
+		}
+
+		skip += pageSize;
 	}
 
-	const salesChannel = assertExists(salesChannels[0], "Canal de vendas não encontrado.");
+	if (existingSalesChannels.length) {
+		logger.info(`Removendo ${existingSalesChannels.length} canais de venda existentes...`);
+		await salesChannelModuleService.deleteSalesChannels(existingSalesChannels.map((salesChannel) => salesChannel.id));
+	}
+
+	const { result } = await createSalesChannelsWorkflow(container).run({
+		input: {
+			salesChannelsData: [
+				{
+					name: "Canal de Vendas Aurea RS",
+				},
+			],
+		},
+	});
+
+	const salesChannel = assertExists(result[0], "Canal de vendas não encontrado.");
 
 	await updateStoreCurrencies(container).run({
 		input: {
