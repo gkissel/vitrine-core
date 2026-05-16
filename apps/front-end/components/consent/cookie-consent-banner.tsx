@@ -25,7 +25,7 @@ export function CookieConsentBanner({
   const hasDecision = consent.analytics !== "pending";
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 sm:px-6 sm:pb-5 lg:px-8">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 sm:px-6 sm:pb-5 lg:px-8 sm:block">
       <div className="pointer-events-auto flex flex-col gap-4 bg-gray-900 px-6 py-5 sm:flex-row sm:items-end sm:justify-between sm:rounded-xl sm:py-4 sm:pr-4 sm:pl-6">
         <div className="max-w-xl">
           <p className="text-sm font-semibold text-white">
@@ -51,7 +51,7 @@ export function CookieConsentBanner({
           </div>
         </div>
 
-        <div className="flex flex-shrink-0 items-center gap-x-4">
+        <div className="flex shrink-0 items-center gap-x-4">
           {hasDecision ? (
             <button
               type="button"
@@ -70,7 +70,10 @@ export function CookieConsentBanner({
           </button>
           <button
             type="button"
-            onClick={onAcceptAnalytics}
+            onClick={() => {
+              onClose();
+              onAcceptAnalytics();
+            }}
             className="cursor-pointer rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm transition hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Accept analytics

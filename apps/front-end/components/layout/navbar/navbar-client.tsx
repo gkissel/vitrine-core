@@ -1,27 +1,28 @@
 "use client";
 
+// biome-ignore assist/source/organizeImports: import order is intentionally grouped here
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from "@headlessui/react";
-import { Bars3Icon, HeartIcon, XMarkIcon } from "@heroicons/react/24/outline";
+  Bars3Icon,
+  ChevronDownIcon,
+  XMarkIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { AccountDropdown } from "components/account/account-dropdown";
 import { Cart } from "components/cart";
-import { SearchButton } from "components/search-command";
 import { trackClient } from "lib/analytics";
-import { signout } from "lib/medusa/customer";
-import { Navigation } from "lib/types";
-import Image from "next/image";
+import type { Navigation } from "lib/types";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { NavbarDesktop } from "./navbar-desktop";
+import Logo from "components/logo";
+import Name from "components/name";
+
+const mobileNavigationLinks = [
+  { name: "Produtos", href: "/products" },
+  { name: "Sobre", href: "/about" },
+];
 
 type CustomerData = {
   firstName: string | null;
@@ -31,20 +32,16 @@ type CustomerData = {
 type NavbarClientProps = {
   navigation: Navigation;
   customer: CustomerData | null;
-  wishlistCount: number;
 };
 
-export function NavbarClient({
-  navigation,
-  customer,
-  wishlistCount,
-}: NavbarClientProps) {
+export function NavbarClient({ navigation, customer }: NavbarClientProps) {
   const [open, setOpen] = useState(false);
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   // Auto-close menu on navigation
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname and search params should reset the menu on navigation
   useEffect(() => {
     setOpen(false);
   }, [pathname, searchParams]);
@@ -77,6 +74,14 @@ export function NavbarClient({
     }
   }
 
+  const brandLinks = Array.from(
+    new Map(
+      navigation.categories
+        .flatMap((category) => category.brands)
+        .map((item) => [item.href, item]),
+    ).values(),
+  );
+
   return (
     <div className="bg-white">
       {/* Mobile menu - inlined from navbar-mobile */}
@@ -87,288 +92,103 @@ export function NavbarClient({
       >
         <DialogBackdrop
           transition
-          className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
+          className="fixed inset-0 bg-transparent transition-opacity duration-300 ease-linear data-closed:opacity-0"
         />
-        <div className="fixed inset-0 z-50 flex">
+        <div className="fixed inset-0 z-50 flex items-start justify-end p-2 sm:p-4">
           <DialogPanel
             id="mobile-menu"
             transition
-            className="relative flex w-full max-w-xs transform flex-col overflow-y-auto bg-white pb-12 shadow-xl transition duration-300 ease-in-out data-closed:-translate-x-full"
+            className="relative flex w-72 max-w-[calc(100vw-1rem)] transform flex-col overflow-hidden rounded-[1.75rem] bg-white px-5 py-4 shadow-[0_30px_80px_rgba(15,23,42,0.22)] transition duration-300 ease-in-out data-closed:translate-y-2 data-closed:opacity-0 sm:w-80"
           >
-            <div className="flex px-4 pt-5 pb-2">
+            <div className="flex items-center justify-between gap-4">
+              <Link
+                prefetch={true}
+                href="/"
+                className="flex items-center gap-2"
+                onClick={() => handleClose(false)}
+              >
+                <Logo width={40} height={40} className="h-10 w-auto" />
+              </Link>
+
               <button
                 type="button"
-                onClick={() => setOpen(false)}
-                className="focus-visible:outline-primary-600 relative -m-2 inline-flex cursor-pointer items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 focus-visible:outline-2"
+                onClick={() => handleClose(false)}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 text-slate-900 transition-colors hover:bg-slate-50"
                 aria-label="Close menu"
                 data-testid="close-mobile-menu"
               >
-                <span className="absolute -inset-0.5" />
-                <span className="sr-only">Close menu</span>
-                <XMarkIcon aria-hidden="true" className="size-6" />
+                <XMarkIcon aria-hidden="true" className="size-5" />
               </button>
             </div>
 
-            {/* Links */}
-            <TabGroup className="mt-2">
-              <div className="border-b border-gray-200">
-                <TabList className="-mb-px flex space-x-8 px-4">
-                  {navigation.categories.map((category) => (
-                    <Tab
-                      key={category.name}
-                      className="data-selected:border-primary-600 data-selected:text-primary-600 flex-1 border-b-2 border-transparent px-1 py-4 text-base font-medium whitespace-nowrap text-gray-900"
-                    >
-                      {category.name}
-                    </Tab>
-                  ))}
-                </TabList>
-              </div>
-              <TabPanels>
-                {navigation.categories.map((category, categoryIdx) => (
-                  <TabPanel
-                    key={category.name}
-                    className="space-y-12 px-4 pt-10 pb-6"
-                  >
-                    <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
-                      <div className="grid grid-cols-1 gap-x-6 gap-y-10">
-                        <div>
-                          <p
-                            id={`mobile-featured-heading-${categoryIdx}`}
-                            className="font-medium text-gray-900"
-                          >
-                            Featured
-                          </p>
-                          <ul
-                            role="list"
-                            aria-labelledby={`mobile-featured-heading-${categoryIdx}`}
-                            className="mt-6 space-y-6"
-                          >
-                            {category.featured.map((item) => (
-                              <li key={item.name} className="flex">
-                                <Link
-                                  prefetch={true}
-                                  href={item.href}
-                                  className="text-gray-500"
-                                >
-                                  {item.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div>
-                          <p
-                            id="mobile-categories-heading"
-                            className="font-medium text-gray-900"
-                          >
-                            Categories
-                          </p>
-                          <ul
-                            role="list"
-                            aria-labelledby="mobile-categories-heading"
-                            className="mt-6 space-y-6"
-                          >
-                            {category.categories.map((item) => (
-                              <li key={item.name} className="flex">
-                                <Link
-                                  prefetch={true}
-                                  href={item.href}
-                                  className="text-gray-500"
-                                >
-                                  {item.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 gap-x-6 gap-y-10">
-                        <div>
-                          <p
-                            id="mobile-collection-heading"
-                            className="font-medium text-gray-900"
-                          >
-                            Collection
-                          </p>
-                          <ul
-                            role="list"
-                            aria-labelledby="mobile-collection-heading"
-                            className="mt-6 space-y-6"
-                          >
-                            {category.collection.map((item) => (
-                              <li key={item.name} className="flex">
-                                <Link
-                                  prefetch={true}
-                                  href={item.href}
-                                  className="text-gray-500"
-                                >
-                                  {item.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div>
-                          <p
-                            id="mobile-brand-heading"
-                            className="font-medium text-gray-900"
-                          >
-                            Brands
-                          </p>
-                          <ul
-                            role="list"
-                            aria-labelledby="mobile-brand-heading"
-                            className="mt-6 space-y-6"
-                          >
-                            {category.brands.map((item) => (
-                              <li key={item.name} className="flex">
-                                <Link
-                                  prefetch={true}
-                                  href={item.href}
-                                  className="text-gray-500"
-                                >
-                                  {item.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </TabGroup>
-
-            <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-              {navigation.pages.map((page) => (
-                <div key={page.name} className="flow-root">
+            <div className="mt-8 flex min-h-0 flex-1 flex-col">
+              <nav className="space-y-6">
+                {mobileNavigationLinks.map((item) => (
                   <Link
+                    key={item.name}
                     prefetch={true}
-                    href={page.href}
-                    className="-m-2 block p-2 font-medium text-gray-900"
+                    href={item.href}
+                    onClick={() => handleClose(false)}
+                    className="block text-[1.05rem] font-semibold tracking-tight text-[#4d7340] transition-colors hover:text-[#3f5f33]"
                   >
-                    {page.name}
+                    {item.name}
                   </Link>
-                </div>
-              ))}
-            </div>
+                ))}
 
-            <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-              {customer ? (
-                <>
-                  <div className="flow-root">
-                    <Link
-                      href="/account"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      My Account
-                    </Link>
-                  </div>
-                  <div className="flow-root">
-                    <Link
-                      href="/account/orders"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Order History
-                    </Link>
-                  </div>
-                  <div className="flow-root">
-                    <Link
-                      href="/account/wishlist"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Wishlist
-                    </Link>
-                  </div>
-                  <div className="flow-root">
-                    <form action={signout}>
-                      <button
-                        type="submit"
-                        className="-m-2 block cursor-pointer p-2 font-medium text-gray-900"
-                      >
-                        Sign out
-                      </button>
-                    </form>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flow-root">
-                    <Link
-                      href="/account/login"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Sign in
-                    </Link>
-                  </div>
-                  <div className="flow-root">
-                    <Link
-                      href="/account/register"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Create account
-                    </Link>
-                  </div>
-                </>
-              )}
+                <details className="group">
+                  <summary className="flex cursor-pointer list-none items-center gap-2 text-[1.05rem] font-semibold tracking-tight text-[#4d7340] outline-none [&::-webkit-details-marker]:hidden">
+                    Marcas
+                    <ChevronDownIcon className="size-4 transition-transform duration-200 group-open:rotate-180" />
+                  </summary>
+
+                  <ul className="mt-3 space-y-3 pl-1">
+                    {brandLinks.map((item) => (
+                      <li key={item.name}>
+                        <Link
+                          prefetch={true}
+                          href={item.href}
+                          onClick={() => handleClose(false)}
+                          className="block text-sm font-medium text-slate-500 transition-colors hover:text-slate-700"
+                        >
+                          {item.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </nav>
+
+              <div className="mt-auto pt-8">
+                <Link
+                  href="/contact"
+                  onClick={() => handleClose(false)}
+                  className="inline-flex w-full items-center justify-center rounded-lg bg-[#4d7340] px-5 py-4 text-base font-medium text-white transition-colors hover:bg-[#3f5f33]"
+                >
+                  Contato
+                </Link>
+              </div>
             </div>
           </DialogPanel>
         </div>
       </Dialog>
 
       <header className="relative bg-white">
-        <nav
-          aria-label="Top"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-        >
-          <div className="border-b border-gray-200">
+        <nav aria-label="Top" className="max-w-7xl mx-2">
+          <div className="border rounded-md my-2 border-gray-200 px-2">
             <div className="flex h-16 items-center justify-between">
-              <div className="relative z-50 flex flex-1 items-center lg:hidden">
-                <button
-                  ref={hamburgerButtonRef}
-                  type="button"
-                  onClick={() => {
-                    setOpen(true);
-                    trackClient("mobile_menu_opened", {});
-                  }}
-                  className="focus-visible:outline-primary-600 relative z-10 -ml-2 min-h-[44px] min-w-[44px] cursor-pointer touch-manipulation rounded-md bg-white p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 active:bg-gray-100"
-                  aria-expanded={open}
-                  aria-controls="mobile-menu"
-                  aria-label="Open main menu"
-                  data-testid="hamburger"
-                  style={{
-                    WebkitTapHighlightColor: "transparent",
-                    touchAction: "manipulation",
-                  }}
-                >
-                  <span className="sr-only">Open menu</span>
-                  <Bars3Icon aria-hidden="true" className="size-6" />
-                </button>
-
-                <SearchButton className="focus-visible:outline-primary-600 ml-2 rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2" />
-              </div>
-
               {/* Flyout menus */}
               <NavbarDesktop navigation={navigation} />
-
               {/* Logo */}
-              <Link prefetch={true} href="/" className="flex">
-                <span className="sr-only">Your Company</span>
-                <Image
-                  alt=""
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                  width={32}
-                  height={32}
-                  className="h-8 w-auto"
-                />
+              <Link
+                prefetch={true}
+                href="/"
+                className="flex items-center gap-3"
+              >
+                <Logo width={40} height={40} className="h-10 w-auto" />
+                <Name width={85} height={29} className="h-10 w-auto" />
               </Link>
 
-              <div className="flex flex-1 items-center justify-end">
-                {/* Search */}
-                <SearchButton className="focus-visible:outline-primary-600 hidden rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 lg:block" />
-
+              <div className="flex items-center justify-end">
                 {/* Account */}
                 <div className="lg:ml-4">
                   {customer ? (
@@ -376,47 +196,50 @@ export function NavbarClient({
                       firstName={customer.firstName}
                       lastName={customer.lastName}
                     />
-                  ) : (
-                    <Link
-                      href="/account/login"
-                      className="p-2 text-sm font-medium text-gray-700 hover:text-gray-800"
-                    >
-                      Sign in
-                    </Link>
-                  )}
-                </div>
-
-                {/* Wishlist */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <Link
-                    href="/account/wishlist"
-                    aria-label={
-                      wishlistCount > 0
-                        ? `Wishlist, ${wishlistCount} item${wishlistCount === 1 ? "" : "s"}`
-                        : "Wishlist"
-                    }
-                    className="group focus-visible:outline-primary-600 -m-2 flex items-center rounded-md p-2 focus-visible:outline-2 focus-visible:outline-offset-2"
-                  >
-                    <HeartIcon
-                      aria-hidden="true"
-                      className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
-                    />
-                    {wishlistCount > 0 && (
-                      <span
-                        aria-hidden="true"
-                        className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800"
-                      >
-                        {wishlistCount}
-                      </span>
-                    )}
-                  </Link>
+                  ) : null}
                 </div>
 
                 {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <Suspense fallback={null}>
-                    <Cart />
-                  </Suspense>
+                {customer ? (
+                  <div className="ml-4 flow-root lg:ml-6">
+                    <Suspense fallback={null}>
+                      <Cart />
+                    </Suspense>
+                  </div>
+                ) : (
+                  <Link
+                    href="/account/login"
+                    aria-label="Access cart by logging in"
+                    className="group focus-visible:outline-primary-600 ml-4 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2"
+                  >
+                    <ShoppingCartIcon
+                      aria-hidden="true"
+                      className="size-6 shrink-0"
+                    />
+                    <span className="sr-only">Login to access cart</span>
+                  </Link>
+                )}
+                <div className="relative z-50 ml-4 flex items-center lg:hidden">
+                  <button
+                    ref={hamburgerButtonRef}
+                    type="button"
+                    onClick={() => {
+                      setOpen(true);
+                      trackClient("mobile_menu_opened", {});
+                    }}
+                    className="border border-gray-200 rounded-md focus-visible:outline-primary-600 relative z-10 -ml-2 min-h-11 min-w-11 cursor-pointer touch-manipulation bg-white p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 active:bg-gray-100"
+                    aria-expanded={open}
+                    aria-controls="mobile-menu"
+                    aria-label="Open main menu"
+                    data-testid="hamburger"
+                    style={{
+                      WebkitTapHighlightColor: "transparent",
+                      touchAction: "manipulation",
+                    }}
+                  >
+                    <span className="sr-only">Open menu</span>
+                    <Bars3Icon aria-hidden="true" className="size-6" />
+                  </button>
                 </div>
               </div>
             </div>

@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -54,19 +55,19 @@ export function StorefrontConsentProvider({
     !hasStoredConsentDecision(initialState),
   );
 
-  function updateConsent(nextConsent: StorefrontConsentState) {
+  const updateConsent = useCallback((nextConsent: StorefrontConsentState) => {
     setConsent(nextConsent);
     persistStorefrontConsentToDocument(nextConsent);
     setIsBannerOpen(false);
-  }
+  }, []);
 
-  function grantAnalyticsConsent() {
+  const grantAnalyticsConsent = useCallback(() => {
     updateConsent(createStorefrontConsentState("granted"));
-  }
+  }, [updateConsent]);
 
-  function denyAnalyticsConsent() {
+  const denyAnalyticsConsent = useCallback(() => {
     updateConsent(createStorefrontConsentState("denied"));
-  }
+  }, [updateConsent]);
 
   const value = useMemo<StorefrontConsentContextValue>(
     () => ({
@@ -77,7 +78,7 @@ export function StorefrontConsentProvider({
       grantAnalyticsConsent,
       denyAnalyticsConsent,
     }),
-    [consent],
+    [consent, denyAnalyticsConsent, grantAnalyticsConsent],
   );
 
   return (

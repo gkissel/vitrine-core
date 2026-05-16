@@ -11,6 +11,8 @@ export interface Product {
   href: string;
   imageSrc: string;
   imageAlt: string;
+  description?: string;
+  availableForSale?: boolean;
   availableColors: AvailableColor[];
 }
 
