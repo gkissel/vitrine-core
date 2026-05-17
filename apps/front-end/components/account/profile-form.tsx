@@ -34,7 +34,7 @@ export function ProfileForm({ customer }: ProfileFormProps) {
             htmlFor="first_name"
             className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5"
           >
-            First name
+            Nome
           </label>
           <div className="mt-2 sm:col-span-2 sm:mt-0">
             <input
@@ -43,7 +43,7 @@ export function ProfileForm({ customer }: ProfileFormProps) {
               name="first_name"
               defaultValue={customer.first_name || ""}
               autoComplete="given-name"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
             />
           </div>
         </div>
@@ -53,7 +53,7 @@ export function ProfileForm({ customer }: ProfileFormProps) {
             htmlFor="last_name"
             className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5"
           >
-            Last name
+            Sobrenome
           </label>
           <div className="mt-2 sm:col-span-2 sm:mt-0">
             <input
@@ -62,14 +62,15 @@ export function ProfileForm({ customer }: ProfileFormProps) {
               name="last_name"
               defaultValue={customer.last_name || ""}
               autoComplete="family-name"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
             />
           </div>
         </div>
 
         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+          {/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
           <label className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5">
-            Email address
+            Email
           </label>
           <div className="mt-2 sm:col-span-2 sm:mt-0">
             <p className="py-1.5 text-sm/6 text-gray-500">{customer.email}</p>
@@ -81,7 +82,7 @@ export function ProfileForm({ customer }: ProfileFormProps) {
             htmlFor="phone"
             className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5"
           >
-            Phone
+            Telefone
           </label>
           <div className="mt-2 sm:col-span-2 sm:mt-0">
             <input
@@ -90,7 +91,7 @@ export function ProfileForm({ customer }: ProfileFormProps) {
               name="phone"
               defaultValue={customer.phone || ""}
               autoComplete="tel"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
             />
           </div>
         </div>
@@ -106,9 +107,9 @@ export function ProfileForm({ customer }: ProfileFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 cursor-pointer rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-brand hover:bg-brand-500 focus-visible:outline-brand cursor-pointer rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isPending ? "Saving..." : "Save"}
+          {isPending ? "Salvando..." : "Salvar"}
         </button>
       </div>
     </form>

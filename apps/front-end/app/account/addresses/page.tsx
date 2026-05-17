@@ -2,7 +2,7 @@ import { retrieveCustomer } from "lib/medusa/customer";
 import { AddressesClient } from "components/account/addresses-client";
 
 export const metadata = {
-  title: "Addresses",
+  title: "Endereços",
 };
 
 export default async function AddressesPage() {
@@ -11,9 +11,9 @@ export default async function AddressesPage() {
 
   return (
     <div>
-      <h2 className="text-base/7 font-semibold text-gray-900">Addresses</h2>
+      <h2 className="text-base/7 font-semibold text-gray-900">Endereços</h2>
       <p className="mt-1 max-w-2xl text-sm/6 text-gray-600">
-        Manage your shipping and billing addresses.
+        Gerencie seus endereços de envio e cobrança.
       </p>
       <div className="mt-10">
         <AddressesClient addresses={customer.addresses || []} />

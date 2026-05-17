@@ -219,7 +219,7 @@ export function NavbarClient({ navigation, customer }: NavbarClientProps) {
                     <span className="sr-only">Login to access cart</span>
                   </Link>
                 )}
-                <div className="relative z-50 ml-4 flex items-center lg:hidden">
+                <div className="relative z-0 ml-4 flex items-center lg:hidden">
                   <button
                     ref={hamburgerButtonRef}
                     type="button"
@@ -227,7 +227,7 @@ export function NavbarClient({ navigation, customer }: NavbarClientProps) {
                       setOpen(true);
                       trackClient("mobile_menu_opened", {});
                     }}
-                    className="border border-gray-200 rounded-md focus-visible:outline-primary-600 relative z-10 -ml-2 min-h-11 min-w-11 cursor-pointer touch-manipulation bg-white p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 active:bg-gray-100"
+                    className="border border-gray-200 rounded-md focus-visible:outline-primary-600 relative -ml-2 min-h-11 min-w-11 cursor-pointer touch-manipulation bg-white p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 active:bg-gray-100"
                     aria-expanded={open}
                     aria-controls="mobile-menu"
                     aria-label="Open main menu"

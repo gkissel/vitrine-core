@@ -5,7 +5,7 @@ import {
   ShareIcon,
   PlusIcon,
   XMarkIcon,
-  ShoppingBagIcon,
+  ShoppingCartIcon,
   EllipsisVerticalIcon,
   PencilIcon,
   TrashIcon,

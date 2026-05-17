@@ -5,10 +5,9 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 const tabs = [
-  { name: "Profile", href: "/account" },
-  { name: "Orders", href: "/account/orders" },
-  { name: "Addresses", href: "/account/addresses" },
-  { name: "Wishlist", href: "/account/wishlist" },
+  { name: "Perfil", href: "/account" },
+  { name: "Pedidos", href: "/account/orders" },
+  { name: "Endereços", href: "/account/addresses" },
 ];
 
 export function AccountTabs() {
@@ -30,7 +29,7 @@ export function AccountTabs() {
               className={clsx(
                 "border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap",
                 isActive
-                  ? "border-primary-600 text-primary-600"
+                  ? "border-brand text-brand"
                   : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
               )}
               aria-current={isActive ? "page" : undefined}
