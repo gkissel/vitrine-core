@@ -16,17 +16,9 @@ export default function Collections() {
   return (
     <Suspense
       fallback={
-        <div className="hidden lg:block">
-          <div className="space-y-4 border-b border-gray-200 pb-6">
-            <div className="h-4 w-5/6 animate-pulse rounded-sm bg-gray-200" />
-            <div className="h-4 w-4/6 animate-pulse rounded-sm bg-gray-200" />
-            <div className="h-4 w-5/6 animate-pulse rounded-sm bg-gray-200" />
-            <div className="h-4 w-3/6 animate-pulse rounded-sm bg-gray-200" />
-            <div className="h-4 w-5/6 animate-pulse rounded-sm bg-gray-200" />
-            <div className="h-4 w-4/6 animate-pulse rounded-sm bg-gray-200" />
-            <div className="h-4 w-5/6 animate-pulse rounded-sm bg-gray-200" />
-            <div className="h-4 w-4/6 animate-pulse rounded-sm bg-gray-200" />
-          </div>
+        <div className="space-y-4 border-b border-gray-200 pb-6">
+          <div className="h-4 w-5/6 animate-pulse rounded-sm bg-gray-200" />
+          <div className="h-14 animate-pulse rounded-2xl bg-gray-200" />
         </div>
       }
     >

@@ -1,10 +1,11 @@
-import ProductGrid from "components/layout/product-grid";
+import ProductGridPaginated from "components/layout/product-grid-paginated";
 import { defaultSort, sorting } from "lib/constants";
 import {
   getCollection,
   getCollectionProducts,
   getCollections,
 } from "lib/medusa";
+import { getVariantsWishlistStates } from "lib/medusa/wishlist";
 import {
   buildBreadcrumbJsonLd,
   buildItemListJsonLd,
@@ -67,6 +68,15 @@ export default async function ProductsCollectionPage(props: {
     getCollection(params.collection),
     getCollectionProducts({ collection: params.collection, sortKey, reverse }),
   ]);
+
+  // Fetch wishlist states
+  const variantIds = products
+    .map((p) => p.variants?.[0]?.id)
+    .filter((id): id is string => Boolean(id));
+
+  const wishlistStatesMap = await getVariantsWishlistStates(variantIds);
+  const wishlistStates = Object.fromEntries(wishlistStatesMap);
+
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
@@ -89,7 +99,11 @@ export default async function ProductsCollectionPage(props: {
       {products.length === 0 ? (
         <p className="py-3 text-lg">{`No products found in this collection`}</p>
       ) : (
-        <ProductGrid products={products} />
+        <ProductGridPaginated
+          products={products}
+          wishlistStates={wishlistStates}
+          itemsPerPage={6}
+        />
       )}
       <JsonLdScript data={breadcrumbJsonLd} />
       <JsonLdScript data={itemListJsonLd} />

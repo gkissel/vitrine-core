@@ -21,7 +21,7 @@ export function RegisterForm() {
             htmlFor="first_name"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            First name
+            Nome
           </label>
           <div className="mt-2">
             <input
@@ -30,7 +30,7 @@ export function RegisterForm() {
               name="first_name"
               required
               autoComplete="given-name"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -40,7 +40,7 @@ export function RegisterForm() {
             htmlFor="last_name"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Last name
+            Sobrenome
           </label>
           <div className="mt-2">
             <input
@@ -49,7 +49,7 @@ export function RegisterForm() {
               name="last_name"
               required
               autoComplete="family-name"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -60,7 +60,7 @@ export function RegisterForm() {
           htmlFor="email"
           className="block text-sm/6 font-medium text-gray-900"
         >
-          Email address
+          Email
         </label>
         <div className="mt-2">
           <input
@@ -69,7 +69,7 @@ export function RegisterForm() {
             name="email"
             required
             autoComplete="email"
-            className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+            className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
           />
         </div>
       </div>
@@ -79,7 +79,7 @@ export function RegisterForm() {
           htmlFor="phone"
           className="block text-sm/6 font-medium text-gray-900"
         >
-          Phone <span className="text-gray-400">(optional)</span>
+          Telefone <span className="text-gray-400">(opcional)</span>
         </label>
         <div className="mt-2">
           <input
@@ -87,7 +87,7 @@ export function RegisterForm() {
             type="tel"
             name="phone"
             autoComplete="tel"
-            className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+            className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
           />
         </div>
       </div>
@@ -97,7 +97,7 @@ export function RegisterForm() {
           htmlFor="password"
           className="block text-sm/6 font-medium text-gray-900"
         >
-          Password
+          Senha
         </label>
         <div className="mt-2">
           <input
@@ -107,11 +107,11 @@ export function RegisterForm() {
             required
             minLength={MIN_PASSWORD_LENGTH}
             autoComplete="new-password"
-            className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+            className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
           />
         </div>
         <p className="mt-1 text-sm text-gray-500">
-          Must be at least {MIN_PASSWORD_LENGTH} characters
+          Deve ter pelo menos {MIN_PASSWORD_LENGTH} caracteres
         </p>
       </div>
 
@@ -119,9 +119,9 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 flex w-full cursor-pointer justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-brand hover:bg-brand-500 focus-visible:outline-brand flex w-full cursor-pointer justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isPending ? "Creating account..." : "Create account"}
+          {isPending ? "Criando conta..." : "Criar conta"}
         </button>
       </div>
     </form>

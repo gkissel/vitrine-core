@@ -84,7 +84,35 @@ export function MobileFilters({
             {/* Mobile Collections */}
             <div className="mt-4 border-t border-gray-200">
               <h3 className="sr-only">Collections</h3>
-              <ul role="list" className="px-2 py-3 font-medium text-gray-900">
+              <ul className="px-2 py-3 font-medium text-gray-900">
+                <li>
+                  <Link
+                    href={
+                      isSearchPage
+                        ? buildSearchHref({ collection: null })
+                        : "/products"
+                    }
+                    onClick={() => {
+                      setMobileFiltersOpen(false);
+                      if (!isSearchPage) {
+                        return;
+                      }
+
+                      trackClient("search_facet_applied", {
+                        facet_type: "collection",
+                        facet_value: "all",
+                        query: redactPiiFromQuery(query),
+                      });
+                    }}
+                    className={clsx(
+                      "block px-2 py-3",
+                      !selectedCollection && "underline underline-offset-4",
+                    )}
+                  >
+                    Todos
+                  </Link>
+                </li>
+
                 {collections.map((collection) => {
                   const href = isSearchPage
                     ? buildSearchHref({

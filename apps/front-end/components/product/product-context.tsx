@@ -1,12 +1,15 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, {
+import {
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useOptimistic,
+  useTransition,
 } from "react";
+import type { ReactNode } from "react";
 
 type ProductState = {
   [key: string]: string;
@@ -22,8 +25,9 @@ type ProductContextType = {
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-export function ProductProvider({ children }: { children: React.ReactNode }) {
+export function ProductProvider({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
+  const [, startTransition] = useTransition();
 
   const getInitialState = () => {
     const params: ProductState = {};
@@ -41,17 +45,27 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     }),
   );
 
-  const updateOption = (name: string, value: string) => {
-    const newState = { [name]: value };
-    setOptimisticState(newState);
-    return { ...state, ...newState };
-  };
+  const updateOption = useCallback(
+    (name: string, value: string) => {
+      const newState = { [name]: value };
+      startTransition(() => {
+        setOptimisticState(newState);
+      });
+      return { ...state, ...newState };
+    },
+    [state, setOptimisticState],
+  );
 
-  const updateImage = (index: string) => {
-    const newState = { image: index };
-    setOptimisticState(newState);
-    return { ...state, ...newState };
-  };
+  const updateImage = useCallback(
+    (index: string) => {
+      const newState = { image: index };
+      startTransition(() => {
+        setOptimisticState(newState);
+      });
+      return { ...state, ...newState };
+    },
+    [state, setOptimisticState],
+  );
 
   const value = useMemo(
     () => ({
@@ -59,7 +73,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       updateOption,
       updateImage,
     }),
-    [state],
+    [state, updateOption, updateImage],
   );
 
   return (

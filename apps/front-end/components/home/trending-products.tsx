@@ -115,8 +115,16 @@ export function TrendingProducts({
                 key={product.id}
                 className="basis-[88%] sm:basis-[52%] md:basis-[46%] lg:basis-1/3 xl:basis-[31%]"
               >
-                <article className="group flex h-full flex-col overflow-hidden rounded-4xl bg-white text-slate-900 [box-shadow:4px_4px_12px_0px_rgba(0,0,0,0.15)]">
-                  <div className="flex items-center justify-between px-4 pt-4 sm:px-5 sm:pt-5">
+                <article className="group isolate relative flex h-full flex-col overflow-hidden rounded-4xl bg-white text-slate-900 [box-shadow:4px_4px_12px_0px_rgba(0,0,0,0.15)]">
+                  <Link
+                    href={product.href}
+                    aria-label={`Abrir ${product.name}`}
+                    className="absolute inset-0 z-0 block rounded-4xl"
+                  >
+                    <span className="sr-only">{product.name}</span>
+                  </Link>
+
+                  <div className="pointer-events-none relative z-10 flex items-center justify-between px-4 pt-4 sm:px-5 sm:pt-5">
                     <span className="rounded-full border border-slate-200 bg-white px-4 py-1 text-sm font-semibold text-slate-900 shadow-sm">
                       {index % 2 === 0 ? "Destaque" : "Mais vendida"}
                     </span>
@@ -124,7 +132,7 @@ export function TrendingProducts({
                       Oferta
                     </span>
                   </div>
-                  <div className="relative mx-4 mt-4 aspect-4/5 overflow-hidden rounded-3xl bg-zinc-100 sm:mx-5">
+                  <div className="pointer-events-none relative z-10 mx-4 mt-4 aspect-4/5 overflow-hidden rounded-3xl bg-zinc-100 sm:mx-5">
                     <Image
                       alt={product.imageAlt}
                       src={product.imageSrc}
@@ -133,14 +141,9 @@ export function TrendingProducts({
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                   </div>
-                  <div className="flex flex-1 flex-col px-5 pb-5 pt-5 sm:px-6 sm:pb-6">
+                  <div className="pointer-events-none relative z-10 flex flex-1 flex-col px-5 pb-5 pt-5 sm:px-6 sm:pb-6">
                     <h3 className="text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">
-                      <Link
-                        href={product.href}
-                        className="transition-colors hover:text-green-700"
-                      >
-                        {product.name}
-                      </Link>
+                      {product.name}
                     </h3>
 
                     <p className="mt-4 line-clamp-3 text-base leading-8 text-slate-500 sm:text-[17px]">
@@ -168,7 +171,7 @@ export function TrendingProducts({
 
                       <button
                         aria-label={`Adicionar ${product.name} ao carrinho`}
-                        className="inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand text-white shadow-[0_16px_28px_rgba(74,124,64,0.28)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-green-800"
+                        className="pointer-events-auto relative z-20 inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand text-white shadow-[0_16px_28px_rgba(74,124,64,0.28)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-green-800"
                         type="button"
                       >
                         <ShoppingCartIcon className="h-6 w-6" />
