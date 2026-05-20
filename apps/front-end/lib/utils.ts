@@ -105,6 +105,7 @@ export const transformProductToTailwind = (
     name: product.title,
     color: defaultColor,
     price,
+    variantId: product.variants[0]?.id || "",
     href: `/product/${product.handle}`,
     imageSrc: product.images[0]?.url || PLACEHOLDER_IMAGE_SRC,
     imageAlt: product.images[0]?.altText || product.title,
@@ -175,6 +176,7 @@ export const transformCollectionsToFooterProducts = (
 
 // Types for Tailwind product components
 export type TailwindProductDetail = {
+  id: string;
   name: string;
   price: string;
   priceAmount: string;
@@ -286,6 +288,7 @@ export const transformProductToTailwindDetail = (
   ];
 
   return {
+    id: product.id,
     name: product.title,
     price,
     priceAmount,
@@ -311,8 +314,9 @@ export const transformProductToTailwindDetail = (
 // Transform Products to Tailwind Related Products format
 export const transformProductsToRelatedProducts = (
   products: Product[],
+  limit = 4,
 ): TailwindRelatedProduct[] => {
-  return products.slice(0, 4).map((product, index) => {
+  return products.slice(0, limit).map((product, index) => {
     // Get first color variant if available
     const colorVariant = product.variants.find((variant) =>
       variant.selectedOptions.some(

@@ -26,6 +26,7 @@ import type { TailwindProductDetail } from "lib/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Link from "next/link";
 
 type Combination = {
   id: string;
@@ -106,6 +107,7 @@ export function ProductDetail({
   const selectedVariantId = selectedVariant?.id ?? variants[0]?.id ?? "";
 
   // Select sensible defaults on first render (prefer available variant)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const optionKeys = options.map((o) => o.name.toLowerCase());
     const missingKeys = optionKeys.filter((k) => !state[k]);
@@ -142,8 +144,8 @@ export function ProductDetail({
         <div className="px-4 pt-6 pb-4 sm:px-0 sm:pt-0 sm:pb-6 lg:pb-8">
           <Breadcrumbs
             items={[
-              { name: "Home", href: "/" },
-              { name: "Products", href: "/products" },
+              { name: "Início", href: "/" },
+              { name: "Produtos", href: "/products" },
               { name: product.name },
             ]}
           />
@@ -205,39 +207,19 @@ export function ProductDetail({
           </TabGroup>
 
           {/* Product info */}
-          <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <div className="mt-5 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+            <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
               {product.name}
             </h1>
+            <p className="text-sm mt-1 tracking-tight text-gray-400">
+              {product.id.slice(5, -1)}
+            </p>
 
-            <div className="mt-3">
-              <h2 className="sr-only">Product information</h2>
+            <div className="mt-5">
               <ProductDetailPrice
                 amount={product.priceAmount}
                 currencyCode={product.priceCurrency}
               />
-            </div>
-
-            {/* Reviews */}
-            <div className="mt-3">
-              <h3 className="sr-only">Reviews</h3>
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      aria-hidden="true"
-                      className={clsx(
-                        product.rating > rating
-                          ? "text-primary-500"
-                          : "text-gray-300",
-                        "size-5 shrink-0",
-                      )}
-                    />
-                  ))}
-                </div>
-                <p className="sr-only">{product.rating} out of 5 stars</p>
-              </div>
             </div>
 
             {/* Social proof */}
@@ -247,71 +229,13 @@ export function ProductDetail({
               <h3 className="sr-only">Description</h3>
 
               <div
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
                 dangerouslySetInnerHTML={{
                   __html: sanitizeHtml(product.description),
                 }}
                 className="space-y-6 text-base text-gray-700"
               />
             </div>
-
-            {/* Colors */}
-            {colorOption && colorOption.values.length > 0 && (
-              <div className="mt-6">
-                <h3 className="text-sm font-medium text-gray-900">Color</h3>
-
-                <fieldset aria-label="Choose a color" className="mt-2">
-                  <div className="flex items-center gap-x-3">
-                    {colorOption.values.map((value) => {
-                      const isOptionAvailable = isAvailable("color", value);
-                      const isActive = state["color"] === value;
-                      const hex = getColorHexFromValue(value);
-                      const isWhite = /^#fff(?:fff)?$/i.test(hex);
-                      const activeRing = isWhite ? "#4F46E5" : hex; // primary-600 ring for white
-                      return (
-                        <label
-                          key={value}
-                          className={clsx(
-                            "flex cursor-pointer items-center",
-                            !isOptionAvailable
-                              ? "cursor-not-allowed opacity-40"
-                              : "",
-                          )}
-                        >
-                          <input
-                            value={value}
-                            checked={Boolean(isActive)}
-                            onChange={() => {
-                              pushParam("color", value);
-                              trackClient("product_variant_selected", {
-                                product_id: sourceProduct.id,
-                                option_name: "color",
-                                option_value: value,
-                              });
-                            }}
-                            name="color"
-                            type="radio"
-                            aria-label={value}
-                            disabled={!isOptionAvailable}
-                            className="sr-only"
-                          />
-                          <span
-                            aria-hidden
-                            className="inline-block size-8 rounded-full"
-                            style={{
-                              backgroundColor: hex,
-                              boxShadow: isActive
-                                ? `0 0 0 2px #fff, 0 0 0 4px ${activeRing}`
-                                : "0 0 0 1px rgba(0,0,0,0.1)",
-                            }}
-                            title={`Color ${value}${!isOptionAvailable ? " (Out of Stock)" : ""}`}
-                          />
-                        </label>
-                      );
-                    })}
-                  </div>
-                </fieldset>
-              </div>
-            )}
 
             {/* Size picker */}
             {sizeOption && sizeOption.values.length > 0 && (
@@ -365,65 +289,9 @@ export function ProductDetail({
               <AddToCart
                 product={sourceProduct}
                 formClassName="max-w-xs flex-1"
-                className="bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 flex w-full cursor-pointer items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
-              />
-              <WishlistButton
-                variantId={selectedVariantId}
-                productId={sourceProduct.id}
-                size="md"
-                className="ml-4"
+                className="bg-brand hover:bg-primary-700 focus:ring-primary-500 flex  cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
               />
             </div>
-
-            <section aria-labelledby="details-heading" className="mt-12">
-              <h2 id="details-heading" className="sr-only">
-                Additional details
-              </h2>
-
-              <div className="divide-y divide-gray-200 border-t border-gray-200">
-                {product.details.map((detail) => (
-                  <Disclosure key={detail.name} as="div">
-                    <h3>
-                      <DisclosureButton
-                        className="group relative flex w-full items-center justify-between py-6 text-left"
-                        onClick={() =>
-                          trackClient("product_details_expanded", {
-                            product_id: sourceProduct.id,
-                            section_name: detail.name,
-                          })
-                        }
-                      >
-                        <span className="group-data-open:text-primary-600 text-sm font-medium text-gray-900">
-                          {detail.name}
-                        </span>
-                        <span className="ml-6 flex items-center">
-                          <PlusIcon
-                            aria-hidden="true"
-                            className="block size-6 text-gray-400 group-hover:text-gray-500 group-data-open:hidden"
-                          />
-                          <MinusIcon
-                            aria-hidden="true"
-                            className="text-primary-400 group-hover:text-primary-500 hidden size-6 group-data-open:block"
-                          />
-                        </span>
-                      </DisclosureButton>
-                    </h3>
-                    <DisclosurePanel className="pb-6">
-                      <ul
-                        role="list"
-                        className="list-disc space-y-1 pl-5 text-sm/6 text-gray-700 marker:text-gray-300"
-                      >
-                        {detail.items.map((item) => (
-                          <li key={item} className="pl-2">
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </DisclosurePanel>
-                  </Disclosure>
-                ))}
-              </div>
-            </section>
           </div>
         </div>
       </div>

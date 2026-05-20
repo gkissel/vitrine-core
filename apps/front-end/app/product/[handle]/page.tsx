@@ -5,8 +5,12 @@ import { ProductPageContent } from "components/product/product-page-content";
 import { RelatedProducts as RelatedProductsComponent } from "components/product/related-products";
 import { ProductReviewsSection } from "components/reviews/ProductReviewsSection";
 import { HIDDEN_PRODUCT_TAG } from "lib/constants";
-import { getProduct, getProductRecommendations, getProducts } from "lib/medusa";
-import { getProductReviews } from "lib/medusa/reviews";
+import {
+  getCollectionProducts,
+  getCollections,
+  getProduct,
+  getProductRecommendations,
+} from "lib/medusa";
 import {
   buildBreadcrumbJsonLd,
   buildProductJsonLd,
@@ -141,13 +145,45 @@ async function RelatedProducts({
   const product = await productPromise;
   if (!product) return null;
 
-  const relatedProducts = await getProductRecommendations(product.id);
+  let relatedProducts = [] as Product[];
+
+  const collections = await getCollections();
+  const collectionCandidates = collections.filter(
+    (collection) => collection.handle,
+  );
+
+  if (collectionCandidates.length > 0) {
+    const productsByCollection = await Promise.all(
+      collectionCandidates.map(async (collection) => ({
+        collection,
+        products: await getCollectionProducts({
+          collection: collection.handle,
+        }),
+      })),
+    );
+
+    const matchedCollection = productsByCollection.find(({ products }) =>
+      products.some((relatedProduct) => relatedProduct.id === product.id),
+    );
+
+    if (matchedCollection) {
+      relatedProducts = matchedCollection.products.filter(
+        (relatedProduct) => relatedProduct.id !== product.id,
+      );
+    }
+  }
+
+  if (relatedProducts.length === 0) {
+    relatedProducts = await getProductRecommendations(product.id);
+  }
 
   if (!relatedProducts.length) return null;
 
   // Transform products for Tailwind component
-  const transformedRelatedProducts =
-    transformProductsToRelatedProducts(relatedProducts);
+  const transformedRelatedProducts = transformProductsToRelatedProducts(
+    relatedProducts,
+    6,
+  );
 
   return (
     <RelatedProductsComponent

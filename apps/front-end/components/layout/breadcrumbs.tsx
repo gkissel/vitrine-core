@@ -16,7 +16,13 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
-            <li key={`${item.name}-${index}`} className="flex items-center">
+            <li
+              key={`${item.name}-${
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                index
+              }`}
+              className="flex items-center"
+            >
               {item.href && !isLast ? (
                 <Link href={item.href} className="hover:text-gray-700">
                   {item.name}
@@ -31,7 +37,7 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
               )}
               {!isLast ? (
                 <span className="mx-2 text-gray-300" aria-hidden="true">
-                  /
+                  {">"}
                 </span>
               ) : null}
             </li>

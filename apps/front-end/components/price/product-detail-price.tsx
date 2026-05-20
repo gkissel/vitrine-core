@@ -8,7 +8,7 @@ export default function ProductDetailPrice({
   return (
     <p
       suppressHydrationWarning={true}
-      className="text-3xl tracking-tight text-gray-900"
+      className="text-4xl font-extrabold text-gray-900"
     >
       {new Intl.NumberFormat(undefined, {
         style: "currency",

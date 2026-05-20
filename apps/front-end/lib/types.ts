@@ -81,6 +81,10 @@ export type Product = {
   title: string;
   description: string;
   descriptionHtml: string;
+  collection?: {
+    handle: string;
+    title: string;
+  };
   options: ProductOption[];
   priceRange: {
     maxVariantPrice: Money;

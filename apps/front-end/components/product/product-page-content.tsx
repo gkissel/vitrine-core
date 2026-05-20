@@ -1,16 +1,16 @@
 "use client";
 
+import AboutFAQ from "components/about/about-faq";
 import { ProductProvider } from "components/product/product-context";
 import ProductWrapper from "components/product/product-wrapper";
 import { trackClient } from "lib/analytics";
-import { Product } from "lib/types";
+import type { Product } from "lib/types";
 import { transformProductToTailwindDetail } from "lib/utils";
 import { notFound } from "next/navigation";
 import { Suspense, use, useEffect, type ReactNode } from "react";
 
 export function ProductPageContent({
   productPromise,
-  reviewsSlot,
   relatedProductsSlot,
 }: {
   productPromise: Promise<Product | undefined>;
@@ -34,8 +34,8 @@ export function ProductPageContent({
           />
         </ProductProvider>
       </Suspense>
-      {reviewsSlot}
       {relatedProductsSlot}
+      <AboutFAQ />
     </div>
   );
 }

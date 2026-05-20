@@ -4,6 +4,9 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { addItem } from "components/cart/actions";
+import { useCart } from "components/cart/cart-context";
+import { useRouter } from "next/navigation";
 
 import {
   Carousel,
@@ -15,6 +18,10 @@ import {
 } from "components/ui/carousel";
 import { cn } from "@/lib/utils";
 
+import type {
+  Product as CartProduct,
+  ProductVariant as CartProductVariant,
+} from "lib/types";
 import type { Product } from "./types";
 
 interface TrendingProductsProps {
@@ -28,11 +35,88 @@ export function TrendingProducts({
   title = "Lorem Ipsum Ametr",
   description = "Ad et et. Accusamus esse in voluptatem odio dolor nobis. Doloribus rerum sed et voluptatem deserunt et.",
 }: TrendingProductsProps) {
+  const { addCartItem } = useCart();
+  const router = useRouter();
   const [carouselApi, setCarouselApi] = React.useState<CarouselApi | null>(
     null,
   );
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [snapCount, setSnapCount] = React.useState(0);
+
+  const buildCartProduct = React.useCallback(
+    (product: Product): CartProduct => {
+      const handle = product.href.replace(/^\/?product\//, "");
+      const description = product.description || product.name;
+      const variantTitle = product.color || product.name;
+      const priceAmount = Number(product.price.replace(/[^0-9.-]/g, ""));
+      const safeAmount = Number.isFinite(priceAmount)
+        ? priceAmount.toFixed(2)
+        : "0.00";
+
+      const variant: CartProductVariant = {
+        id: product.variantId || String(product.id),
+        title: variantTitle,
+        availableForSale: product.availableForSale ?? true,
+        selectedOptions: product.color
+          ? [{ name: "Color", value: product.color }]
+          : [],
+        price: {
+          amount: safeAmount,
+          currencyCode: "USD",
+        },
+      };
+
+      return {
+        id: String(product.id),
+        handle,
+        availableForSale: product.availableForSale ?? true,
+        title: product.name,
+        description,
+        descriptionHtml: description,
+        options: product.color
+          ? [
+              {
+                id: "color",
+                name: "Color",
+                values: [product.color],
+              },
+            ]
+          : [],
+        priceRange: {
+          minVariantPrice: {
+            amount: safeAmount,
+            currencyCode: "USD",
+          },
+          maxVariantPrice: {
+            amount: safeAmount,
+            currencyCode: "USD",
+          },
+        },
+        variants: [variant],
+        featuredImage: {
+          url: product.imageSrc,
+          altText: product.imageAlt,
+          width: 1200,
+          height: 1200,
+        },
+        images: [
+          {
+            url: product.imageSrc,
+            altText: product.imageAlt,
+            width: 1200,
+            height: 1200,
+          },
+        ],
+        seo: {
+          title: product.name,
+          description,
+        },
+        tags: [],
+        updatedAt: new Date().toISOString(),
+      } as CartProduct;
+    },
+    [],
+  );
 
   React.useEffect(() => {
     if (!carouselApi) return;
@@ -171,7 +255,33 @@ export function TrendingProducts({
 
                       <button
                         aria-label={`Adicionar ${product.name} ao carrinho`}
-                        className="pointer-events-auto relative z-20 inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand text-white shadow-[0_16px_28px_rgba(74,124,64,0.28)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-green-800"
+                        disabled={
+                          product.availableForSale === false ||
+                          !product.variantId
+                        }
+                        onClick={async (event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+
+                          if (
+                            product.availableForSale === false ||
+                            !product.variantId
+                          ) {
+                            return;
+                          }
+
+                          const cartProduct = buildCartProduct(product);
+                          const cartVariant = cartProduct.variants[0];
+
+                          if (!cartVariant) {
+                            return;
+                          }
+
+                          addCartItem(cartVariant, cartProduct);
+                          await addItem(null, cartVariant.id);
+                          router.refresh();
+                        }}
+                        className="pointer-events-auto relative z-20 inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand text-white shadow-[0_16px_28px_rgba(74,124,64,0.28)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
                         type="button"
                       >
                         <ShoppingCartIcon className="h-6 w-6" />

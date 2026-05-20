@@ -110,7 +110,7 @@ async function getDefaultRegion(): Promise<HttpTypes.StoreRegion> {
 // --- Product Fields ---
 
 const PRODUCT_FIELDS =
-  "*variants.calculated_price,*variants.images,+metadata,+tags";
+  "*variants.calculated_price,*variants.images,+collection.handle,+collection.title,+metadata,+tags";
 
 const CART_FIELDS =
   "*items,*items.product,*items.variant,*items.thumbnail,+items.total,*promotions,+shipping_methods.name";

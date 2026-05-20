@@ -1,6 +1,6 @@
 "use client";
 
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { addItem } from "components/cart/actions";
 import { useCart } from "components/cart/cart-context";
@@ -12,10 +12,12 @@ function SubmitButton({
   availableForSale,
   selectedVariantId,
   className,
+  label = "Adicionar ao carrinho",
 }: {
   availableForSale: boolean;
   selectedVariantId: string | undefined;
   className?: string;
+  label?: string;
 }) {
   const defaultClasses =
     "relative flex w-full items-center justify-center rounded-full bg-primary-600 p-4 tracking-wide text-white";
@@ -25,7 +27,10 @@ function SubmitButton({
   if (!availableForSale) {
     return (
       <button disabled className={clsx(buttonClasses, disabledClasses)}>
-        Out Of Stock
+        <div className="flex items-center gap-2">
+          <ShoppingCartIcon className="h-5 w-5" />
+          Fora de estoque
+        </div>
       </button>
     );
   }
@@ -33,7 +38,7 @@ function SubmitButton({
   if (!selectedVariantId) {
     return (
       <button
-        aria-label="Please select an option"
+        aria-label="Por favor selecione uma opção"
         disabled
         className={clsx(buttonClasses, disabledClasses)}
       >
@@ -42,14 +47,17 @@ function SubmitButton({
             <PlusIcon className="h-5" />
           </div>
         )}
-        Add To Cart
+        <div className="flex items-center gap-2">
+          <ShoppingCartIcon className="h-5 w-5" />
+          {label}
+        </div>
       </button>
     );
   }
 
   return (
     <button
-      aria-label="Add to cart"
+      aria-label="Adicionar ao carrinho"
       className={clsx(buttonClasses, {
         "cursor-pointer hover:opacity-90": !className,
       })}
@@ -59,7 +67,10 @@ function SubmitButton({
           <PlusIcon className="h-5" />
         </div>
       )}
-      Add To Cart
+      <div className="flex items-left gap-2">
+        {label}
+        <ShoppingCartIcon className="h-5 w-5" />
+      </div>
     </button>
   );
 }
@@ -68,10 +79,12 @@ export function AddToCart({
   product,
   className,
   formClassName,
+  label,
 }: {
   product: Product;
   className?: string;
   formClassName?: string;
+  label?: string;
 }) {
   const { variants, availableForSale } = product;
   const { addCartItem } = useCart();
@@ -102,6 +115,7 @@ export function AddToCart({
         availableForSale={availableForSale}
         selectedVariantId={selectedVariantId}
         className={className}
+        label={label}
       />
       <p aria-live="polite" className="sr-only" role="status">
         {message}
