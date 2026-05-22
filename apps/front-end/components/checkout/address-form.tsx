@@ -12,7 +12,7 @@ type AddressFormProps = {
 };
 
 const INPUT_CLASS =
-  "block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primary-600 sm:text-sm/6";
+  "block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-brand sm:text-sm/6";
 
 const LABEL_CLASS = "block text-sm/6 font-medium text-gray-900";
 
@@ -56,7 +56,7 @@ export function AddressForm({
       {/* First name / Last name */}
       <div className="sm:col-span-3">
         <label htmlFor={`${idPrefix}-first-name`} className={LABEL_CLASS}>
-          First name
+          Nome
         </label>
         <div className="mt-1">
           <input
@@ -74,7 +74,7 @@ export function AddressForm({
 
       <div className="sm:col-span-3">
         <label htmlFor={`${idPrefix}-last-name`} className={LABEL_CLASS}>
-          Last name
+          Sobrenome
         </label>
         <div className="mt-1">
           <input
@@ -93,8 +93,8 @@ export function AddressForm({
       {/* Company (optional) */}
       <div className="sm:col-span-6">
         <label htmlFor={`${idPrefix}-company`} className={LABEL_CLASS}>
-          Company{" "}
-          <span className="text-sm font-normal text-gray-500">(optional)</span>
+          Empresa{" "}
+          <span className="text-sm font-normal text-gray-500">(opcional)</span>
         </label>
         <div className="mt-1">
           <input
@@ -112,7 +112,7 @@ export function AddressForm({
       {/* Address line 1 */}
       <div className="sm:col-span-6">
         <label htmlFor={`${idPrefix}-address1`} className={LABEL_CLASS}>
-          Address
+          Endereço
         </label>
         <div className="mt-1">
           <input
@@ -131,8 +131,8 @@ export function AddressForm({
       {/* Address line 2 (optional) */}
       <div className="sm:col-span-6">
         <label htmlFor={`${idPrefix}-address2`} className={LABEL_CLASS}>
-          Apartment, suite, etc.{" "}
-          <span className="text-sm font-normal text-gray-500">(optional)</span>
+          Apartamento, suite, etc.{" "}
+          <span className="text-sm font-normal text-gray-500">(opcional)</span>
         </label>
         <div className="mt-1">
           <input
@@ -150,7 +150,7 @@ export function AddressForm({
       {/* City / Province / Postal code — 3-column grid */}
       <div className="sm:col-span-2">
         <label htmlFor={`${idPrefix}-city`} className={LABEL_CLASS}>
-          City
+          Cidade
         </label>
         <div className="mt-1">
           <input
@@ -168,7 +168,7 @@ export function AddressForm({
 
       <div className="sm:col-span-2">
         <label htmlFor={`${idPrefix}-province`} className={LABEL_CLASS}>
-          State / Province
+          Estado{" "}
         </label>
         <div className="mt-1">
           <input
@@ -185,7 +185,7 @@ export function AddressForm({
 
       <div className="sm:col-span-2">
         <label htmlFor={`${idPrefix}-postal-code`} className={LABEL_CLASS}>
-          Postal code
+          CEP
         </label>
         <div className="mt-1">
           <input
@@ -204,7 +204,7 @@ export function AddressForm({
       {/* Country */}
       <div className="sm:col-span-3">
         <label htmlFor={`${idPrefix}-country`} className={LABEL_CLASS}>
-          Country
+          País
         </label>
         <div className="mt-1">
           <select
@@ -216,7 +216,7 @@ export function AddressForm({
             onChange={(e) => update("country_code", e.target.value)}
             className={INPUT_CLASS}
           >
-            <option value="">Select a country</option>
+            <option value="">Selecione o país</option>
             {countries.map((c) => (
               <option key={c.iso_2} value={c.iso_2}>
                 {c.display_name}
@@ -229,7 +229,7 @@ export function AddressForm({
       {/* Phone */}
       <div className="sm:col-span-3">
         <label htmlFor={`${idPrefix}-phone`} className={LABEL_CLASS}>
-          Phone
+          Telefone
         </label>
         <div className="mt-1">
           <input

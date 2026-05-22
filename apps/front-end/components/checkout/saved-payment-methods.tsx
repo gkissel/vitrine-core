@@ -160,7 +160,7 @@ export function SavedPaymentMethods({
               <label
                 key={method.id}
                 className={clsx(
-                  "group has-[:checked]:outline-primary-600 relative block cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-4 has-[:checked]:outline has-[:checked]:outline-2 has-[:checked]:-outline-offset-2",
+                  "group has-[:checked]:outline-brand relative block cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-4 has-[:checked]:outline has-[:checked]:outline-2 has-[:checked]:-outline-offset-2",
                   isSwitching && "pointer-events-none opacity-60",
                 )}
               >
@@ -189,7 +189,7 @@ export function SavedPaymentMethods({
           {/* Use a new card option */}
           <label
             className={clsx(
-              "group has-[:checked]:outline-primary-600 relative block cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-4 has-[:checked]:outline has-[:checked]:outline-2 has-[:checked]:-outline-offset-2",
+              "group has-[:checked]:outline-brand relative block cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-4 has-[:checked]:outline has-[:checked]:outline-2 has-[:checked]:-outline-offset-2",
               isSwitching && "pointer-events-none opacity-60",
             )}
           >

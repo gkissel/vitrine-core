@@ -50,7 +50,7 @@ export function OrderCard({ order }: { order: HttpTypes.StoreOrder }) {
           {showInvoice && <DownloadInvoiceButton orderId={order.id} />}
           <Link
             href={`/account/orders/${order.id}`}
-            className="text-primary-600 hover:text-primary-500 text-sm font-medium"
+            className="text-brand hover:text-brand text-sm font-medium"
           >
             View Order
             <span aria-hidden="true"> &rarr;</span>
@@ -95,7 +95,7 @@ export function OrderCard({ order }: { order: HttpTypes.StoreOrder }) {
               <div className="mt-6 flex items-center gap-x-6 border-t border-gray-200 pt-4 text-sm font-medium">
                 <Link
                   href={`/product/${item.product_handle}`}
-                  className="text-primary-600 hover:text-primary-500"
+                  className="text-brand hover:text-brand"
                 >
                   View product
                 </Link>
@@ -109,7 +109,7 @@ export function OrderCard({ order }: { order: HttpTypes.StoreOrder }) {
         {showInvoice && <DownloadInvoiceButton orderId={order.id} />}
         <Link
           href={`/account/orders/${order.id}`}
-          className="text-primary-600 hover:text-primary-500 text-sm font-medium"
+          className="text-brand hover:text-brand text-sm font-medium"
         >
           View Order
           <span aria-hidden="true"> &rarr;</span>

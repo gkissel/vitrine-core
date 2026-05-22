@@ -41,7 +41,7 @@ export const ProductResult = forwardRef<
       {...props}
       className={`flex cursor-pointer items-center rounded-lg px-3 py-2 select-none ${
         active
-          ? "bg-primary-600 text-white"
+          ? "bg-brand text-white"
           : "bg-gray-50 text-gray-900 hover:bg-gray-100"
       }`}
     >
@@ -62,12 +62,12 @@ export const ProductResult = forwardRef<
           ) : (
             <div
               className={`flex h-full items-center justify-center ${
-                active ? "bg-primary-500" : "bg-gray-100"
+                active ? "bg-brand-500" : "bg-gray-100"
               }`}
             >
               <span
                 className={
-                  active ? "text-primary-100 text-xs" : "text-xs text-gray-400"
+                  active ? "text-brand text-xs" : "text-xs text-gray-400"
                 }
               >
                 No image
@@ -84,9 +84,7 @@ export const ProductResult = forwardRef<
         >
           {product.title}
         </p>
-        <p
-          className={`text-sm ${active ? "text-primary-100" : "text-gray-500"}`}
-        >
+        <p className={`text-sm ${active ? "text-brand" : "text-gray-500"}`}>
           ${price.toFixed(2)}
         </p>
       </div>

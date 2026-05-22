@@ -1,9 +1,9 @@
 import ProductGridPaginated from "components/layout/product-grid-paginated";
 import { defaultSort, sorting } from "lib/constants";
-import { getProducts } from "lib/medusa";
+import { getCategories, getProducts } from "lib/medusa";
 import { getVariantsWishlistStates } from "lib/medusa/wishlist";
 import { buildItemListJsonLd, JsonLdScript } from "lib/structured-data";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -16,10 +16,14 @@ export default async function ProductsPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const { sort } = (searchParams || {}) as { [key: string]: string };
+  const categoryHandle = (searchParams?.category as string | undefined) || "";
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
-
-  const products = await getProducts({ sortKey, reverse });
+  const categories = await getCategories();
+  const categoryId = categories.find(
+    (category) => category.handle === categoryHandle,
+  )?.id;
+  const products = await getProducts({ sortKey, reverse, categoryId });
 
   // Fetch wishlist states
   const variantIds = products

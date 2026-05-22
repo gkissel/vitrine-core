@@ -1,9 +1,9 @@
 import ProductGridPaginated from "components/layout/product-grid-paginated";
 import { defaultSort, sorting } from "lib/constants";
-import { getProducts, getProductsByHandles } from "lib/medusa";
+import { getCategories, getProducts, getProductsByHandles } from "lib/medusa";
 import { getVariantsWishlistStates } from "lib/medusa/wishlist";
 import { MEILISEARCH_ENABLED, searchIndexedProducts } from "lib/meilisearch";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default async function SearchPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const availability = getFirstParam(searchParams?.availability);
-  const collection = getFirstParam(searchParams?.collection);
+  const category = getFirstParam(searchParams?.category);
   const maxPrice = getFirstParam(searchParams?.maxPrice);
   const minPrice = getFirstParam(searchParams?.minPrice);
   const sort = getFirstParam(searchParams?.sort);
@@ -53,18 +53,21 @@ export default async function SearchPage(props: {
   const meilisearchResults = meilisearchEnabledForRequest
     ? await searchIndexedProducts(searchValue, {
         availability: availability === "in_stock" ? true : undefined,
-        collection: collection || null,
+        collection: category || null,
         minPrice: parsedMinPrice,
         maxPrice: parsedMaxPrice,
         sort,
       })
     : null;
 
+  const categories = await getCategories();
+  const categoryId = categories.find((item) => item.handle === category)?.id;
+
   const products = meilisearchResults
     ? await getProductsByHandles(
         meilisearchResults.hits.map((hit) => hit.handle),
       )
-    : await getProducts({ sortKey, reverse, query: searchValue });
+    : await getProducts({ sortKey, reverse, query: searchValue, categoryId });
 
   // Fetch wishlist states
   const variantIds = products

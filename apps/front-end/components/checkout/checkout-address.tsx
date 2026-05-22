@@ -176,25 +176,25 @@ export function CheckoutAddress({
       )}
 
       {/* Billing address toggle */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <label className="flex items-center gap-x-3">
           <input
             type="checkbox"
             checked={billingSameAsShipping}
             onChange={(e) => setBillingSameAsShipping(e.target.checked)}
-            className="text-primary-600 focus:ring-primary-600 h-4 w-4 rounded border-gray-300"
+            className="text-brand focus:ring-primary-600 h-4 w-4 rounded border-gray-300"
           />
           <span className="text-sm text-gray-700">
-            Billing address same as shipping
+            Endereço de entrega igual ao de envio.
           </span>
         </label>
-      </div>
+      </div> */}
 
       {/* Billing address form (shown when unchecked) */}
       {!billingSameAsShipping && (
         <div className="mb-6">
           <h4 className="mb-3 text-sm/6 font-semibold text-gray-900">
-            Billing address
+            Endereço de cobrança
           </h4>
           <AddressForm
             key="billing"
@@ -213,9 +213,9 @@ export function CheckoutAddress({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 w-full cursor-pointer rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+        className="bg-brand hover:bg-brand focus:ring-brand w-full cursor-pointer rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
       >
-        {isSubmitting ? "Processing..." : "Continue"}
+        {isSubmitting ? "Processando..." : "Continuar"}
       </button>
     </form>
   );

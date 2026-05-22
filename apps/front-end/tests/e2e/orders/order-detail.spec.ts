@@ -151,7 +151,7 @@ test.describe("Order Detail Page", () => {
     await expect(progressBar).toBeVisible();
 
     // The inner bar should have a width > 0 (at least step 0)
-    const innerBar = progressBar.locator(".bg-primary-600");
+    const innerBar = progressBar.locator(".bg-brand");
     await expect(innerBar).toBeVisible();
     const width = await innerBar.evaluate((el) => el.style.width);
     expect(width).toBeTruthy();
@@ -162,10 +162,10 @@ test.describe("Order Detail Page", () => {
     const labelCount = await progressLabels.count();
     expect(labelCount).toBe(4);
 
-    // "Order placed" label should be highlighted (text-primary-600)
+    // "Order placed" label should be highlighted (text-brand)
     const orderPlacedLabel = progressLabels.first();
     await expect(orderPlacedLabel).toHaveText("Order placed");
-    await expect(orderPlacedLabel).toHaveClass(/text-primary-600/);
+    await expect(orderPlacedLabel).toHaveClass(/text-brand/);
 
     // Status text above progress bar
     await expect(page.locator('text="Order placed"').first()).toBeVisible();

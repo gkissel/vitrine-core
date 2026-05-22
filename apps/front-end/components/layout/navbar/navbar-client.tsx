@@ -6,7 +6,6 @@ import {
   Bars3Icon,
   ChevronDownIcon,
   XMarkIcon,
-  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import { AccountDropdown } from "components/account/account-dropdown";
 import { Cart } from "components/cart";
@@ -18,11 +17,6 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { NavbarDesktop } from "./navbar-desktop";
 import Logo from "components/logo";
 import Name from "components/name";
-
-const mobileNavigationLinks = [
-  { name: "Produtos", href: "/products" },
-  { name: "Sobre", href: "/about" },
-];
 
 type CustomerData = {
   firstName: string | null;
@@ -39,6 +33,13 @@ export function NavbarClient({ navigation, customer }: NavbarClientProps) {
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const accountLink = customer ? "/account" : "/account/login";
+  const accountLinkLabel = customer ? "Minha Conta" : "Entrar";
+  const mobileNavigationLinks = [
+    { name: accountLinkLabel, href: accountLink },
+    { name: "Produtos", href: "/products" },
+    { name: "Sobre", href: "/about" },
+  ];
 
   // Auto-close menu on navigation
   // biome-ignore lint/correctness/useExhaustiveDependencies: pathname and search params should reset the menu on navigation
@@ -200,25 +201,11 @@ export function NavbarClient({ navigation, customer }: NavbarClientProps) {
                 </div>
 
                 {/* Cart */}
-                {customer ? (
-                  <div className="ml-4 flow-root lg:ml-6">
-                    <Suspense fallback={null}>
-                      <Cart />
-                    </Suspense>
-                  </div>
-                ) : (
-                  <Link
-                    href="/account/login"
-                    aria-label="Access cart by logging in"
-                    className="group focus-visible:outline-primary-600 ml-4 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2"
-                  >
-                    <ShoppingCartIcon
-                      aria-hidden="true"
-                      className="size-6 shrink-0"
-                    />
-                    <span className="sr-only">Login to access cart</span>
-                  </Link>
-                )}
+                <div className="ml-4 flow-root lg:ml-6">
+                  <Suspense fallback={null}>
+                    <Cart />
+                  </Suspense>
+                </div>
                 <div className="relative z-0 ml-4 flex items-center lg:hidden">
                   <button
                     ref={hamburgerButtonRef}
@@ -227,7 +214,7 @@ export function NavbarClient({ navigation, customer }: NavbarClientProps) {
                       setOpen(true);
                       trackClient("mobile_menu_opened", {});
                     }}
-                    className="border border-gray-200 rounded-md focus-visible:outline-primary-600 relative -ml-2 min-h-11 min-w-11 cursor-pointer touch-manipulation bg-white p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 active:bg-gray-100"
+                    className="border border-gray-200 rounded-md focus-visible:outline-brand relative -ml-2 min-h-11 min-w-11 cursor-pointer touch-manipulation bg-white p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 active:bg-gray-100"
                     aria-expanded={open}
                     aria-controls="mobile-menu"
                     aria-label="Open main menu"

@@ -242,7 +242,7 @@ export function ProductDetail({
               <div className="mt-8">
                 <div className="flex items-center justify-between">
                   <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                  {/* <a href="#" className="text-sm font-medium text-primary-600 hover:text-primary-500">
+                  {/* <a href="#" className="text-sm font-medium text-brand hover:text-brand">
                     See sizing chart
                   </a> */}
                 </div>
@@ -256,7 +256,7 @@ export function ProductDetail({
                         <label
                           key={value}
                           aria-label={value}
-                          className="group has-checked:border-primary-600 has-checked:bg-primary-600 has-focus-visible:outline-primary-600 relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25"
+                          className="group has-checked:border-primary-600 has-checked:bg-brand has-focus-visible:outline-brand relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25"
                         >
                           <input
                             value={value}
@@ -289,7 +289,7 @@ export function ProductDetail({
               <AddToCart
                 product={sourceProduct}
                 formClassName="max-w-xs flex-1"
-                className="bg-brand hover:bg-primary-700 focus:ring-primary-500 flex  cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
+                className="bg-brand hover:bg-brand focus:ring-brand flex  cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
               />
             </div>
           </div>

@@ -7,26 +7,16 @@ import { useCallback, useMemo, useState } from "react";
 
 import { CheckoutAddress } from "components/checkout/checkout-address";
 import { CheckoutEmail } from "components/checkout/checkout-email";
-import { CheckoutPayment } from "components/checkout/checkout-payment";
 import { CheckoutReview } from "components/checkout/checkout-review";
-import { CheckoutShipping } from "components/checkout/checkout-shipping";
 import { ExpressCheckout } from "components/checkout/express-checkout";
 import type { CheckoutStep } from "lib/types";
 
-const STEP_ORDER: CheckoutStep[] = [
-  "email",
-  "address",
-  "shipping",
-  "payment",
-  "review",
-];
+const STEP_ORDER: CheckoutStep[] = ["email", "address", "review"];
 
 const STEP_LABELS: Record<CheckoutStep, string> = {
-  email: "Contact information",
-  address: "Shipping address",
-  shipping: "Shipping method",
-  payment: "Payment",
-  review: "Review order",
+  email: "Email de contato",
+  address: "Endereço de entrega",
+  // review: "Revisar pedido",
 };
 
 function deriveCompletedSteps(cart: HttpTypes.StoreCart): Set<CheckoutStep> {
@@ -59,10 +49,6 @@ function getStepSummary(step: CheckoutStep, cart: HttpTypes.StoreCart): string {
       ].filter(Boolean);
       return parts.join(", ");
     }
-    case "shipping":
-      return cart.shipping_methods?.[0]?.name || "Shipping method selected";
-    case "payment":
-      return "Payment method selected";
     case "review":
       return "";
   }
@@ -120,25 +106,6 @@ export function CheckoutForm({
             cart={cart}
             customer={customer}
             onComplete={() => onStepComplete("address")}
-          />
-        );
-      case "shipping":
-        return (
-          <CheckoutShipping
-            cart={cart}
-            onComplete={() => onStepComplete("shipping")}
-          />
-        );
-      case "payment":
-        return (
-          <CheckoutPayment
-            cart={cart}
-            customer={customer}
-            onComplete={() => onStepComplete("payment")}
-            onStripeReady={(stripe, elements) => {
-              setStripeInstance(stripe);
-              setElementsInstance(elements);
-            }}
           />
         );
       case "review":
@@ -205,9 +172,9 @@ export function CheckoutForm({
                     <button
                       type="button"
                       onClick={() => onEditStep(step)}
-                      className="text-primary-600 hover:text-primary-500 cursor-pointer text-sm font-medium"
+                      className="text-brand hover:text-brand cursor-pointer text-sm font-medium"
                     >
-                      Edit
+                      Editar
                     </button>
                   )}
                 </div>

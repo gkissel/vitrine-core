@@ -20,7 +20,7 @@ function SubmitButton({
   label?: string;
 }) {
   const defaultClasses =
-    "relative flex w-full items-center justify-center rounded-full bg-primary-600 p-4 tracking-wide text-white";
+    "relative flex w-full items-center justify-center rounded-full bg-brand p-4 tracking-wide text-white";
   const buttonClasses = className || defaultClasses;
   const disabledClasses = "cursor-not-allowed opacity-60 hover:opacity-60";
 

@@ -17,14 +17,12 @@ export default function CollectionsList({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const selectedCollection = searchParams.get("collection") || "";
+  const selectedCategory = searchParams.get("category") || "";
   const isSearchPage = pathname === "/search" && MEILISEARCH_ENABLED && !!query;
-  const currentCollection = isSearchPage
-    ? selectedCollection
-    : pathname.match(/^\/products\/([^/]+)$/)?.[1] || "";
+  const currentCategory = selectedCategory;
 
   const currentCollectionName =
-    collections.find((collection) => collection.handle === currentCollection)
+    collections.find((collection) => collection.handle === currentCategory)
       ?.name || "";
 
   const buildSearchHref = (overrides: Record<string, string | null>) => {
@@ -41,18 +39,20 @@ export default function CollectionsList({
     return createUrl("/search", params);
   };
 
-  const buildProductsHref = (collectionHandle: string) => {
+  const buildProductsHref = (categoryHandle: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    const pathnameWithCollection = collectionHandle
-      ? `/products/${collectionHandle}`
-      : "/products";
+    if (categoryHandle) {
+      params.set("category", categoryHandle);
+    } else {
+      params.delete("category");
+    }
 
-    return createUrl(pathnameWithCollection, params);
+    return createUrl("/products", params);
   };
 
   return (
     <div className="space-y-3 pb-6">
-      <p className="block text-lg font-normal text-gray-500">Categoria:</p>
+      <p className="block text-lg font-normal text-gray-500">Categorias:</p>
 
       <Menu as="div" className="relative">
         <MenuButton className="group flex w-full cursor-pointer items-center justify-between rounded-2xl border border-gray-200  px-5 py-4 text-left text-lg text-slate-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/20 data-open:rounded-b-none data-open:border-b-0">
@@ -71,10 +71,10 @@ export default function CollectionsList({
             {collections.map((collection) => {
               const href = isSearchPage
                 ? buildSearchHref({
-                    collection: collection.handle || null,
+                    category: collection.handle || null,
                   })
                 : buildProductsHref(collection.handle);
-              const isActive = currentCollection === collection.handle;
+              const isActive = currentCategory === collection.handle;
 
               return (
                 <MenuItem key={collection.name}>
@@ -86,7 +86,7 @@ export default function CollectionsList({
                       }
 
                       trackClient("search_facet_applied", {
-                        facet_type: "collection",
+                        facet_type: "category",
                         facet_value: collection.handle || "all",
                         query: redactPiiFromQuery(query),
                       });

@@ -20,7 +20,7 @@ export default async function RegisterPage() {
           Já tem uma conta?{" "}
           <Link
             href="/account/login"
-            className="text-brand hover:text-brand-500 font-semibold"
+            className="text-brand hover:text-brand font-semibold"
           >
             Entrar
           </Link>

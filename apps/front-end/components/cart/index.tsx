@@ -239,7 +239,7 @@ export function Cart() {
                         <button
                           type="button"
                           onClick={closeCart}
-                          className="text-brand font-semibold hover:text-brand-500 focus-visible:outline-brand-600 cursor-pointer rounded focus-visible:outline-2 focus-visible:outline-offset-2"
+                          className="text-brand font-semibold hover:text-brand focus-visible:outline-brand-600 cursor-pointer rounded focus-visible:outline-2 focus-visible:outline-offset-2"
                         >
                           Continuar comprando
                           <span aria-hidden="true"></span>

@@ -1,15 +1,15 @@
-import { getCollections } from "lib/medusa";
+import { getCategories } from "lib/medusa";
 import { Suspense } from "react";
 import CollectionsList from "./collections-list";
 
 async function CollectionList() {
-  const collections = await getCollections();
-  const collectionsWithHandles = collections.map((collection) => ({
-    name: collection.title,
-    handle: collection.handle,
+  const categories = await getCategories();
+  const categoriesWithHandles = categories.map((category) => ({
+    name: category.name,
+    handle: category.handle,
   }));
 
-  return <CollectionsList collections={collectionsWithHandles} />;
+  return <CollectionsList collections={categoriesWithHandles} />;
 }
 
 export default function Collections() {

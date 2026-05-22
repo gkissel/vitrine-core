@@ -74,7 +74,7 @@ export async function retrieveCustomer(): Promise<HttpTypes.StoreCustomer | null
 }
 
 export async function login(
-  prevState: string | null,
+  _prevState: string | null,
   formData: FormData,
 ): Promise<string | null> {
   const email = (formData.get("email") as string)?.trim().toLowerCase();
@@ -128,11 +128,11 @@ export async function login(
   }
 
   revalidateCustomer();
-  redirect("/account");
+  redirect("/");
 }
 
 export async function signup(
-  prevState: string | null,
+  _prevState: string | null,
   formData: FormData,
 ): Promise<string | null> {
   const email = (formData.get("email") as string)?.trim().toLowerCase();
@@ -342,7 +342,7 @@ export async function completePasswordReset(
 }
 
 export async function updateCustomer(
-  prevState: ActionResult,
+  _prevState: ActionResult,
   formData: FormData,
 ): Promise<ActionResult> {
   const body: HttpTypes.StoreUpdateCustomer = {
@@ -391,7 +391,7 @@ function parseAddressFields(
 }
 
 export async function addCustomerAddress(
-  prevState: ActionResult,
+  _prevState: ActionResult,
   formData: FormData,
 ): Promise<ActionResult> {
   const headers = await getAuthHeaders();
@@ -417,7 +417,7 @@ export async function addCustomerAddress(
 }
 
 export async function updateCustomerAddress(
-  prevState: ActionResult,
+  _prevState: ActionResult,
   formData: FormData,
 ): Promise<ActionResult> {
   const addressId = formData.get("address_id") as string;

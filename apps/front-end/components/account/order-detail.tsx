@@ -71,7 +71,7 @@ function ProgressBar({ step }: { step: number }) {
       <div className="overflow-hidden rounded-full bg-gray-200">
         <div
           style={{ width: getProgressWidth(step) }}
-          className="bg-primary-600 h-2 rounded-full"
+          className="bg-brand h-2 rounded-full"
         />
       </div>
       <div className="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
@@ -79,7 +79,7 @@ function ProgressBar({ step }: { step: number }) {
           <div
             key={label}
             className={clsx(
-              step >= i ? "text-primary-600" : "",
+              step >= i ? "text-brand" : "",
               getProgressLabelAlignment(i),
             )}
           >
@@ -395,7 +395,7 @@ export function OrderDetail({ order }: { order: StoreOrderDetail }) {
             </div>
             <div className="flex items-center justify-between pt-4">
               <dt className="font-medium text-gray-900">Order total</dt>
-              <dd className="text-primary-600 font-medium">
+              <dd className="text-brand font-medium">
                 {formatMoney(order.total, currencyCode)}
               </dd>
             </div>

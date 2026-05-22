@@ -47,9 +47,9 @@ export function AddressCard({ address, onEdit }: AddressCardProps) {
         <button
           type="button"
           onClick={onEdit}
-          className="text-primary-600 hover:text-primary-500 cursor-pointer"
+          className="text-brand hover:text-brand cursor-pointer"
         >
-          Edit
+          Editar
         </button>
         <button
           type="button"

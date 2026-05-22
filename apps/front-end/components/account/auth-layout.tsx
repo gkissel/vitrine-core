@@ -10,8 +10,8 @@ type AuthLayoutProps = {
 
 export function AuthLayout({ heading, subtext, children }: AuthLayoutProps) {
   return (
-    <div className="flex min-h-full bg-neutral-50 text-gray-900">
-      <div className="flex flex-1 flex-col justify-center bg-neutral-50 px-4 py-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+    <div className="flex min-h-full bg-white text-gray-900">
+      <div className="flex flex-1 flex-col justify-center bg-white px-4 py-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <h2 className="mt-8 text-2xl/9 font-bold tracking-tight text-gray-900">

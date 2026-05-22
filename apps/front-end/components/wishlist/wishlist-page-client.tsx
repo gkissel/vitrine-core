@@ -59,7 +59,7 @@ export function WishlistPageClient({ wishlists }: { wishlists: Wishlist[] }) {
                 className={clsx(
                   "cursor-pointer border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap",
                   index === activeTab
-                    ? "border-primary-600 text-primary-600"
+                    ? "border-primary-600 text-brand"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                 )}
               >
@@ -68,7 +68,7 @@ export function WishlistPageClient({ wishlists }: { wishlists: Wishlist[] }) {
                   className={clsx(
                     "ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium",
                     index === activeTab
-                      ? "bg-primary-100 text-primary-600"
+                      ? "bg-brand-100 text-brand"
                       : "bg-gray-100 text-gray-600",
                   )}
                 >
@@ -255,7 +255,7 @@ function EmptyState() {
       <div className="mt-6">
         <Link
           href="/products"
-          className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="bg-brand hover:bg-brand-500 focus-visible:outline-brand inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           Browse Products
         </Link>
@@ -336,7 +336,7 @@ function NewWishlistButton() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 inline-flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="bg-brand hover:bg-brand-500 focus-visible:outline-brand inline-flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         <PlusIcon className="-ml-0.5 size-4" />
         New Wishlist
@@ -375,7 +375,7 @@ function NewWishlistButton() {
                     type="text"
                     required
                     placeholder="e.g. Gift ideas"
-                    className="focus:outline-primary-600 mt-1 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+                    className="focus:outline-brand mt-1 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
                   />
 
                   {state?.error && (
@@ -394,7 +394,7 @@ function NewWishlistButton() {
                       type="submit"
                       disabled={isPending}
                       className={clsx(
-                        "bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2",
+                        "bg-brand hover:bg-brand-500 focus-visible:outline-brand rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2",
                         isPending
                           ? "cursor-not-allowed opacity-50"
                           : "cursor-pointer",
@@ -538,7 +538,7 @@ function RenameWishlistDialog({
                 type="text"
                 required
                 defaultValue={wishlist.name || ""}
-                className="focus:outline-primary-600 mt-1 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+                className="focus:outline-brand mt-1 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
               />
               {state?.error && (
                 <p className="mt-2 text-sm text-red-600">{state.error}</p>
@@ -555,7 +555,7 @@ function RenameWishlistDialog({
                   type="submit"
                   disabled={isPending}
                   className={clsx(
-                    "bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2",
+                    "bg-brand hover:bg-brand-500 focus-visible:outline-brand rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2",
                     isPending && "cursor-not-allowed opacity-50",
                   )}
                 >

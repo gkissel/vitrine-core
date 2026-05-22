@@ -101,7 +101,7 @@ export default async function OrderConfirmedPage({
     <div className="bg-white">
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="max-w-xl">
-          <h1 className="text-primary-600 text-base font-medium">Thank you!</h1>
+          <h1 className="text-brand text-base font-medium">Thank you!</h1>
           <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             Your order is confirmed
           </p>
@@ -276,7 +276,7 @@ export default async function OrderConfirmedPage({
         <div className="mt-16 border-t border-gray-200 py-6 text-right">
           <Link
             href="/"
-            className="text-primary-600 hover:text-primary-500 text-sm font-medium"
+            className="text-brand hover:text-brand text-sm font-medium"
           >
             Continue Shopping
             <span aria-hidden="true"> &rarr;</span>

@@ -29,7 +29,7 @@ export function DeleteItemButton({
       <button
         type="submit"
         aria-label="Remove cart item"
-        className="text-brand hover:text-brand-500 focus-visible:outline-brand-600 cursor-pointer rounded font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="text-brand hover:text-brand focus-visible:outline-brand-600 cursor-pointer rounded font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         Remover
       </button>

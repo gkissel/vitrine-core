@@ -20,8 +20,20 @@ export function MobileFilters({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const selectedCollection = searchParams.get("collection") || "";
+  const selectedCategory = searchParams.get("category") || "";
   const isSearchPage = pathname === "/search" && MEILISEARCH_ENABLED && !!query;
+
+  const buildProductsHref = (categoryHandle: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (categoryHandle) {
+      params.set("category", categoryHandle);
+    } else {
+      params.delete("category");
+    }
+
+    return createUrl("/products", params);
+  };
 
   const buildSearchHref = (overrides: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -81,49 +93,19 @@ export function MobileFilters({
               </button>
             </div>
 
-            {/* Mobile Collections */}
+            {/* Mobile Categories */}
             <div className="mt-4 border-t border-gray-200">
-              <h3 className="sr-only">Collections</h3>
+              <h3 className="sr-only">Categories</h3>
               <ul className="px-2 py-3 font-medium text-gray-900">
-                <li>
-                  <Link
-                    href={
-                      isSearchPage
-                        ? buildSearchHref({ collection: null })
-                        : "/products"
-                    }
-                    onClick={() => {
-                      setMobileFiltersOpen(false);
-                      if (!isSearchPage) {
-                        return;
-                      }
-
-                      trackClient("search_facet_applied", {
-                        facet_type: "collection",
-                        facet_value: "all",
-                        query: redactPiiFromQuery(query),
-                      });
-                    }}
-                    className={clsx(
-                      "block px-2 py-3",
-                      !selectedCollection && "underline underline-offset-4",
-                    )}
-                  >
-                    Todos
-                  </Link>
-                </li>
-
                 {collections.map((collection) => {
                   const href = isSearchPage
                     ? buildSearchHref({
-                        collection: collection.handle || null,
+                        category: collection.handle || null,
                       })
-                    : collection.handle
-                      ? `/products/${collection.handle}`
-                      : "/products";
+                    : buildProductsHref(collection.handle);
                   const isActive = isSearchPage
-                    ? selectedCollection === collection.handle
-                    : pathname === href;
+                    ? selectedCategory === collection.handle
+                    : selectedCategory === collection.handle;
 
                   return (
                     <li key={collection.name}>
@@ -136,7 +118,7 @@ export function MobileFilters({
                           }
 
                           trackClient("search_facet_applied", {
-                            facet_type: "collection",
+                            facet_type: "category",
                             facet_value: collection.handle || "all",
                             query: redactPiiFromQuery(query),
                           });
