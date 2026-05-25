@@ -1,38 +1,30 @@
 import {
-	defineMiddlewares,
 	authenticate,
-	validateAndTransformBody,
-	validateAndTransformQuery,
+	defineMiddlewares,
 	type MedusaErrorHandlerFunction,
 	type MedusaRequest,
 	type MedusaRequestHandler,
 	type MedusaResponse,
+	validateAndTransformBody,
+	validateAndTransformQuery,
 } from "@medusajs/framework/http";
 import { MedusaError } from "@medusajs/framework/utils";
+import { z } from "@medusajs/framework/zod";
+import * as Sentry from "@sentry/node";
 import multer from "multer";
-import { authRateLimit } from "./middlewares/rate-limit";
-import { contactRateLimit } from "./middlewares/contact-rate-limit";
-import { newsletterRateLimit } from "./middlewares/newsletter-rate-limit";
-import { PostStoreReviewSchema } from "./store/reviews/route";
-import { PostAdminUpdateReviewsStatusSchema } from "./admin/reviews/status/route";
+import { PostAdminInvoiceConfigSchema } from "./admin/invoice-config/route";
 import { PostAdminReviewResponseSchema } from "./admin/reviews/[id]/response/route";
 import { GetAdminReviewsSchema } from "./admin/reviews/route";
-import { GetStoreReviewsSchema } from "./store/products/[id]/reviews/route";
+import { PostAdminUpdateReviewsStatusSchema } from "./admin/reviews/status/route";
+import { contactRateLimit } from "./middlewares/contact-rate-limit";
+import { newsletterRateLimit } from "./middlewares/newsletter-rate-limit";
+import { authRateLimit } from "./middlewares/rate-limit";
 import { PostStoreContactSchema } from "./store/contact/validators";
-import {
-	WishlistNameSchema,
-	PostCreateWishlistItemSchema,
-} from "./store/customers/me/wishlists/validators";
-import {
-	PostGuestCreateWishlistItemSchema,
-	PostImportWishlistSchema,
-} from "./store/wishlists/validators";
-import { PostAdminInvoiceConfigSchema } from "./admin/invoice-config/route";
-import {
-	SubscribeSchema,
-	UnsubscribeSchema,
-} from "./store/newsletter/validators";
-import * as Sentry from "@sentry/node";
+import { PostCreateWishlistItemSchema, WishlistNameSchema } from "./store/customers/me/wishlists/validators";
+import { SubscribeSchema, UnsubscribeSchema } from "./store/newsletter/validators";
+import { GetStoreReviewsSchema } from "./store/products/[id]/reviews/route";
+import { PostStoreReviewSchema } from "./store/reviews/route";
+import { PostGuestCreateWishlistItemSchema, PostImportWishlistSchema } from "./store/wishlists/validators";
 
 const upload = multer({
 	storage: multer.memoryStorage(),
@@ -42,12 +34,7 @@ const upload = multer({
 		if (allowed.includes(file.mimetype)) {
 			cb(null, true);
 		} else {
-			cb(
-				new MedusaError(
-					MedusaError.Types.INVALID_DATA,
-					"Only JPEG, PNG, and WebP images are allowed",
-				),
-			);
+			cb(new MedusaError(MedusaError.Types.INVALID_DATA, "Only JPEG, PNG, and WebP images are allowed"));
 		}
 	},
 });
@@ -69,24 +56,13 @@ const trustProxyMiddleware: MedusaRequestHandler = (req, _res, next) => {
 	next();
 };
 
-const reviewUploadsMiddleware = upload.array(
-	"files",
-	3,
-) as unknown as MedusaRequestHandler;
+const reviewUploadsMiddleware = upload.array("files", 3) as unknown as MedusaRequestHandler;
 
 export default defineMiddlewares({
-	errorHandler: ((
-		error: unknown,
-		req: MedusaRequest,
-		_res: MedusaResponse,
-		next,
-	) => {
+	errorHandler: ((error: unknown, req: MedusaRequest, _res: MedusaResponse, next) => {
 		Sentry.withScope((scope) => {
 			const actorId =
-				"auth_context" in req
-					? (req as { auth_context?: { actor_id?: string } }).auth_context
-							?.actor_id
-					: undefined;
+				"auth_context" in req ? (req as { auth_context?: { actor_id?: string } }).auth_context?.actor_id : undefined;
 			if (actorId) {
 				scope.setUser({ id: actorId });
 			}
@@ -124,10 +100,7 @@ export default defineMiddlewares({
 		{
 			method: ["POST"],
 			matcher: "/store/reviews",
-			middlewares: [
-				authenticate("customer", ["session", "bearer"]),
-				validateAndTransformBody(PostStoreReviewSchema),
-			],
+			middlewares: [authenticate("customer", ["session", "bearer"]), validateAndTransformBody(PostStoreReviewSchema)],
 		},
 		// --- Contact form route ---
 		{
@@ -146,10 +119,7 @@ export default defineMiddlewares({
 		{
 			method: ["POST"],
 			matcher: "/store/reviews/uploads",
-			middlewares: [
-				authenticate("customer", ["session", "bearer"]),
-				reviewUploadsMiddleware,
-			],
+			middlewares: [authenticate("customer", ["session", "bearer"]), reviewUploadsMiddleware],
 		},
 		{
 			matcher: "/store/products/:id/reviews",
@@ -201,9 +171,7 @@ export default defineMiddlewares({
 		{
 			matcher: "/admin/reviews/status",
 			method: ["POST"],
-			middlewares: [
-				validateAndTransformBody(PostAdminUpdateReviewsStatusSchema),
-			],
+			middlewares: [validateAndTransformBody(PostAdminUpdateReviewsStatusSchema)],
 		},
 		{
 			matcher: "/admin/reviews/:id/response",
@@ -241,9 +209,7 @@ export default defineMiddlewares({
 		{
 			matcher: "/store/wishlists/:id/items",
 			method: ["POST"],
-			middlewares: [
-				validateAndTransformBody(PostGuestCreateWishlistItemSchema),
-			],
+			middlewares: [validateAndTransformBody(PostGuestCreateWishlistItemSchema)],
 		},
 		// Import route — requires auth
 		{
@@ -287,9 +253,20 @@ export default defineMiddlewares({
 		{
 			matcher: "/store/newsletter/unsubscribe",
 			method: ["POST"],
+			middlewares: [newsletterRateLimit(), validateAndTransformBody(UnsubscribeSchema)],
+		},
+		// --- WhatsApp checkout validation ---
+		{
+			matcher: "/store/whatsapp-checkout/complete",
+			method: ["POST"],
 			middlewares: [
-				newsletterRateLimit(),
-				validateAndTransformBody(UnsubscribeSchema),
+				validateAndTransformBody(
+					z.object({
+						cart_id: z.string().min(1, "cart_id is required"),
+						customer_name: z.string().optional(),
+						delivery_address: z.string().optional(),
+					}),
+				),
 			],
 		},
 	],
