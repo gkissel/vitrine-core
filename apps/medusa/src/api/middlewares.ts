@@ -16,6 +16,7 @@ import { PostAdminInvoiceConfigSchema } from "./admin/invoice-config/route";
 import { PostAdminReviewResponseSchema } from "./admin/reviews/[id]/response/route";
 import { GetAdminReviewsSchema } from "./admin/reviews/route";
 import { PostAdminUpdateReviewsStatusSchema } from "./admin/reviews/status/route";
+import { PostAdminWhatsAppConfigSchema } from "./admin/whatsapp-config/route";
 import { contactRateLimit } from "./middlewares/contact-rate-limit";
 import { newsletterRateLimit } from "./middlewares/newsletter-rate-limit";
 import { authRateLimit } from "./middlewares/rate-limit";
@@ -255,6 +256,12 @@ export default defineMiddlewares({
 			method: ["POST"],
 			middlewares: [newsletterRateLimit(), validateAndTransformBody(UnsubscribeSchema)],
 		},
+		// --- Admin WhatsApp config ---
+		{
+			matcher: "/admin/whatsapp-config",
+			method: ["POST"],
+			middlewares: [validateAndTransformBody(PostAdminWhatsAppConfigSchema)],
+		},
 		// --- WhatsApp checkout validation ---
 		{
 			matcher: "/store/whatsapp-checkout/complete",
@@ -262,7 +269,7 @@ export default defineMiddlewares({
 			middlewares: [
 				validateAndTransformBody(
 					z.object({
-						cart_id: z.string().min(1, "cart_id is required"),
+						cart_id: z.string().min(1, "cart_id é obrigatório"),
 						customer_name: z.string().optional(),
 						delivery_address: z.string().optional(),
 					}),
