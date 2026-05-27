@@ -570,10 +570,14 @@ async function loadCollections(): Promise<Collection[]> {
   }
 }
 
-const getCollectionsCached = unstable_cache(loadCollections, ["medusa-collections"], {
-  tags: [TAGS.collections],
-  revalidate: CATALOG_REVALIDATE_SECONDS,
-});
+const getCollectionsCached = unstable_cache(
+  loadCollections,
+  ["medusa-collections"],
+  {
+    tags: [TAGS.collections],
+    revalidate: CATALOG_REVALIDATE_SECONDS,
+  },
+);
 
 export async function getCollections(): Promise<Collection[]> {
   return IS_PRODUCTION ? getCollectionsCached() : loadCollections();
@@ -618,10 +622,14 @@ async function loadCategories(): Promise<CategorySummary[]> {
   }
 }
 
-const getCategoriesCached = unstable_cache(loadCategories, ["medusa-categories"], {
-  tags: [TAGS.collections],
-  revalidate: CATALOG_REVALIDATE_SECONDS,
-});
+const getCategoriesCached = unstable_cache(
+  loadCategories,
+  ["medusa-categories"],
+  {
+    tags: [TAGS.collections],
+    revalidate: CATALOG_REVALIDATE_SECONDS,
+  },
+);
 
 export async function getCategories(): Promise<CategorySummary[]> {
   return IS_PRODUCTION ? getCategoriesCached() : loadCategories();
@@ -936,10 +944,14 @@ async function loadNavigation(): Promise<Navigation> {
   };
 }
 
-const getNavigationCached = unstable_cache(loadNavigation, ["medusa-navigation"], {
-  tags: [TAGS.collections],
-  revalidate: CATALOG_REVALIDATE_SECONDS,
-});
+const getNavigationCached = unstable_cache(
+  loadNavigation,
+  ["medusa-navigation"],
+  {
+    tags: [TAGS.collections],
+    revalidate: CATALOG_REVALIDATE_SECONDS,
+  },
+);
 
 export async function getNavigation(): Promise<Navigation> {
   return IS_PRODUCTION ? getNavigationCached() : loadNavigation();
