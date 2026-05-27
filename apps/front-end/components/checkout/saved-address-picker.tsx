@@ -50,10 +50,12 @@ export function SavedAddressPicker({
 }: SavedAddressPickerProps) {
   // Default to first address if available, otherwise "new"
   const [selected, setSelected] = useState<string>(
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     addresses.length > 0 ? addresses[0]!.id : "new",
   );
 
   // Sync initial selection to parent state on mount
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (addresses.length > 0) {
       onSelect(toPayload(addresses[0]!));
@@ -75,7 +77,7 @@ export function SavedAddressPicker({
   return (
     <fieldset>
       <legend className="text-sm/6 font-semibold text-gray-900">
-        Saved addresses
+        Endereços salvos
       </legend>
       <div className="mt-3 space-y-3">
         {addresses.map((addr) => {
@@ -132,7 +134,7 @@ export function SavedAddressPicker({
           <span className="flex items-center">
             <span className="flex flex-col text-sm">
               <span className="font-medium text-gray-900">
-                Use a different address
+                Usar outro endereço
               </span>
             </span>
           </span>

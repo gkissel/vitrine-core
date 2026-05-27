@@ -13,17 +13,17 @@ export function AddressCard({ address, onEdit }: AddressCardProps) {
   const { showNotification } = useNotification();
 
   async function handleDelete() {
-    if (!confirm("Are you sure you want to delete this address?")) return;
+    if (!confirm("Tem certeza de que deseja excluir este endereço?")) return;
     const error = await deleteCustomerAddress(address.id);
     if (error) {
-      showNotification("error", "Failed to delete address", error);
+      showNotification("error", "Erro ao deletar endereço", error);
     } else {
-      showNotification("success", "Address deleted");
+      showNotification("success", "Endereço deletado");
     }
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 p-6">
+    <div className="rounded-lg border border-gray-200 p-6 mb-4">
       <p className="font-medium text-gray-900">
         {address.first_name} {address.last_name}
       </p>
@@ -56,7 +56,7 @@ export function AddressCard({ address, onEdit }: AddressCardProps) {
           onClick={handleDelete}
           className="cursor-pointer text-red-600 hover:text-red-500"
         >
-          Delete
+          Deletar
         </button>
       </div>
     </div>

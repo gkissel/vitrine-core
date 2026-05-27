@@ -6,16 +6,72 @@ type WorkflowInput = {
 	customer_id?: string;
 };
 
+type CartItemInput = {
+	id?: string;
+	title?: string;
+	quantity?: number;
+	unit_price?: number | string;
+	total?: number | string;
+	variant_id?: string;
+	product_id?: string;
+	metadata?: Record<string, unknown>;
+};
+
+type ShippingMethodInput = {
+	name?: string;
+	amount?: number | string;
+	shipping_option_id?: string;
+	data?: Record<string, unknown>;
+};
+
+type CartInput = {
+	id: string;
+	currency_code?: string;
+	email?: string | null;
+	customer_id?: string | null;
+	region?: {
+		currency_code?: string;
+	};
+	shipping_address?: Record<string, unknown> | null;
+	billing_address?: Record<string, unknown> | null;
+	items?: CartItemInput[];
+	shipping_methods?: ShippingMethodInput[];
+};
+
+type CartModuleService = {
+	retrieveCart: (cartId: string, options: Record<string, unknown>) => Promise<CartInput | null>;
+	updateCarts: (input: { id: string; completed_at: string }) => Promise<unknown>;
+};
+
+type OrderModuleService = {
+	createOrders: (input: Record<string, unknown>) => Promise<{ id: string }>;
+	deleteOrders: (orderIds: string[]) => Promise<unknown>;
+};
+
 const createOrderFromCartStep = createStep(
 	"create-order-from-cart-step",
 	async (input: WorkflowInput, { container }) => {
-		const cartModuleService = container.resolve(Modules.CART) as any;
-		const orderModuleService = container.resolve(Modules.ORDER) as any;
+		const cartModuleService = container.resolve(Modules.CART) as CartModuleService;
+		const orderModuleService = container.resolve(Modules.ORDER) as OrderModuleService;
 
 		// Retrieve the cart with relations requ1ired to calculate totals
 		const cart = await cartModuleService.retrieveCart(input.cart_id, {
 			relations: ["items", "shipping_address", "billing_address", "shipping_methods"],
-			select: ["total", "item_subtotal", "items.total"],
+			select: [
+				"currency_code",
+				"region_id",
+				"sales_channel_id",
+				"total",
+				"item_subtotal",
+				"items.id",
+				"items.title",
+				"items.quantity",
+				"items.unit_price",
+				"items.total",
+				"items.variant_id",
+				"items.product_id",
+				"items.metadata",
+			],
 		});
 
 		if (!cart) {
@@ -60,7 +116,7 @@ const createOrderFromCartStep = createStep(
 				}
 			: shippingAddress;
 
-		const items = (cart.items ?? []).map((item: any) => {
+		const items = (cart.items ?? []).map((item) => {
 			const quantity = Number(item.quantity ?? 0) || 0;
 			// Prefer explicit unit_price, fallback to total/quantity when available
 			const rawUnit = item.unit_price ?? item.total ?? 0;
@@ -76,7 +132,7 @@ const createOrderFromCartStep = createStep(
 			};
 		});
 
-		const shipping_methods = (cart.shipping_methods ?? []).map((sm: any) => ({
+		const shipping_methods = (cart.shipping_methods ?? []).map((sm) => ({
 			name: sm?.name ?? "",
 			amount: Number(sm?.amount ?? 0) || 0,
 			shipping_option_id: sm?.shipping_option_id ?? "",
@@ -84,7 +140,7 @@ const createOrderFromCartStep = createStep(
 		}));
 
 		const order = await orderModuleService.createOrders({
-			currency_code: cart.currency_code || "usd",
+			currency_code: cart.currency_code || cart.region?.currency_code || "brl",
 			email: cart.email || undefined,
 			customer_id: cart.customer_id || input.customer_id || undefined,
 			region_id: (cart as unknown as Record<string, unknown>).region_id as string | undefined,
@@ -100,7 +156,7 @@ const createOrderFromCartStep = createStep(
 		try {
 			await cartModuleService.updateCarts({ id: cart.id, completed_at: new Date().toISOString() });
 		} catch (err) {
-			const logger = container.resolve("logger") as any;
+			const logger = container.resolve("logger") as { warn?: (payload: unknown, message: string) => void };
 			if (logger && typeof logger.warn === "function") {
 				logger.warn({ err }, "Failed to mark cart as completed after creating order");
 			}
@@ -110,7 +166,7 @@ const createOrderFromCartStep = createStep(
 	},
 	async (orderId, { container }) => {
 		if (!orderId) return;
-		const orderModuleService = container.resolve(Modules.ORDER) as any;
+		const orderModuleService = container.resolve(Modules.ORDER) as OrderModuleService;
 		await orderModuleService.deleteOrders([orderId]);
 	},
 );

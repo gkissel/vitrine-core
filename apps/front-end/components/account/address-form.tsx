@@ -34,7 +34,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
       if (result?.success) {
         showNotification(
           "success",
-          isEditing ? "Address updated" : "Address added",
+          isEditing ? "Endereço atualizado" : "Endereço adicionado",
         );
         onCloseRef.current();
       }

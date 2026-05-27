@@ -1,5 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-import { MedusaError, Modules } from "@medusajs/framework/utils";
+import { MedusaError } from "@medusajs/framework/utils";
 import { WHATSAPP_MODULE } from "../../../../modules/whatsapp";
 import type WhatsAppModuleService from "../../../../modules/whatsapp/service";
 import { createOrderFromCartWorkflow } from "../../../../workflows/create-order-from-cart";
@@ -43,11 +43,47 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 	});
 
 	const order = result.order;
-
-	const orderService = req.scope.resolve(Modules.ORDER);
-	const fullOrder = await orderService.retrieveOrder(order.id, {
-		relations: ["items"],
+	const query = req.scope.resolve("query");
+	const { data: [fullOrder] } = await query.graph({
+		entity: "order",
+		fields: [
+			"id",
+			"currency_code",
+			"total",
+			"subtotal",
+			"tax_total",
+			"discount_total",
+			"discount_tax_total",
+			"original_total",
+			"original_subtotal",
+			"original_tax_total",
+			"item_total",
+			"item_subtotal",
+			"item_tax_total",
+			"original_item_total",
+			"original_item_subtotal",
+			"original_item_tax_total",
+			"shipping_total",
+			"shipping_subtotal",
+			"shipping_tax_total",
+			"original_shipping_total",
+			"original_shipping_subtotal",
+			"original_shipping_tax_total",
+			"items.*",
+			"shipping_methods.*",
+			"summary.*",
+		],
+		filters: {
+			id: order.id,
+		},
 	});
+
+	if (!fullOrder) {
+		throw new MedusaError(
+			MedusaError.Types.NOT_FOUND,
+			"Pedido criado, mas não foi possível recarregar os totais"
+		);
+	}
 
 	const whatsappService: WhatsAppModuleService = req.scope.resolve(WHATSAPP_MODULE);
 	const configs = await whatsappService.listWhatsAppConfigs();
@@ -67,8 +103,16 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
 	const itemLines = ((fullOrder.items ?? []) as unknown as OrderLineItem[])
 		.map((item) => {
-			const variant = item.variant_title && item.variant_title !== "Default Variant" ? ` (${item.variant_title})` : "";
-			return `\u2022 ${item.quantity ?? 0}x ${item.product_title ?? ""}${variant} \u2014 ${formatMoney(item.total ?? 0, currency)}`;
+			const productName = item.product_title || (item as { title?: string | null }).title || "Produto sem nome";
+			const variantName =
+				item.variant_title && item.variant_title !== "Default Variant"
+					? item.variant_title
+					: null;
+			const quantity = Number(item.quantity ?? 0) || 0;
+			const lineTotal =
+				Number(item.total ?? 0) ||
+				(Number((item as { unit_price?: number | string }).unit_price ?? 0) || 0) * quantity;
+			return `\u2022 ${quantity}x ${productName}${variantName ? ` | Variante: ${variantName}` : ""} \u2014 ${formatMoney(lineTotal, currency)}`;
 		})
 		.join("\n");
 
@@ -78,9 +122,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 	const message = applyTemplate(template, {
 		id_do_pedido: order.id,
 		linhas_de_itens: itemLines,
-		subtotal: formatMoney(Number(fullOrder.subtotal ?? 0), currency),
+		subtotal: formatMoney(Number(fullOrder.item_subtotal ?? fullOrder.subtotal ?? 0), currency),
 		desconto: discount,
-		total: formatMoney(Number(fullOrder.total ?? 0), currency),
+		total: formatMoney(Number(fullOrder.total ?? fullOrder.grand_total ?? 0), currency),
 		nome_do_cliente: customer_name || "",
 		endereco: delivery_address || "",
 	});

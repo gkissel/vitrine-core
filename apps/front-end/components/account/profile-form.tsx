@@ -20,7 +20,7 @@ export function ProfileForm({ customer }: ProfileFormProps) {
   useEffect(() => {
     if (result !== prevResultRef.current) {
       if (result?.success) {
-        showNotification("success", "Profile updated");
+        showNotification("success", "Perfil atualizado");
       }
       prevResultRef.current = result;
     }

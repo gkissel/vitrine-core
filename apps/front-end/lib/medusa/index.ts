@@ -690,7 +690,14 @@ export async function getOrSetCart(): Promise<Cart> {
 export async function addToCart(
   lines: { merchandiseId: string; quantity: number }[],
 ): Promise<Cart> {
-  const cartId = (await getCartId()) ?? (await createCart()).id;
+  const existingCartId = await getCartId();
+  const createdCart = existingCartId ? undefined : await createCart();
+  const cartId = existingCartId ?? createdCart?.id;
+
+  if (!cartId) {
+    throw new Error("Cart ID unavailable after creation");
+  }
+
   const headers = await getAuthHeaders();
 
   for (const line of lines) {
