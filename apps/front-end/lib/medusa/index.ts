@@ -211,12 +211,14 @@ const getProductsCached = unstable_cache(
     sortKey,
     limit = 100,
     categoryId,
+    collectionId,
   }: {
     query?: string;
     reverse?: boolean;
     sortKey?: string;
     limit?: number;
     categoryId?: string;
+    collectionId?: string;
   }): Promise<Product[]> => {
     try {
       const region = await getDefaultRegion();
@@ -231,6 +233,7 @@ const getProductsCached = unstable_cache(
       if (query) fetchQuery.q = query;
       if (order) fetchQuery.order = order;
       if (categoryId) fetchQuery.category_id = [categoryId];
+      if (collectionId) fetchQuery.collection_id = [collectionId];
 
       const { products } = await sdk.client.fetch<{
         products: HttpTypes.StoreProduct[];
@@ -267,14 +270,23 @@ export async function getProducts({
   sortKey,
   limit = 100,
   categoryId,
+  collectionId,
 }: {
   query?: string;
   reverse?: boolean;
   sortKey?: string;
   limit?: number;
   categoryId?: string;
+  collectionId?: string;
 }): Promise<Product[]> {
-  return getProductsCached({ query, reverse, sortKey, limit, categoryId });
+  return getProductsCached({
+    query,
+    reverse,
+    sortKey,
+    limit,
+    categoryId,
+    collectionId,
+  });
 }
 
 export async function getProductsByHandles(

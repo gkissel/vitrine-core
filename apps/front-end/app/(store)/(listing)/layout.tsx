@@ -1,7 +1,5 @@
-import { Squares2X2Icon } from "@heroicons/react/20/solid";
 import Collections from "components/layout/search/collections";
-import MobileFiltersWrapper from "components/layout/search/mobile-filters-wrapper";
-import { SortFilter } from "components/layout/search/sort-filter";
+import CollectionFilter from "components/layout/search/collection-filter";
 import { Suspense } from "react";
 import ChildrenWrapper from "../shared/children-wrapper";
 import SearchHeader from "../shared/search-header";
@@ -31,20 +29,15 @@ export default function ListingLayout({
             Produtos
           </h2>
 
-          <div className="pb-6 lg:hidden">
+          <div className="grid grid-cols-2 gap-4 pb-6">
             <Collections />
+            <CollectionFilter />
           </div>
 
-          <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-            <div className="hidden lg:block">
-              <Collections />
-            </div>
-
-            <div className="lg:col-span-3">
-              <Suspense fallback={null}>
-                <ChildrenWrapper>{children}</ChildrenWrapper>
-              </Suspense>
-            </div>
+          <div>
+            <Suspense fallback={null}>
+              <ChildrenWrapper>{children}</ChildrenWrapper>
+            </Suspense>
           </div>
         </section>
       </div>

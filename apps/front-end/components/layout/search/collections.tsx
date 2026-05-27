@@ -9,7 +9,14 @@ async function CollectionList() {
     handle: category.handle,
   }));
 
-  return <CollectionsList collections={categoriesWithHandles} />;
+  return (
+    <CollectionsList
+      label="Categorias"
+      collections={categoriesWithHandles}
+      facetType="category"
+      queryParam="category"
+    />
+  );
 }
 
 export default function Collections() {

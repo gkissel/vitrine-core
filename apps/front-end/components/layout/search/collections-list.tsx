@@ -10,19 +10,25 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 export default function CollectionsList({
+  label,
   collections,
+  facetType,
+  queryParam,
 }: {
+  label: string;
   collections: Array<{ name: string; handle: string }>;
+  facetType: string;
+  queryParam: string;
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const selectedCategory = searchParams.get("category") || "";
+  const selectedValue = searchParams.get(queryParam) || "";
   const isSearchPage = pathname === "/search" && MEILISEARCH_ENABLED && !!query;
-  const currentCategory = selectedCategory;
+  const currentSelection = selectedValue;
 
   const currentCollectionName =
-    collections.find((collection) => collection.handle === currentCategory)
+    collections.find((collection) => collection.handle === currentSelection)
       ?.name || "";
 
   const buildSearchHref = (overrides: Record<string, string | null>) => {
@@ -39,12 +45,12 @@ export default function CollectionsList({
     return createUrl("/search", params);
   };
 
-  const buildProductsHref = (categoryHandle: string) => {
+  const buildProductsHref = (handle: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (categoryHandle) {
-      params.set("category", categoryHandle);
+    if (handle) {
+      params.set(queryParam, handle);
     } else {
-      params.delete("category");
+      params.delete(queryParam);
     }
 
     return createUrl("/products", params);
@@ -52,7 +58,7 @@ export default function CollectionsList({
 
   return (
     <div className="space-y-3 pb-6">
-      <p className="block text-lg font-normal text-gray-500">Categorias:</p>
+      <p className="block text-lg font-normal text-gray-500">{label}:</p>
 
       <Menu as="div" className="relative">
         <MenuButton className="group flex w-full cursor-pointer items-center justify-between rounded-2xl border border-gray-200  px-5 py-4 text-left text-lg text-slate-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/20 data-open:rounded-b-none data-open:border-b-0">
@@ -71,10 +77,10 @@ export default function CollectionsList({
             {collections.map((collection) => {
               const href = isSearchPage
                 ? buildSearchHref({
-                    category: collection.handle || null,
+                    [queryParam]: collection.handle || null,
                   })
                 : buildProductsHref(collection.handle);
-              const isActive = currentCategory === collection.handle;
+              const isActive = currentSelection === collection.handle;
 
               return (
                 <MenuItem key={collection.name}>
@@ -86,7 +92,7 @@ export default function CollectionsList({
                       }
 
                       trackClient("search_facet_applied", {
-                        facet_type: "category",
+                        facet_type: facetType,
                         facet_value: collection.handle || "all",
                         query: redactPiiFromQuery(query),
                       });
