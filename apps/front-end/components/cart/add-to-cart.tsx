@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { addItem } from "components/cart/actions";
 import { useCart } from "components/cart/cart-context";
 import { useProduct } from "components/product/product-context";
-import { Product, ProductVariant } from "lib/types";
+import type { Product, ProductVariant } from "lib/types";
 import { useActionState } from "react";
 
 function SubmitButton({
@@ -26,7 +26,11 @@ function SubmitButton({
 
   if (!availableForSale) {
     return (
-      <button disabled className={clsx(buttonClasses, disabledClasses)}>
+      <button
+        type="submit"
+        disabled
+        className={clsx(buttonClasses, disabledClasses)}
+      >
         <div className="flex items-center gap-2">
           <ShoppingCartIcon className="h-5 w-5" />
           Fora de estoque
@@ -38,6 +42,7 @@ function SubmitButton({
   if (!selectedVariantId) {
     return (
       <button
+        type="submit"
         aria-label="Por favor selecione uma opção"
         disabled
         className={clsx(buttonClasses, disabledClasses)}
@@ -57,6 +62,7 @@ function SubmitButton({
 
   return (
     <button
+      type="submit"
       aria-label="Adicionar ao carrinho"
       className={clsx(buttonClasses, {
         "cursor-pointer hover:opacity-90": !className,
@@ -91,22 +97,31 @@ export function AddToCart({
   const { state: productState } = useProduct();
   const [message, formAction] = useActionState(addItem, null);
 
+  const optionKeys = new Set(
+    product.options.map((option) => option.name.toLowerCase()),
+  );
+  const selectedOptionState = Object.fromEntries(
+    Object.entries(productState).filter(([key]) => optionKeys.has(key)),
+  );
+
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every(
-      (option) => option.value === productState[option.name.toLowerCase()],
+      (option) =>
+        option.value === selectedOptionState[option.name.toLowerCase()],
     ),
   );
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
   const addItemAction = formAction.bind(null, selectedVariantId);
-  const finalVariant = variants.find(
-    (variant) => variant.id === selectedVariantId,
-  )!;
+  const finalVariant = selectedVariantId
+    ? variants.find((variant) => variant.id === selectedVariantId)
+    : undefined;
 
   return (
     <form
       className={formClassName || "w-full"}
       action={async () => {
+        if (!finalVariant) return;
         addCartItem(finalVariant, product);
         addItemAction();
       }}

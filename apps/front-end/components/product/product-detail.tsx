@@ -1,32 +1,17 @@
 "use client";
 
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from "@headlessui/react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { AddToCart } from "components/cart/add-to-cart";
 import Breadcrumbs from "components/layout/breadcrumbs";
 import ProductDetailPrice from "components/price/product-detail-price";
 import { useProduct, useUpdateURL } from "components/product/product-context";
-import { WishlistButton } from "components/wishlist/wishlist-button";
+import { VariantSelector } from "components/product/template-variant-selector";
 import { WishlistCount } from "components/wishlist/wishlist-count";
-import clsx from "clsx";
 import { trackClient } from "lib/analytics";
-import { sanitizeHtml } from "lib/sanitize";
 import type { Product, ProductOption, ProductVariant } from "lib/types";
 import type { TailwindProductDetail } from "lib/utils";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Link from "next/link";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 
 type Combination = {
   id: string;
@@ -49,65 +34,37 @@ export function ProductDetail({
 }: ProductDetailProps) {
   const { state, updateOption: updateOptionContext } = useProduct();
   const updateURL = useUpdateURL();
-  const router = useRouter();
+
+  const optionKeys = new Set(
+    options.map((option) => option.name.toLowerCase()),
+  );
+  const selectedOptionState = Object.fromEntries(
+    Object.entries(state).filter(([key]) => optionKeys.has(key)),
+  );
 
   const combinations: Combination[] = variants.map((variant) => ({
     id: variant.id,
     availableForSale: variant.availableForSale,
-    ...variant.selectedOptions.reduce(
-      (acc, option) => ({ ...acc, [option.name.toLowerCase()]: option.value }),
-      {} as Record<string, string>,
+    ...variant.selectedOptions.reduce<Record<string, string>>(
+      (accumulator, option) => {
+        accumulator[option.name.toLowerCase()] = option.value;
+        return accumulator;
+      },
+      {},
     ),
   }));
 
-  const optionExists = (key: string, value: string) =>
-    options.find(
-      (o) => o.name.toLowerCase() === key && o.values.includes(value),
-    );
-
-  const isAvailable = (key: string, value: string) => {
-    const optionParams = { ...state, [key]: value };
-    const filtered = Object.entries(optionParams).filter(([k, v]) =>
-      optionExists(k, String(v)),
-    );
-    const match = combinations.find((combination) =>
-      filtered.every(
-        ([k, v]) => combination[k] === v && combination.availableForSale,
-      ),
-    );
-    return Boolean(match);
-  };
-
-  const pushParam = (key: string, value: string) => {
-    const newState = updateOptionContext(key, value);
-    updateURL(newState);
-  };
-
-  const getColorClasses = (value: string) => {
-    const color = product.colors.find(
-      (c) => c.name.toLowerCase() === value.toLowerCase(),
-    );
-    return color?.classes || "bg-gray-200";
-  };
-
-  // Extract hex color from Tailwind arbitrary class like bg-[#111827]
-  const getColorHexFromValue = (value: string): string => {
-    const classes = getColorClasses(value);
-    const match = classes.match(/bg-\[(#[^\]]+)\]/);
-    return match?.[1] ?? "#9CA3AF";
-  };
-
-  const colorOption = options.find((o) => o.name.toLowerCase() === "color");
-  const sizeOption = options.find((o) => o.name.toLowerCase() === "size");
-
   // Derive the currently selected variant ID from option state
   const selectedVariant = combinations.find((combo) =>
-    Object.entries(state).every(([key, value]) => combo[key] === value),
+    Object.entries(selectedOptionState).every(
+      ([key, value]) => combo[key] === value,
+    ),
   );
-  const selectedVariantId = selectedVariant?.id ?? variants[0]?.id ?? "";
+  const selectedVariantFromVariants =
+    variants.find((variant) => variant.id === selectedVariant?.id) ??
+    variants[0];
 
   // Select sensible defaults on first render (prefer available variant)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const optionKeys = options.map((o) => o.name.toLowerCase());
     const missingKeys = optionKeys.filter((k) => !state[k]);
@@ -136,7 +93,7 @@ export function ProductDetail({
         updateURL(newState);
       }
     });
-  }, [options, variants, state]);
+  }, [options, variants, state, updateOptionContext, updateURL]);
 
   return (
     <main className="mx-auto max-w-7xl sm:px-6 sm:pt-12 lg:px-8">
@@ -217,79 +174,29 @@ export function ProductDetail({
 
             <div className="mt-5">
               <ProductDetailPrice
-                amount={product.priceAmount}
-                currencyCode={product.priceCurrency}
+                amount={
+                  selectedVariantFromVariants?.price.amount ??
+                  product.priceAmount
+                }
+                currencyCode={
+                  selectedVariantFromVariants?.price.currencyCode ??
+                  product.priceCurrency
+                }
               />
             </div>
 
             {/* Social proof */}
             <WishlistCount productId={sourceProduct.id} />
 
-            <div className="mt-6">
-              <h3 className="sr-only">Description</h3>
-
-              <div
-                // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(product.description),
-                }}
-                className="space-y-6 text-base text-gray-700"
-              />
+            <div className="mt-8">
+              <VariantSelector options={options} variants={variants} />
             </div>
 
-            {/* Size picker */}
-            {sizeOption && sizeOption.values.length > 0 && (
-              <div className="mt-8">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                  {/* <a href="#" className="text-sm font-medium text-brand hover:text-brand">
-                    See sizing chart
-                  </a> */}
-                </div>
-
-                <fieldset aria-label="Choose a size" className="mt-2">
-                  <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                    {sizeOption.values.map((value) => {
-                      const isOptionAvailable = isAvailable("size", value);
-                      const isActive = state["size"] === value;
-                      return (
-                        <label
-                          key={value}
-                          aria-label={value}
-                          className="group has-checked:border-primary-600 has-checked:bg-brand has-focus-visible:outline-brand relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25"
-                        >
-                          <input
-                            value={value}
-                            checked={Boolean(isActive)}
-                            name="size"
-                            type="radio"
-                            disabled={!isOptionAvailable}
-                            onChange={() => {
-                              pushParam("size", value);
-                              trackClient("product_variant_selected", {
-                                product_id: sourceProduct.id,
-                                option_name: "size",
-                                option_value: value,
-                              });
-                            }}
-                            className="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed"
-                          />
-                          <span className="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">
-                            {value}
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                </fieldset>
-              </div>
-            )}
-
-            <div className="mt-10 flex">
+            <div className="mt-8 flex">
               <AddToCart
                 product={sourceProduct}
                 formClassName="max-w-xs flex-1"
-                className="bg-brand hover:bg-brand focus:ring-brand flex  cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
+                className="bg-brand hover:bg-brand flex cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white "
               />
             </div>
           </div>
