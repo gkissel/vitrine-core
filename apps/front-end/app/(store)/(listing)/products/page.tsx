@@ -6,65 +6,50 @@ import { buildItemListJsonLd, JsonLdScript } from "lib/structured-data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Products",
-  description: "Browse all products.",
-  alternates: { canonical: "/products" },
+	title: "Products",
+	description: "Browse all products.",
+	alternates: { canonical: "/products" },
 };
 
 export default async function ProductsPage(props: {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+	searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const searchParams = await props.searchParams;
-  const { sort } = (searchParams || {}) as { [key: string]: string };
-  const categoryHandle = (searchParams?.category as string | undefined) || "";
-  const collectionHandle =
-    (searchParams?.collection as string | undefined) || "";
-  const { sortKey, reverse } =
-    sorting.find((item) => item.slug === sort) || defaultSort;
-  const [categories, collections] = await Promise.all([
-    getCategories(),
-    getCollections(),
-  ]);
-  const categoryId = categories.find(
-    (category) => category.handle === categoryHandle,
-  )?.id;
-  const collectionId = collections.find(
-    (collection) => collection.handle === collectionHandle,
-  )?.id;
-  const products = await getProducts({
-    sortKey,
-    reverse,
-    categoryId,
-    collectionId,
-  });
+	const searchParams = await props.searchParams;
+	const { sort } = (searchParams || {}) as { [key: string]: string };
+	const categoryHandle = (searchParams?.category as string | undefined) || "";
+	const collectionHandle = (searchParams?.collection as string | undefined) || "";
+	const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
+	const [categories, collections] = await Promise.all([getCategories(), getCollections()]);
+	const categoryId = categories.find((category) => category.handle === categoryHandle)?.id;
+	const collectionId = collections.find((collection) => collection.handle === collectionHandle)?.id;
+	const products = await getProducts({
+		sortKey,
+		reverse,
+		categoryId,
+		collectionId,
+	});
 
-  // Fetch wishlist states
-  const variantIds = products
-    .map((p) => p.variants?.[0]?.id)
-    .filter((id): id is string => Boolean(id));
+	// Fetch wishlist states
+	const variantIds = products.map((p) => p.variants?.[0]?.id).filter((id): id is string => Boolean(id));
 
-  const wishlistStatesMap = await getVariantsWishlistStates(variantIds);
-  const wishlistStates = Object.fromEntries(wishlistStatesMap);
+	const wishlistStatesMap = await getVariantsWishlistStates(variantIds);
+	const wishlistStates = Object.fromEntries(wishlistStatesMap);
 
-  const itemListJsonLd = buildItemListJsonLd(
-    products.map((product, index) => ({
-      position: index + 1,
-      name: product.title,
-      path: `/product/${product.handle}`,
-      image: product.featuredImage?.url,
-    })),
-  );
+	const itemListJsonLd = buildItemListJsonLd(
+		products.map((product, index) => ({
+			position: index + 1,
+			name: product.title,
+			path: `/product/${product.handle}`,
+			image: product.featuredImage?.url,
+		})),
+	);
 
-  return (
-    <div>
-      {products.length > 0 ? (
-        <ProductGridPaginated
-          products={products}
-          wishlistStates={wishlistStates}
-          itemsPerPage={6}
-        />
-      ) : null}
-      <JsonLdScript data={itemListJsonLd} />
-    </div>
-  );
+	return (
+		<div>
+			{products.length > 0 ? (
+				<ProductGridPaginated products={products} wishlistStates={wishlistStates} itemsPerPage={6} />
+			) : null}
+			<JsonLdScript data={itemListJsonLd} />
+		</div>
+	);
 }
