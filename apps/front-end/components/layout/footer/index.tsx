@@ -64,10 +64,13 @@ async function NewsletterWithCustomer() {
 	return <FooterNewsletter customerEmail={customer?.email} />;
 }
 
-export default async function Footer() {
+const getCurrentYear = async () => {
 	"use cache";
 
-	const currentYear = new Date().getFullYear();
+	return new Date().getFullYear();
+};
+export default async function Footer() {
+	const currentYear = await getCurrentYear();
 
 	return (
 		<footer className="bg-white">
