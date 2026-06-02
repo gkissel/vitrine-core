@@ -16,6 +16,7 @@ type VariantWithCalculatedPrice = HttpTypes.StoreProductVariant & {
     calculated_amount?: number;
   };
   inventory_quantity?: number;
+  images?: HttpTypes.StoreProductImage[]; // ← adicione
 };
 
 interface ProductTagValue {
@@ -60,6 +61,7 @@ function transformImage(
 function transformVariant(
   variant: VariantWithCalculatedPrice,
   currencyCode: string,
+  productTitle: string,
 ): ProductVariant {
   const calculatedPrice = variant.calculated_price;
   const amount = calculatedPrice?.calculated_amount ?? 0;
@@ -78,6 +80,9 @@ function transformVariant(
       value: opt.value || "",
     })),
     price: toMoney(amount, currencyCode),
+    images: (variant.images || []).map((img) =>
+      transformImage(img, productTitle),
+    ), // ← adicione
   };
 }
 
@@ -91,8 +96,13 @@ function transformOption(option: HttpTypes.StoreProductOption): ProductOption {
 
 export function transformProduct(product: HttpTypes.StoreProduct): Product {
   const currencyCode = getCurrencyCode(product);
-  const variants = (product.variants || []).map((v) =>
-    transformVariant(v as VariantWithCalculatedPrice, currencyCode),
+  const variants = (product.variants || []).map(
+    (v) =>
+      transformVariant(
+        v as VariantWithCalculatedPrice,
+        currencyCode,
+        product.title || "",
+      ), // ← passe o título
   );
   const images = (product.images || []).map((img) =>
     transformImage(img, product.title || ""),

@@ -10,6 +10,7 @@ import {
   getCollections,
   getProduct,
   getProductRecommendations,
+  getProducts,
 } from "lib/medusa";
 import {
   buildBreadcrumbJsonLd,
@@ -94,6 +95,7 @@ export default async function ProductPage(props: {
     { name: product.title, path: `/product/${product.handle}` },
   ]);
 
+  // console.dir({ product }, { depth: null });
   return (
     <>
       <JsonLdScript data={breadcrumbJsonLd} />

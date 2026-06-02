@@ -18,6 +18,12 @@ import {
   transformProduct,
 } from "./transforms";
 
+const timeAtBuild = async () => {
+  "use cache";
+
+  return new Date().toISOString();
+};
+
 const STATIC_PAGE_LINKS = [
   ...FOOTER_CONFIG.company,
   ...FOOTER_CONFIG.legal,
@@ -182,6 +188,7 @@ const getProductCached = unstable_cache(
       });
 
       const product = products[0];
+
       if (!product) return undefined;
 
       return transformProduct(product);
@@ -555,7 +562,7 @@ async function loadCollections(): Promise<Collection[]> {
     description: "All products",
     seo: { title: "All", description: "All products" },
     path: "/products",
-    updatedAt: new Date().toISOString(),
+    updatedAt: await timeAtBuild(),
   };
 
   try {
@@ -601,7 +608,7 @@ async function loadCategories(): Promise<CategorySummary[]> {
     name: "Todos",
     handle: "",
     path: "/products",
-    updatedAt: new Date().toISOString(),
+    updatedAt: await timeAtBuild(),
   };
 
   try {
@@ -621,7 +628,7 @@ async function loadCategories(): Promise<CategorySummary[]> {
         name: category.name,
         handle: category.handle,
         path: `/products?category=${encodeURIComponent(category.handle)}`,
-        updatedAt: category.updated_at ?? new Date().toISOString(),
+        updatedAt: category.updated_at,
       }));
 
     return [allCategory, ...categories];

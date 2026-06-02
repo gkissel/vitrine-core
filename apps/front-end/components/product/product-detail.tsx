@@ -10,8 +10,14 @@ import { trackClient } from "lib/analytics";
 import type { Product, ProductOption, ProductVariant } from "lib/types";
 import type { TailwindProductDetail } from "lib/utils";
 import Image from "next/image";
-import { useEffect } from "react";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "components/ui/carousel";
+import { cn } from "lib/utils";
 
 type Combination = {
   id: string;
@@ -26,6 +32,23 @@ interface ProductDetailProps {
   variants: ProductVariant[];
 }
 
+/** Resolve the image list to show for a given variant.
+ *  Priority: variant.images → product.images (fallback) */
+function resolveImagesForVariant(
+  variant: ProductVariant | undefined,
+  productImages: TailwindProductDetail["images"],
+) {
+  if (variant?.images && variant.images.length > 0) {
+    return variant.images.map((img, i) => ({
+      id: `variant-img-${i}`,
+      src: img.url,
+      alt: img.altText ?? "",
+      name: img.altText ?? "",
+    }));
+  }
+  return productImages;
+}
+
 export function ProductDetail({
   product,
   sourceProduct,
@@ -34,6 +57,9 @@ export function ProductDetail({
 }: ProductDetailProps) {
   const { state, updateOption: updateOptionContext } = useProduct();
   const updateURL = useUpdateURL();
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const prevVariantIdRef = useRef<string | undefined>(undefined);
 
   const optionKeys = new Set(
     options.map((option) => option.name.toLowerCase()),
@@ -54,7 +80,6 @@ export function ProductDetail({
     ),
   }));
 
-  // Derive the currently selected variant ID from option state
   const selectedVariant = combinations.find((combo) =>
     Object.entries(selectedOptionState).every(
       ([key, value]) => combo[key] === value,
@@ -64,13 +89,50 @@ export function ProductDetail({
     variants.find((variant) => variant.id === selectedVariant?.id) ??
     variants[0];
 
-  // Select sensible defaults on first render (prefer available variant)
+  // Resolve which images to display based on selected variant
+  const displayImages = resolveImagesForVariant(
+    selectedVariantFromVariants,
+    product.images,
+  );
+
+  // When variant changes, reset carousel to first slide
+  useEffect(() => {
+    if (!api) return;
+    const variantId = selectedVariantFromVariants?.id;
+    if (variantId === prevVariantIdRef.current) return;
+    prevVariantIdRef.current = variantId;
+    api.scrollTo(0, true); // jump instantly on variant change
+    setCurrent(0);
+  }, [selectedVariantFromVariants?.id, api]);
+
+  // Track current slide index
+  useEffect(() => {
+    if (!api) return;
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    api.on("select", onSelect);
+    onSelect();
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
+  const goToImage = useCallback(
+    (index: number) => {
+      api?.scrollTo(index);
+      trackClient("product_image_viewed", {
+        product_id: sourceProduct.id,
+        image_index: index,
+      });
+    },
+    [api, sourceProduct.id],
+  );
+
+  // Select sensible defaults on first render
   useEffect(() => {
     const optionKeys = options.map((o) => o.name.toLowerCase());
     const missingKeys = optionKeys.filter((k) => !state[k]);
     if (missingKeys.length === 0) return;
 
-    // Filter variants by currently selected state (partial match)
     const partiallyMatched = variants.filter((v) =>
       v.selectedOptions.every((opt) => {
         const key = opt.name.toLowerCase();
@@ -107,28 +169,47 @@ export function ProductDetail({
             ]}
           />
         </div>
-        {/* Product */}
+
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           {/* Image gallery */}
-          <TabGroup
-            className="flex flex-col-reverse"
-            onChange={(index) =>
-              trackClient("product_image_viewed", {
-                product_id: sourceProduct.id,
-                image_index: index,
-              })
-            }
-          >
-            {/* Image selector */}
-            <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
-              <TabList className="grid grid-cols-4 gap-6">
-                {product.images.map((image) => (
-                  <Tab
-                    key={image.id}
-                    className="group focus-visible:ring-primary-500/50 relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium text-gray-900 uppercase hover:bg-gray-50 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-offset-4"
-                  >
-                    <span className="sr-only">{image.name}</span>
-                    <span className="absolute inset-0 overflow-hidden rounded-md">
+          <div className="flex flex-col gap-4">
+            {/* Main carousel */}
+            <Carousel setApi={setApi} className="w-full">
+              <CarouselContent>
+                {displayImages.map((image, index) => (
+                  <CarouselItem key={image.id}>
+                    <div className="relative aspect-square w-full overflow-hidden sm:rounded-lg">
+                      <Image
+                        alt={image.alt}
+                        src={image.src}
+                        fill
+                        sizes="(min-width: 1024px) 50vw, 100vw"
+                        className="object-cover"
+                        priority={index === 0}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+
+            {/* Thumbnail strip */}
+            {displayImages.length > 1 && (
+              <div className="mx-auto hidden w-full max-w-2xl sm:block lg:max-w-none">
+                <div className="grid grid-cols-4 gap-3">
+                  {displayImages.map((image, index) => (
+                    <button
+                      type="button"
+                      key={image.id}
+                      onClick={() => goToImage(index)}
+                      className={cn(
+                        "group relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium text-gray-900 uppercase hover:bg-gray-50 focus:outline-none focus-visible:ring-3 focus-visible:ring-offset-4 overflow-hidden",
+                        current === index
+                          ? "ring-primary-500 ring-2 ring-offset-2"
+                          : "ring-transparent ring-2 ring-offset-2",
+                      )}
+                    >
+                      <span className="sr-only">{image.name}</span>
                       <Image
                         alt={image.name || ""}
                         src={image.src}
@@ -136,32 +217,12 @@ export function ProductDetail({
                         sizes="96px"
                         className="object-cover"
                       />
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="group-data-selected:ring-primary-500 pointer-events-none absolute inset-0 rounded-md ring-2 ring-transparent ring-offset-2"
-                    />
-                  </Tab>
-                ))}
-              </TabList>
-            </div>
-
-            <TabPanels>
-              {product.images.map((image) => (
-                <TabPanel key={image.id}>
-                  <div className="relative aspect-square w-full overflow-hidden sm:rounded-lg">
-                    <Image
-                      alt={image.alt}
-                      src={image.src}
-                      fill
-                      sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="object-cover"
-                    />
-                  </div>
-                </TabPanel>
-              ))}
-            </TabPanels>
-          </TabGroup>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Product info */}
           <div className="mt-5 px-4 sm:mt-16 sm:px-0 lg:mt-0">
@@ -185,7 +246,6 @@ export function ProductDetail({
               />
             </div>
 
-            {/* Social proof */}
             <WishlistCount productId={sourceProduct.id} />
 
             <div className="mt-8">
@@ -196,7 +256,7 @@ export function ProductDetail({
               <AddToCart
                 product={sourceProduct}
                 formClassName="max-w-xs flex-1"
-                className="bg-brand hover:bg-brand flex cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white "
+                className="bg-brand hover:bg-brand flex cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white"
               />
             </div>
           </div>
