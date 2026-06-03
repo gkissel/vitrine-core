@@ -142,7 +142,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     ),
     desconto: discount,
     total: formatMoney(
-      Number(fullOrder.total ?? fullOrder.grand_total ?? 0),
+      Number(fullOrder.total ?? fullOrder.raw_total ?? 0),
       currency,
     ),
     nome_do_cliente: customer_name || "",
