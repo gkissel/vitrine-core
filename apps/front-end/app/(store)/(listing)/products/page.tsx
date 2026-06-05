@@ -6,13 +6,13 @@ import { buildItemListJsonLd, JsonLdScript } from "lib/structured-data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Products",
-  description: "Browse all products.",
-  alternates: { canonical: "/products" },
+	title: "Products",
+	description: "Browse all products.",
+	alternates: { canonical: "/products" },
 };
 
 export default async function ProductsPage(props: {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+	searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
   const { sort } = (searchParams || {}) as { [key: string]: string };
@@ -37,22 +37,17 @@ export default async function ProductsPage(props: {
     categoryId,
     collectionId,
   });
-  const filteredProducts = collectionHandle
-    ? products.filter(
-        (product) => product.collection?.handle === collectionHandle,
-      )
-    : products;
 
   // Fetch wishlist states
-  const variantIds = filteredProducts
+  const variantIds = products
     .map((p) => p.variants?.[0]?.id)
     .filter((id): id is string => Boolean(id));
 
-  const wishlistStatesMap = await getVariantsWishlistStates(variantIds);
-  const wishlistStates = Object.fromEntries(wishlistStatesMap);
+	const wishlistStatesMap = await getVariantsWishlistStates(variantIds);
+	const wishlistStates = Object.fromEntries(wishlistStatesMap);
 
   const itemListJsonLd = buildItemListJsonLd(
-    filteredProducts.map((product, index) => ({
+    products.map((product, index) => ({
       position: index + 1,
       name: product.title,
       path: `/product/${product.handle}`,
@@ -62,9 +57,9 @@ export default async function ProductsPage(props: {
 
   return (
     <div>
-      {filteredProducts.length > 0 ? (
+      {products.length > 0 ? (
         <ProductGridPaginated
-          products={filteredProducts}
+          products={products}
           wishlistStates={wishlistStates}
           itemsPerPage={6}
         />

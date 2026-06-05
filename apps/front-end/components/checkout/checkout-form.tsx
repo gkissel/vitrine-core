@@ -12,13 +12,13 @@ import { useCallback, useMemo, useState } from "react";
 
 const STEP_ORDER: CheckoutStep[] = ["email", "address", "review"];
 
-const STEP_LABELS: Record<CheckoutStep, string> = {
+const STEP_LABELS: Record<Extract<CheckoutStep, "email" | "address">, string> = {
 	email: "Email de contato",
 	address: "Endereço de entrega",
-	shipping: "",
-	payment: "",
-	review: ""
+	// review: "Revisar pedido",
 };
+
+type STEP_LABELS_KEYS = keyof typeof STEP_LABELS;
 
 function deriveCompletedSteps(cart: HttpTypes.StoreCart): Set<CheckoutStep> {
 	const completed = new Set<CheckoutStep>();
@@ -45,6 +45,8 @@ function getStepSummary(step: CheckoutStep, cart: HttpTypes.StoreCart): string {
 			return parts.join(", ");
 		}
 		case "review":
+			return "";
+		default:
 			return "";
 	}
 }
@@ -126,7 +128,7 @@ export function CheckoutForm({
 									disabled
 									className="w-full cursor-auto text-left text-lg font-medium text-gray-500"
 								>
-									{STEP_LABELS[step]}
+									{STEP_LABELS[step as STEP_LABELS_KEYS]}
 								</button>
 							)}
 
@@ -134,7 +136,7 @@ export function CheckoutForm({
 							{!isFuture && (
 								<div className={clsx(isCollapsed && "flex items-center justify-between")}>
 									<div>
-										<h2 className="text-lg font-medium text-gray-900">{STEP_LABELS[step]}</h2>
+										<h2 className="text-lg font-medium text-gray-900">{STEP_LABELS[step as STEP_LABELS_KEYS]}</h2>
 										{isCollapsed && <p className="mt-1 text-sm text-gray-500">{getStepSummary(step, cart)}</p>}
 									</div>
 									{isCollapsed && (
