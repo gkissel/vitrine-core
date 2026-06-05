@@ -1,6 +1,11 @@
 import ProductGridPaginated from "components/layout/product-grid-paginated";
 import { defaultSort, sorting } from "lib/constants";
-import { getCategories, getProducts, getProductsByHandles } from "lib/medusa";
+import {
+  getCategories,
+  getCollections,
+  getProducts,
+  getProductsByHandles,
+} from "lib/medusa";
 import { getVariantsWishlistStates } from "lib/medusa/wishlist";
 import { MEILISEARCH_ENABLED, searchIndexedProducts } from "lib/meilisearch";
 import type { Metadata } from "next";
@@ -33,6 +38,7 @@ export default async function SearchPage(props: {
   const searchParams = await props.searchParams;
   const availability = getFirstParam(searchParams?.availability);
   const category = getFirstParam(searchParams?.category);
+  const collection = getFirstParam(searchParams?.collection);
   const maxPrice = getFirstParam(searchParams?.maxPrice);
   const minPrice = getFirstParam(searchParams?.minPrice);
   const sort = getFirstParam(searchParams?.sort);
@@ -53,21 +59,33 @@ export default async function SearchPage(props: {
   const meilisearchResults = meilisearchEnabledForRequest
     ? await searchIndexedProducts(searchValue, {
         availability: availability === "in_stock" ? true : undefined,
-        collection: category || null,
+        collection: collection || category || null,
         minPrice: parsedMinPrice,
         maxPrice: parsedMaxPrice,
         sort,
       })
     : null;
 
-  const categories = await getCategories();
+  const [categories, collections] = await Promise.all([
+    getCategories(),
+    getCollections(),
+  ]);
   const categoryId = categories.find((item) => item.handle === category)?.id;
+  const collectionId = collections.find(
+    (item) => item.handle === collection,
+  )?.id;
 
   const products = meilisearchResults
     ? await getProductsByHandles(
         meilisearchResults.hits.map((hit) => hit.handle),
       )
-    : await getProducts({ sortKey, reverse, query: searchValue, categoryId });
+    : await getProducts({
+        sortKey,
+        reverse,
+        query: searchValue,
+        categoryId,
+        collectionId,
+      });
 
   // Fetch wishlist states
   const variantIds = products

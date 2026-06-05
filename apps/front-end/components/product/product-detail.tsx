@@ -259,6 +259,9 @@ export function ProductDetail({
                 className="bg-brand hover:bg-brand flex cursor-pointer rounded-md border border-transparent px-6 py-3 text-base font-medium text-white"
               />
             </div>
+
+            <div className="mt-8 flex">
+            </div>
           </div>
         </div>
       </div>

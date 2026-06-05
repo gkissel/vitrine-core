@@ -1,4 +1,5 @@
-import { Product } from "lib/types";
+import type { Product } from "lib/types";
+import { formatMoney } from "lib/medusa/format";
 import Image from "next/image";
 import { forwardRef, useEffect, useRef } from "react";
 
@@ -85,13 +86,14 @@ export const ProductResult = forwardRef<
           {product.title}
         </p>
         <p className={`text-sm ${active ? "text-brand" : "text-gray-500"}`}>
-          ${price.toFixed(2)}
+          {formatMoney(price, "BRL")}
         </p>
       </div>
 
       {/* Arrow indicator */}
       {active && (
         <svg
+          aria-hidden="true"
           className="h-5 w-5 flex-none text-white"
           viewBox="0 0 20 20"
           fill="currentColor"

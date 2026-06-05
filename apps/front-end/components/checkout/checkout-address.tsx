@@ -57,7 +57,7 @@ export function CheckoutAddress({
   const [billingAddress, setBillingAddress] = useState<AddressPayload>(
     cartShippingToPayload(cart.billing_address) ?? { ...EMPTY_ADDRESS },
   );
-  const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
+  const [billingSameAsShipping] = useState(true);
   const [useSavedAddress, setUseSavedAddress] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -162,7 +162,7 @@ export function CheckoutAddress({
         <div className="mb-6">
           {showSavedPicker && (
             <h4 className="mb-3 text-sm/6 font-semibold text-gray-900">
-              New shipping address
+              Novo endereço
             </h4>
           )}
           <AddressForm

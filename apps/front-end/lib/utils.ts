@@ -4,6 +4,7 @@ import type {
 } from "components/home/types";
 import type { ReadonlyURLSearchParams } from "next/navigation";
 import type { Collection, Product } from "./types";
+import { formatMoney } from "lib/medusa/format";
 
 export const PLACEHOLDER_IMAGE_SRC = "/images/product-placeholder.svg";
 
@@ -39,6 +40,10 @@ export const createUrl = (
 
   return `${pathname}${queryString}`;
 };
+
+function formatBRL(amount: number): string {
+  return formatMoney(amount, "BRL");
+}
 
 export const ensureStartsWith = (stringToCheck: string, startsWith: string) =>
   stringToCheck.startsWith(startsWith)
@@ -95,8 +100,8 @@ export const transformProductToTailwind = (
 
   // Format price with currency symbol
   const price = product.variants[0]?.price
-    ? `$${parseFloat(product.variants[0].price.amount).toFixed(2)}`
-    : "$0.00";
+    ? formatBRL(parseFloat(product.variants[0].price.amount))
+    : formatBRL(0);
 
   return {
     id:
@@ -240,12 +245,12 @@ export const transformProductToTailwindDetail = (
 
   // Format price
   const price = product.variants[0]?.price
-    ? `$${parseFloat(product.variants[0].price.amount).toFixed(2)}`
-    : "$0.00";
+    ? formatBRL(parseFloat(product.variants[0].price.amount))
+    : formatBRL(0);
 
   // Store raw price data for proper formatting
   const priceAmount = product.variants[0]?.price?.amount || "0";
-  const priceCurrency = product.variants[0]?.price?.currencyCode || "USD";
+  const priceCurrency = product.variants[0]?.price?.currencyCode || "BRL";
 
   // Create default product details sections
   const details = [
@@ -329,8 +334,8 @@ export const transformProductsToRelatedProducts = (
 
     // Format price
     const price = product.variants[0]?.price
-      ? `$${parseFloat(product.variants[0].price.amount).toFixed(2)}`
-      : "$0.00";
+      ? formatBRL(parseFloat(product.variants[0].price.amount))
+      : formatBRL(0);
 
     return {
       id: parseInt(product.id.replace(/\D/g, "")) || index + 1,

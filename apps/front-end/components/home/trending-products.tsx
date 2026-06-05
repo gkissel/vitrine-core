@@ -48,7 +48,12 @@ export function TrendingProducts({
       const handle = product.href.replace(/^\/?product\//, "");
       const description = product.description || product.name;
       const variantTitle = product.color || product.name;
-      const priceAmount = Number(product.price.replace(/[^0-9.-]/g, ""));
+      const normalizedPrice = product.price.replace(/[^0-9,.-]/g, "");
+      const priceAmount = Number(
+        normalizedPrice.includes(",")
+          ? normalizedPrice.replace(/\./g, "").replace(",", ".")
+          : normalizedPrice,
+      );
       const safeAmount = Number.isFinite(priceAmount)
         ? priceAmount.toFixed(2)
         : "0.00";
@@ -62,7 +67,7 @@ export function TrendingProducts({
           : [],
         price: {
           amount: safeAmount,
-          currencyCode: "USD",
+          currencyCode: "BRL",
         },
       };
 
@@ -85,11 +90,11 @@ export function TrendingProducts({
         priceRange: {
           minVariantPrice: {
             amount: safeAmount,
-            currencyCode: "USD",
+            currencyCode: "BRL",
           },
           maxVariantPrice: {
             amount: safeAmount,
-            currencyCode: "USD",
+            currencyCode: "BRL",
           },
         },
         variants: [variant],

@@ -15,7 +15,9 @@ const STEP_ORDER: CheckoutStep[] = ["email", "address", "review"];
 const STEP_LABELS: Record<CheckoutStep, string> = {
 	email: "Email de contato",
 	address: "Endereço de entrega",
-	// review: "Revisar pedido",
+	shipping: "",
+	payment: "",
+	review: ""
 };
 
 function deriveCompletedSteps(cart: HttpTypes.StoreCart): Set<CheckoutStep> {

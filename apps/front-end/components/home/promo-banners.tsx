@@ -13,17 +13,19 @@ export function PromoBanners() {
       subtitle:
         "Blend tradicional, sabor intenso e folha selecionada da serra gaúcha.",
       label: "1500+ clientes satisfeitos",
+      href: "/products?category=chimarr%C3%A3o-tradicional",
     },
     {
-      title: "Tererê Gelado",
+      title: "Erva para Tereré",
       subtitle: "Refrescante e leve, ideal para o verão brasileiro.",
       label: "1000+ clientes satisfeitos",
+      href: "/products?category=terer%C3%A9",
     },
     {
-      title: "Erva Orgânica",
-      subtitle:
-        "Sem agrotóxicos, certificada e com sabor suave para quem começa.",
+      title: "Acessórios",
+      subtitle: "Cuia, bomba e garrafa térmica para uma experiência completa",
       label: "750+ clientes satisfeitos",
+      href: "/products?category=acess%C3%B3rios",
     },
   ];
 
@@ -69,9 +71,12 @@ export function PromoBanners() {
                   {banner.label}
                 </span>
                 {/** biome-ignore lint/a11y/useButtonType: <explanation> */}
-                <button className="bg-white text-gray-900 w-8 h-8 rounded flex items-center justify-center font-bold">
+                <Link
+                  href={banner.href}
+                  className="bg-white text-gray-900 w-8 h-8 rounded flex items-center justify-center font-bold"
+                >
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
               </div>
             </div>
           ))}

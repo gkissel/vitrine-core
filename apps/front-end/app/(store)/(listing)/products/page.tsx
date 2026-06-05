@@ -37,9 +37,14 @@ export default async function ProductsPage(props: {
     categoryId,
     collectionId,
   });
+  const filteredProducts = collectionHandle
+    ? products.filter(
+        (product) => product.collection?.handle === collectionHandle,
+      )
+    : products;
 
   // Fetch wishlist states
-  const variantIds = products
+  const variantIds = filteredProducts
     .map((p) => p.variants?.[0]?.id)
     .filter((id): id is string => Boolean(id));
 
@@ -47,7 +52,7 @@ export default async function ProductsPage(props: {
   const wishlistStates = Object.fromEntries(wishlistStatesMap);
 
   const itemListJsonLd = buildItemListJsonLd(
-    products.map((product, index) => ({
+    filteredProducts.map((product, index) => ({
       position: index + 1,
       name: product.title,
       path: `/product/${product.handle}`,
@@ -57,9 +62,9 @@ export default async function ProductsPage(props: {
 
   return (
     <div>
-      {products.length > 0 ? (
+      {filteredProducts.length > 0 ? (
         <ProductGridPaginated
-          products={products}
+          products={filteredProducts}
           wishlistStates={wishlistStates}
           itemsPerPage={6}
         />

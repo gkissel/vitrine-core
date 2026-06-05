@@ -42,13 +42,11 @@ export function AddressForm({
 
   const update = useCallback(
     (field: keyof AddressPayload, value: string) => {
-      setAddress((prev) => {
-        const next = { ...prev, [field]: value };
-        onChange?.(next);
-        return next;
-      });
+      const next = { ...address, [field]: value };
+      setAddress(next);
+      onChange?.(next);
     },
-    [onChange],
+    [address, onChange],
   );
 
   return (

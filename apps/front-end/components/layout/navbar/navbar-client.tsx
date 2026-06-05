@@ -26,9 +26,14 @@ type CustomerData = {
 type NavbarClientProps = {
   navigation: Navigation;
   customer: CustomerData | null;
+  collections: { name: string; handle: string }[]; // ← adicionar
 };
 
-export function NavbarClient({ navigation, customer }: NavbarClientProps) {
+export function NavbarClient({
+  navigation,
+  customer,
+  collections,
+}: NavbarClientProps) {
   const [open, setOpen] = useState(false);
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
@@ -74,14 +79,6 @@ export function NavbarClient({ navigation, customer }: NavbarClientProps) {
       }, 100);
     }
   }
-
-  const brandLinks = Array.from(
-    new Map(
-      navigation.categories
-        .flatMap((category) => category.brands)
-        .map((item) => [item.href, item]),
-    ).values(),
-  );
 
   return (
     <div className="bg-white">
@@ -143,18 +140,25 @@ export function NavbarClient({ navigation, customer }: NavbarClientProps) {
                   </summary>
 
                   <ul className="mt-3 space-y-3 pl-1">
-                    {brandLinks.map((item) => (
-                      <li key={item.name}>
-                        <Link
-                          prefetch={true}
-                          href={item.href}
-                          onClick={() => handleClose(false)}
-                          className="block text-sm font-medium text-slate-500 transition-colors hover:text-slate-700"
-                        >
-                          {item.name}
-                        </Link>
-                      </li>
-                    ))}
+                    {collections
+                      .filter(
+                        (item) =>
+                          item.handle !== "todos" &&
+                          item.handle !== "" &&
+                          item.name !== "Todos",
+                      )
+                      .map((item) => (
+                        <li key={item.handle}>
+                          <Link
+                            prefetch={true}
+                            href={`/products?collection=${item.handle}`}
+                            onClick={() => handleClose(false)}
+                            className="block text-sm font-medium text-slate-500 transition-colors hover:text-slate-700"
+                          >
+                            {item.name}
+                          </Link>
+                        </li>
+                      ))}
                   </ul>
                 </details>
               </nav>

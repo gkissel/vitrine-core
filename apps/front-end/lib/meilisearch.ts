@@ -51,11 +51,11 @@ export function meilisearchHitToProduct(
     priceRange: {
       minVariantPrice: {
         amount: Number(hit.min_variant_price || 0).toFixed(2),
-        currencyCode: "USD",
+        currencyCode: "BRL",
       },
       maxVariantPrice: {
         amount: Number(hit.max_variant_price || 0).toFixed(2),
-        currencyCode: "USD",
+        currencyCode: "BRL",
       },
     },
     variants: [],
