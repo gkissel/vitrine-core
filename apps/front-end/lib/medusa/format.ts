@@ -6,6 +6,6 @@ export function formatMoney(
 ): string {
   return new Intl.NumberFormat(DEFAULT_LOCALE, {
     style: "currency",
-    currency: currencyCode || "USD",
+    currency: currencyCode || "BRL",
   }).format(amount ?? 0);
 }

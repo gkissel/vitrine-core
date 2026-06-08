@@ -2,7 +2,6 @@
 
 import clsx from "clsx";
 import { useProduct, useUpdateURL } from "components/product/product-context";
-import { ProductOption, ProductVariant } from "lib/types";
 
 type Combination = {
   id: string;
@@ -10,12 +9,24 @@ type Combination = {
   [key: string]: string | boolean;
 };
 
+type VariantOption = {
+  id: string;
+  name: string;
+  values: string[];
+};
+
+type VariantSelection = {
+  id: string;
+  availableForSale: boolean;
+  selectedOptions: Array<{ name: string; value: string }>;
+};
+
 export function VariantSelector({
   options,
   variants,
 }: {
-  options: ProductOption[];
-  variants: ProductVariant[];
+  options: VariantOption[];
+  variants: VariantSelection[];
 }) {
   const { state, updateOption } = useProduct();
   const updateURL = useUpdateURL();
@@ -30,23 +41,26 @@ export function VariantSelector({
   const combinations: Combination[] = variants.map((variant) => ({
     id: variant.id,
     availableForSale: variant.availableForSale,
-    ...variant.selectedOptions.reduce(
-      (accumulator, option) => ({
-        ...accumulator,
-        [option.name.toLowerCase()]: option.value,
-      }),
+    ...variant.selectedOptions.reduce<Record<string, string>>(
+      (accumulator, option) => {
+        accumulator[option.name.toLowerCase()] = option.value;
+        return accumulator;
+      },
       {},
     ),
   }));
 
-  return options.map((option) => (
-    <form key={option.id}>
-      <dl className="mb-8">
-        <dt className="mb-4 text-sm tracking-wide uppercase">{option.name}</dt>
-        <dd className="flex flex-wrap gap-3">
-          {option.values.map((value) => {
-            const optionNameLowerCase = option.name.toLowerCase();
+  return options.map((option) => {
+    const optionNameLowerCase = option.name.toLowerCase();
 
+    return (
+      <div key={option.id} className="mb-8">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide">
+          {option.name}
+        </h2>
+
+        <div className="flex flex-wrap gap-3">
+          {option.values.map((value) => {
             // Base option params on current selectedOptions so we can preserve any other param state.
             const optionParams = { ...state, [optionNameLowerCase]: value };
 
@@ -71,21 +85,23 @@ export function VariantSelector({
 
             return (
               <button
-                formAction={() => {
+                key={value}
+                type="button"
+                onClick={() => {
                   const newState = updateOption(optionNameLowerCase, value);
                   updateURL(newState);
                 }}
-                key={value}
+                aria-pressed={isActive}
                 aria-disabled={!isAvailableForSale}
                 disabled={!isAvailableForSale}
                 title={`${option.name} ${value}${!isAvailableForSale ? " (Out of Stock)" : ""}`}
                 className={clsx(
-                  "flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900",
+                  "min-w-20 rounded-lg border px-4 py-2.5 text-sm font-medium transition-all duration-200 ",
                   {
-                    "cursor-default ring-2 ring-blue-600": isActive,
-                    "cursor-pointer ring-1 ring-transparent transition duration-300 ease-in-out hover:ring-blue-600":
+                    "border-brand bg-brand text-white shadow-sm": isActive,
+                    "border-gray-300 bg-white text-gray-900 hover:border-gray-400 hover:bg-gray-50":
                       !isActive && isAvailableForSale,
-                    "relative z-10 cursor-not-allowed overflow-hidden bg-neutral-100 text-neutral-500 ring-1 ring-neutral-300 before:absolute before:inset-x-0 before:-z-10 before:h-px before:-rotate-45 before:bg-neutral-300 before:transition-transform dark:bg-neutral-900 dark:text-neutral-400 dark:ring-neutral-700 dark:before:bg-neutral-700":
+                    "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400 line-through opacity-70":
                       !isAvailableForSale,
                   },
                 )}
@@ -94,8 +110,8 @@ export function VariantSelector({
               </button>
             );
           })}
-        </dd>
-      </dl>
-    </form>
-  ));
+        </div>
+      </div>
+    );
+  });
 }

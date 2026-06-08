@@ -50,7 +50,7 @@ export default function GlobalError({
                 <div className="inline-flex items-center gap-3 rounded-full border border-gray-200 bg-white px-4 py-2 shadow-sm">
                   <ExclamationTriangleIcon
                     aria-hidden="true"
-                    className="text-primary-600 size-5"
+                    className="text-brand size-5"
                   />
                   <span className="text-sm font-semibold text-gray-700">
                     Storefront recovery
@@ -71,21 +71,21 @@ export default function GlobalError({
                   <button
                     type="button"
                     onClick={() => reset()}
-                    className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold text-white shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    className="bg-brand hover:bg-brand-500 focus-visible:outline-brand inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold text-white shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                     <ArrowPathIcon aria-hidden="true" className="size-5" />
                     Try again
                   </button>
                   <Link
                     href="/"
-                    className="focus-visible:outline-primary-600 inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-900 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    className="focus-visible:outline-brand inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-900 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                     <HomeIcon aria-hidden="true" className="size-5" />
                     Back to home
                   </Link>
                   <Link
                     href="/products"
-                    className="focus-visible:outline-primary-600 inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-transparent px-2 py-3 text-sm font-semibold text-gray-700 transition hover:text-gray-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    className="focus-visible:outline-brand inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-transparent px-2 py-3 text-sm font-semibold text-gray-700 transition hover:text-gray-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                     <Squares2X2Icon aria-hidden="true" className="size-5" />
                     Browse products
@@ -123,10 +123,10 @@ export default function GlobalError({
 
               <aside className="rounded-3xl border border-gray-200 bg-white/95 p-6 shadow-[0_20px_80px_-40px_rgba(15,23,42,0.35)] backdrop-blur sm:p-8">
                 <div className="flex items-start gap-4">
-                  <div className="bg-primary-50 rounded-2xl p-3">
+                  <div className="bg-brand-50 rounded-2xl p-3">
                     <ExclamationTriangleIcon
                       aria-hidden="true"
-                      className="text-primary-600 size-6"
+                      className="text-brand size-6"
                     />
                   </div>
                   <div>
@@ -169,7 +169,7 @@ export default function GlobalError({
                     </p>
                     <Link
                       href="/contact"
-                      className="text-primary-600 hover:text-primary-500 focus-visible:outline-primary-600 mt-4 inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                      className="text-brand hover:text-brand focus-visible:outline-brand mt-4 inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                     >
                       <ChatBubbleLeftRightIcon
                         aria-hidden="true"

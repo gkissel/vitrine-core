@@ -153,7 +153,7 @@ export const CHECKOUT_REVIEW_PAYMENT_DT = 'dt:has-text("Payment")';
 export const ORDER_SUMMARY_HEADING = 'h2:has-text("Order summary")';
 export const ORDER_SUMMARY_ITEM = 'ul[role="list"] li';
 export const ORDER_SUMMARY_EDIT_LINK =
-  'a.font-medium.text-primary-600[href*="/product/"]';
+  'a.font-medium.text-brand[href*="/product/"]';
 export const ORDER_SUMMARY_REMOVE_BUTTON = 'button:has-text("Remove")';
 export const ORDER_SUMMARY_SUBTOTAL = 'dt:has-text("Subtotal")';
 export const ORDER_SUMMARY_TOTAL = 'dt:has-text("Total")';
@@ -162,7 +162,7 @@ export const ORDER_SUMMARY_TOTAL = 'dt:has-text("Total")';
 export const STEP_HEADING_ACTIVE = "h2.text-lg.font-medium.text-gray-900";
 export const STEP_DISABLED_BUTTON =
   "button:disabled.text-lg.font-medium.text-gray-500";
-export const STEP_EDIT_BUTTON = 'button.text-primary-600:has-text("Edit")';
+export const STEP_EDIT_BUTTON = 'button.text-brand:has-text("Edit")';
 
 // Express Checkout
 export const EXPRESS_CHECKOUT_DIVIDER = 'span:has-text("or")';

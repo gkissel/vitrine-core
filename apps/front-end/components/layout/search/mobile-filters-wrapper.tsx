@@ -1,15 +1,15 @@
-import { getCollections } from "lib/medusa";
+import { getCategories } from "lib/medusa";
 import { Suspense } from "react";
 import { MobileFilters } from "./mobile-filters";
 
 async function MobileFiltersList() {
-  const collections = await getCollections();
-  const collectionsWithHandles = collections.map((collection) => ({
-    name: collection.title,
-    handle: collection.handle,
+  const categories = await getCategories();
+  const categoriesWithHandles = categories.map((category) => ({
+    name: category.name,
+    handle: category.handle,
   }));
 
-  return <MobileFilters collections={collectionsWithHandles} />;
+  return <MobileFilters collections={categoriesWithHandles} />;
 }
 
 export default function MobileFiltersWrapper() {

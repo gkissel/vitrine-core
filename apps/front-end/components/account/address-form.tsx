@@ -17,7 +17,7 @@ type AddressFormProps = {
 export function AddressForm({ address, onClose }: AddressFormProps) {
   const isEditing = Boolean(address);
   const action = isEditing ? updateCustomerAddress : addCustomerAddress;
-  const submitLabel = isEditing ? "Update address" : "Add address";
+  const submitLabel = isEditing ? "Atualizar endereço" : "Adicionar endereço";
   const { showNotification } = useNotification();
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
@@ -34,7 +34,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
       if (result?.success) {
         showNotification(
           "success",
-          isEditing ? "Address updated" : "Address added",
+          isEditing ? "Endereço atualizado" : "Endereço adicionado",
         );
         onCloseRef.current();
       }
@@ -58,7 +58,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="first_name"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            First name
+            Nome
           </label>
           <div className="mt-2">
             <input
@@ -68,7 +68,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               required
               defaultValue={address?.first_name || ""}
               autoComplete="given-name"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -78,7 +78,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="last_name"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Last name
+            Sobrenome
           </label>
           <div className="mt-2">
             <input
@@ -88,7 +88,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               required
               defaultValue={address?.last_name || ""}
               autoComplete="family-name"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -98,7 +98,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="company"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Company <span className="text-gray-400">(optional)</span>
+            Empresa <span className="text-gray-400">(opcional)</span>
           </label>
           <div className="mt-2">
             <input
@@ -107,7 +107,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               name="company"
               defaultValue={address?.company || ""}
               autoComplete="organization"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -117,7 +117,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="address_1"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Address line 1
+            Endereço
           </label>
           <div className="mt-2">
             <input
@@ -127,7 +127,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               required
               defaultValue={address?.address_1 || ""}
               autoComplete="address-line1"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -137,7 +137,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="address_2"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Address line 2 <span className="text-gray-400">(optional)</span>
+            Endereço 2 <span className="text-gray-400">(opcional)</span>
           </label>
           <div className="mt-2">
             <input
@@ -146,7 +146,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               name="address_2"
               defaultValue={address?.address_2 || ""}
               autoComplete="address-line2"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -156,7 +156,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="city"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            City
+            Cidade
           </label>
           <div className="mt-2">
             <input
@@ -166,7 +166,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               required
               defaultValue={address?.city || ""}
               autoComplete="address-level2"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -176,7 +176,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="province"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            State / Province
+            Estado
           </label>
           <div className="mt-2">
             <input
@@ -185,7 +185,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               name="province"
               defaultValue={address?.province || ""}
               autoComplete="address-level1"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -195,7 +195,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="postal_code"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            ZIP / Postal code
+            CEP
           </label>
           <div className="mt-2">
             <input
@@ -205,7 +205,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               required
               defaultValue={address?.postal_code || ""}
               autoComplete="postal-code"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
             />
           </div>
         </div>
@@ -215,7 +215,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="country_code"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Country
+            País
           </label>
           <div className="mt-2">
             <select
@@ -224,19 +224,20 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               required
               defaultValue={address?.country_code || "us"}
               autoComplete="country"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
             >
-              <option value="us">United States</option>
-              <option value="ca">Canada</option>
-              <option value="gb">United Kingdom</option>
-              <option value="au">Australia</option>
-              <option value="de">Germany</option>
-              <option value="fr">France</option>
-              <option value="it">Italy</option>
-              <option value="es">Spain</option>
-              <option value="nl">Netherlands</option>
-              <option value="jp">Japan</option>
-              <option value="mx">Mexico</option>
+              <option value="br">Brasil</option>
+              <option value="us">Estados Unidos</option>
+              <option value="ca">Canadá</option>
+              <option value="gb">Reino Unido</option>
+              <option value="au">Austrália</option>
+              <option value="de">Alemanha</option>
+              <option value="fr">França</option>
+              <option value="it">Itália</option>
+              <option value="es">Espanha</option>
+              <option value="nl">Países Baixos</option>
+              <option value="jp">Japão</option>
+              <option value="mx">México</option>
             </select>
           </div>
         </div>
@@ -246,7 +247,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
             htmlFor="phone"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Phone <span className="text-gray-400">(optional)</span>
+            Telefone <span className="text-gray-400">(optional)</span>
           </label>
           <div className="mt-2">
             <input
@@ -255,7 +256,7 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
               name="phone"
               defaultValue={address?.phone || ""}
               autoComplete="tel"
-              className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
+              className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:max-w-xs sm:text-sm/6"
             />
           </div>
         </div>
@@ -267,14 +268,14 @@ export function AddressForm({ address, onClose }: AddressFormProps) {
           onClick={onClose}
           className="cursor-pointer text-sm/6 font-semibold text-gray-900"
         >
-          Cancel
+          Cancelar
         </button>
         <button
           type="submit"
           disabled={isPending}
-          className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 cursor-pointer rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-brand hover:bg-brand-500 focus-visible:outline-brand cursor-pointer rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isPending ? "Saving..." : submitLabel}
+          {isPending ? "Salvando..." : submitLabel}
         </button>
       </div>
     </form>

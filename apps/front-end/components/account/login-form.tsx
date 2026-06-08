@@ -19,7 +19,7 @@ export function LoginForm() {
           htmlFor="email"
           className="block text-sm/6 font-medium text-gray-900"
         >
-          Email address
+          Email
         </label>
         <div className="mt-2">
           <input
@@ -28,7 +28,7 @@ export function LoginForm() {
             name="email"
             required
             autoComplete="email"
-            className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+            className="focus:outline-brand block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
           />
         </div>
       </div>
@@ -38,7 +38,7 @@ export function LoginForm() {
           htmlFor="password"
           className="block text-sm/6 font-medium text-gray-900"
         >
-          Password
+          Senha
         </label>
         <div className="mt-2">
           <input
@@ -47,7 +47,7 @@ export function LoginForm() {
             name="password"
             required
             autoComplete="current-password"
-            className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+            className="focus:outline-brand-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
           />
         </div>
       </div>
@@ -56,9 +56,9 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 flex w-full cursor-pointer justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-brand hover:bg-brand-500 focus-visible:outline-brand-600 flex w-full cursor-pointer justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isPending ? "Signing in..." : "Sign in"}
+          {isPending ? "Entrando..." : "Entrar"}
         </button>
       </div>
     </form>

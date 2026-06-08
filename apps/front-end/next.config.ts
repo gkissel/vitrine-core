@@ -1,5 +1,6 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import { getStorefrontSentryBuildConfig } from "./lib/sentry";
+import type { NextConfig } from "next";
 
 const sentryBuildConfig = getStorefrontSentryBuildConfig();
 
@@ -73,7 +74,7 @@ function buildContentSecurityPolicy(): string {
 		`script-src ${scriptSrc}`,
 		"script-src-attr 'none'",
 		"style-src 'self' 'unsafe-inline'",
-		"img-src 'self' data: blob: https:",
+		`img-src 'self' data: blob: https: ${isDev ? backendOrigin : ""}`.trim(),
 		"font-src 'self' data:",
 		`connect-src ${connectSrc}`,
 		"frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://*.stripe.com",
@@ -143,11 +144,18 @@ export default withSentryConfig(
 			},
 		},
 		images: {
+			dangerouslyAllowLocalIP: true,
 			formats: ["image/avif", "image/webp"],
 			remotePatterns: [
 				{
 					protocol: "http",
 					hostname: "localhost",
+				},
+
+				{
+					protocol: "http",
+					hostname: "localhost",
+					port: "9000",
 				},
 				{
 					protocol: "https",
@@ -157,7 +165,6 @@ export default withSentryConfig(
 					protocol: "https",
 					hostname: "medusa-server-testing.s3.amazonaws.com",
 				},
-
 				{
 					protocol: "https",
 					hostname: "tailwindcss.com",
@@ -166,6 +173,14 @@ export default withSentryConfig(
 				{
 					protocol: "https",
 					hostname: "images.unsplash.com",
+				},
+				{
+					protocol: "http",
+					hostname: "192.168.208.94",
+				},
+				{
+					protocol: "http",
+					hostname: "127.0.0.1",
 				},
 				...(process.env.S3_IMAGE_HOSTNAME
 					? [
@@ -178,7 +193,7 @@ export default withSentryConfig(
 				...(process.env.NODE_ENV !== "production" ? [{ protocol: "https" as const, hostname: "placehold.co" }] : []),
 			],
 		},
-	},
+	} satisfies NextConfig,
 	{
 		authToken: sentryBuildConfig.authToken,
 		org: sentryBuildConfig.org,

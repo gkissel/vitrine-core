@@ -54,9 +54,9 @@ export function OrderSummary({ cart }: { cart: HttpTypes.StoreCart }) {
                     {handle && (
                       <Link
                         href={`/product/${handle}`}
-                        className="text-primary-600 hover:text-primary-500 font-medium"
+                        className="text-brand hover:text-brand font-medium"
                       >
-                        Edit
+                        Editar
                       </Link>
                     )}
                     {item.id && <RemoveItemButton lineItemId={item.id} />}

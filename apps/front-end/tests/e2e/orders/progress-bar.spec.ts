@@ -184,19 +184,19 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await expect(progressBar).toBeVisible();
 
     // Inner bar width: calc((0 * 2 + 1) / 8 * 100%) = 12.5%
-    const innerBar = progressBar.locator(".bg-primary-600");
+    const innerBar = progressBar.locator(".bg-brand");
     await expect(innerBar).toBeVisible();
     const width = await innerBar.evaluate((el) => el.style.width);
     expect(width).toBe("calc(12.5%)");
 
     // "Order placed" label should be highlighted
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
 
     // "Processing", "Shipped", "Delivered" should NOT be highlighted
-    await expect(labels.nth(1)).not.toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).not.toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(1)).not.toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).not.toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).not.toHaveClass(/text-brand/);
 
     // Status text
     await expect(page.locator('p:has-text("Order placed")')).toBeVisible();
@@ -212,16 +212,16 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await expect(progressBar).toBeVisible();
 
     // Inner bar width: calc((1 * 2 + 1) / 8 * 100%) = 37.5%
-    const innerBar = progressBar.locator(".bg-primary-600");
+    const innerBar = progressBar.locator(".bg-brand");
     const width = await innerBar.evaluate((el) => el.style.width);
     expect(width).toBe("calc(37.5%)");
 
     // "Order placed" and "Processing" should be highlighted
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).not.toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).not.toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).not.toHaveClass(/text-brand/);
 
     // Status text
     await expect(page.locator('p:has-text("Processing")')).toBeVisible();
@@ -234,10 +234,10 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await goToFirstOrderDetail(page);
 
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).not.toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).not.toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).not.toHaveClass(/text-brand/);
 
     await expect(page.locator('p:has-text("Processing")')).toBeVisible();
   });
@@ -252,16 +252,16 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await expect(progressBar).toBeVisible();
 
     // Inner bar width: calc((2 * 2 + 1) / 8 * 100%) = 62.5%
-    const innerBar = progressBar.locator(".bg-primary-600");
+    const innerBar = progressBar.locator(".bg-brand");
     const width = await innerBar.evaluate((el) => el.style.width);
     expect(width).toBe("calc(62.5%)");
 
     // First 3 labels should be highlighted
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).not.toHaveClass(/text-brand/);
 
     // Status text
     await expect(page.locator('p:has-text("Shipped")')).toBeVisible();
@@ -274,10 +274,10 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await goToFirstOrderDetail(page);
 
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).not.toHaveClass(/text-brand/);
 
     await expect(page.locator('p:has-text("Shipped")')).toBeVisible();
   });
@@ -289,10 +289,10 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await goToFirstOrderDetail(page);
 
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).not.toHaveClass(/text-brand/);
 
     await expect(page.locator('p:has-text("Shipped")')).toBeVisible();
   });
@@ -307,16 +307,16 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await expect(progressBar).toBeVisible();
 
     // Delivered should render as fully complete.
-    const innerBar = progressBar.locator(".bg-primary-600");
+    const innerBar = progressBar.locator(".bg-brand");
     const width = await innerBar.evaluate((el) => el.style.width);
     expect(width).toBe("100%");
 
     // All 4 labels should be highlighted
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).toHaveClass(/text-brand/);
 
     // Status text
     await expect(page.locator('p:has-text("Delivered")')).toBeVisible();
@@ -329,10 +329,10 @@ test.describe("Progress Bar — Fulfillment Stages", () => {
     await goToFirstOrderDetail(page);
 
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(2)).not.toHaveClass(/text-primary-600/);
-    await expect(labels.nth(3)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).toHaveClass(/text-brand/);
+    await expect(labels.nth(2)).not.toHaveClass(/text-brand/);
+    await expect(labels.nth(3)).not.toHaveClass(/text-brand/);
 
     await expect(page.locator('p:has-text("Processing")')).toBeVisible();
   });
@@ -364,8 +364,8 @@ test.describe("Progress Bar — Edge Cases", () => {
     await goToFirstOrderDetail(page);
 
     const labels = page.locator(".hidden.grid-cols-4 div");
-    await expect(labels.nth(0)).toHaveClass(/text-primary-600/);
-    await expect(labels.nth(1)).not.toHaveClass(/text-primary-600/);
+    await expect(labels.nth(0)).toHaveClass(/text-brand/);
+    await expect(labels.nth(1)).not.toHaveClass(/text-brand/);
 
     await expect(page.locator('p:has-text("Order placed")')).toBeVisible();
   });

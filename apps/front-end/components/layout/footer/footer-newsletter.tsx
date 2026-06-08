@@ -84,13 +84,13 @@ export function FooterNewsletter({
             defaultValue={customerEmail ?? ""}
             disabled={isPending}
             placeholder="Enter your email"
-            className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 disabled:opacity-50 sm:text-sm/6"
+            className="focus:outline-brand block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 disabled:opacity-50 sm:text-sm/6"
           />
           <div className="ml-4 shrink-0">
             <button
               type="submit"
               disabled={isPending}
-              className="bg-primary-600 hover:bg-primary-700 focus-visible:ring-primary-500 flex w-full cursor-pointer items-center justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-xs focus:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="bg-brand hover:bg-brand focus-visible:ring-primary-500 flex w-full cursor-pointer items-center justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-xs focus:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending ? "..." : "Sign up"}
             </button>

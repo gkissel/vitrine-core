@@ -1,13 +1,13 @@
-import { getNavigation } from "lib/medusa";
+// biome-ignore assist/source/organizeImports: <explanation>
+import { getNavigation, getCollections } from "lib/medusa";
 import { retrieveCustomer } from "lib/medusa/customer";
-import { getWishlistItemCount } from "lib/medusa/wishlist";
 import { NavbarClient } from "./navbar-client";
 
 export async function NavbarData() {
-  const [navigation, customer, wishlistCount] = await Promise.all([
+  const [navigation, customer, collections] = await Promise.all([
     getNavigation(),
     retrieveCustomer(),
-    getWishlistItemCount(),
+    getCollections(), // ← adicionar
   ]);
 
   const customerData = customer
@@ -21,7 +21,10 @@ export async function NavbarData() {
     <NavbarClient
       navigation={navigation}
       customer={customerData}
-      wishlistCount={wishlistCount}
+      collections={collections.map((c) => ({
+        name: c.title,
+        handle: c.handle,
+      }))}
     />
   );
 }

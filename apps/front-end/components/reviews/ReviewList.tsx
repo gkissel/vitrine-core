@@ -44,7 +44,7 @@ export function ReviewList({ reviews }: { reviews: Review[] }) {
                         {review.first_name} {review.last_name.charAt(0)}.
                       </h4>
                       {review.verified_purchase && (
-                        <span className="bg-primary-50 text-primary-700 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium">
+                        <span className="bg-brand-50 text-brand inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium">
                           <CheckBadgeIcon
                             className="size-4"
                             aria-hidden="true"

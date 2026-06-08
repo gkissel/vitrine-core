@@ -1,5 +1,5 @@
-import { loadEnv, defineConfig } from "@medusajs/framework/utils";
 import { randomUUID } from "node:crypto";
+import { defineConfig, loadEnv } from "@medusajs/framework/utils";
 import { siteModules } from "./src/site";
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd());
@@ -142,6 +142,9 @@ module.exports = defineConfig({
     },
     {
       resolve: "./src/modules/newsletter",
+    },
+    {
+      resolve: "./src/modules/whatsapp",
     },
     // S3 file provider for persistent storage (conditional on S3_BUCKET)
     ...(process.env.S3_BUCKET

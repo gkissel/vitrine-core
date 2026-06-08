@@ -73,7 +73,7 @@ export function CheckoutEmail({
         htmlFor="checkout-email"
         className="block text-sm/6 font-medium text-gray-900"
       >
-        Email address
+        Email
       </label>
       <div className="mt-2">
         <input
@@ -85,7 +85,7 @@ export function CheckoutEmail({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="focus:outline-primary-600 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+          className="focus:outline-brand block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
         />
       </div>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
@@ -93,9 +93,9 @@ export function CheckoutEmail({
         <button
           type="submit"
           disabled={isSubmitting || !email}
-          className="bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 w-full cursor-pointer rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+          className="bg-brand hover:bg-brand focus:ring-brand w-full cursor-pointer rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
         >
-          {isSubmitting ? "Processing..." : "Continue"}
+          {isSubmitting ? "Processando..." : "Continuar"}
         </button>
       </div>
     </form>

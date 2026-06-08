@@ -1,8 +1,14 @@
-import ProductGrid from "components/layout/product-grid";
+import ProductGridPaginated from "components/layout/product-grid-paginated";
 import { defaultSort, sorting } from "lib/constants";
-import { getProducts, getProductsByHandles } from "lib/medusa";
+import {
+  getCategories,
+  getCollections,
+  getProducts,
+  getProductsByHandles,
+} from "lib/medusa";
+import { getVariantsWishlistStates } from "lib/medusa/wishlist";
 import { MEILISEARCH_ENABLED, searchIndexedProducts } from "lib/meilisearch";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -31,6 +37,7 @@ export default async function SearchPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const availability = getFirstParam(searchParams?.availability);
+  const category = getFirstParam(searchParams?.category);
   const collection = getFirstParam(searchParams?.collection);
   const maxPrice = getFirstParam(searchParams?.maxPrice);
   const minPrice = getFirstParam(searchParams?.minPrice);
@@ -52,18 +59,42 @@ export default async function SearchPage(props: {
   const meilisearchResults = meilisearchEnabledForRequest
     ? await searchIndexedProducts(searchValue, {
         availability: availability === "in_stock" ? true : undefined,
-        collection: collection || null,
+        collection: collection || category || null,
         minPrice: parsedMinPrice,
         maxPrice: parsedMaxPrice,
         sort,
       })
     : null;
 
+  const [categories, collections] = await Promise.all([
+    getCategories(),
+    getCollections(),
+  ]);
+  const categoryId = categories.find((item) => item.handle === category)?.id;
+  const collectionId = collections.find(
+    (item) => item.handle === collection,
+  )?.id;
+
   const products = meilisearchResults
     ? await getProductsByHandles(
         meilisearchResults.hits.map((hit) => hit.handle),
       )
-    : await getProducts({ sortKey, reverse, query: searchValue });
+    : await getProducts({
+        sortKey,
+        reverse,
+        query: searchValue,
+        categoryId,
+        collectionId,
+      });
+
+  // Fetch wishlist states
+  const variantIds = products
+    .map((p) => p.variants?.[0]?.id)
+    .filter((id): id is string => Boolean(id));
+
+  const wishlistStatesMap = await getVariantsWishlistStates(variantIds);
+  const wishlistStates = Object.fromEntries(wishlistStatesMap);
+
   const shownCount = products.length;
   const totalCount = meilisearchResults?.totalCount ?? shownCount;
   const resultsText = totalCount === 1 ? "result" : "results";
@@ -78,7 +109,13 @@ export default async function SearchPage(props: {
             : `Showing ${shownCount} ${resultsText} for `}
         <span className="font-bold">&quot;{searchValue}&quot;</span>
       </p>
-      {products.length > 0 ? <ProductGrid products={products} /> : null}
+      {products.length > 0 ? (
+        <ProductGridPaginated
+          products={products}
+          wishlistStates={wishlistStates}
+          itemsPerPage={6}
+        />
+      ) : null}
     </div>
   );
 }

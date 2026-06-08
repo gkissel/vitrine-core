@@ -1,8 +1,9 @@
 "use cache";
-import { Collections } from "components/home/collections";
 import { Hero } from "components/home/hero";
 import { TrendingProducts } from "components/home/trending-products";
-import { getCollections, getProducts } from "lib/medusa";
+import { MasonryFeatures } from "components/home/masonry-features";
+import { PromoBanners } from "components/home/promo-banners";
+import { getProducts } from "lib/medusa";
 import {
   buildWebsiteJsonLd,
   buildOrganizationJsonLd,
@@ -10,11 +11,8 @@ import {
   getSiteSchemaConfig,
   JsonLdScript,
 } from "lib/structured-data";
-import {
-  transformCollectionToTailwind,
-  transformProductToTailwind,
-} from "lib/utils";
-import { Metadata } from "next";
+import { transformProductToTailwind } from "lib/utils";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   alternates: {
@@ -28,21 +26,17 @@ export default async function HomePage() {
   const allProducts = await getProducts({
     sortKey: "CREATED_AT",
     reverse: true,
-    limit: 4,
+    limit: 8,
   });
 
-  // Transform and limit to 4 products for trending section
-  const trendingProducts = allProducts
+  // Split products for two sections
+  const firstCategoryProducts = allProducts
     .slice(0, 4)
     .map(transformProductToTailwind);
+  const secondCategoryProducts = allProducts
+    .slice(4, 8)
+    .map(transformProductToTailwind);
 
-  // Fetch collections from Medusa
-  const allCollections = await getCollections();
-
-  // Transform and limit to 3 collections (skip the "All" collection at index 0)
-  const collections = allCollections
-    .slice(1, 4)
-    .map(transformCollectionToTailwind);
   const siteSchemaConfig = getSiteSchemaConfig({
     description: DEFAULT_SITE_DESCRIPTION,
   });
@@ -53,9 +47,28 @@ export default async function HomePage() {
     <>
       <JsonLdScript data={organizationJsonLd} />
       <JsonLdScript data={websiteJsonLd} />
+
       <Hero />
-      <TrendingProducts products={trendingProducts} />
-      <Collections collections={collections} />
+
+      <MasonryFeatures
+        title={
+          <>
+            Cultivada com cuidado,{" "}
+            <span className="font-normal italic bg-[#9FBD3B33]">
+              "com orgulho entregue"
+            </span>{" "}
+            optio para todo o Brasil.
+          </>
+        }
+      />
+
+      <TrendingProducts
+        products={firstCategoryProducts.length > 0 ? firstCategoryProducts : []}
+        title="Nossos Produtos"
+        description="Da erva cancheada ao chimarrão pronto para beber. Encontre o blend ideal para o seu momento."
+      />
+
+      <PromoBanners />
     </>
   );
 }

@@ -9,7 +9,6 @@ import { CartProvider } from "components/cart/cart-context";
 import { AttributionPersistence } from "components/consent/attribution-persistence";
 import { StorefrontConsentProvider } from "components/consent/consent-provider";
 import Footer from "components/layout/footer";
-import { Incentives } from "components/layout/incentives";
 import { Navbar } from "components/layout/navbar";
 import {
   NotificationContainer,
@@ -60,7 +59,6 @@ async function AppProviders({ children }: { children: ReactNode }) {
           <SearchDialog />
           <Navbar />
           <main>{children}</main>
-          <Incentives />
           <Footer />
         </SearchProvider>
       </NotificationProvider>

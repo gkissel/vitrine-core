@@ -102,7 +102,7 @@ export function ProductReviews({
         {submissionNotice && (
           <div
             data-testid="review-submission-notice"
-            className="border-primary-200 bg-primary-50 text-primary-800 mb-6 rounded-lg border px-4 py-3 text-sm"
+            className="border-primary-200 bg-brand-50 text-brand mb-6 rounded-lg border px-4 py-3 text-sm"
           >
             {submissionNotice}
           </div>

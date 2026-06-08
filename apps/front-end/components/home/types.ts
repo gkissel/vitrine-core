@@ -8,9 +8,12 @@ export interface Product {
   name: string;
   color: string;
   price: string;
+  variantId?: string;
   href: string;
   imageSrc: string;
   imageAlt: string;
+  description?: string;
+  availableForSale?: boolean;
   availableColors: AvailableColor[];
 }
 

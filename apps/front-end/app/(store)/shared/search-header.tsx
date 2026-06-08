@@ -10,11 +10,10 @@ export default function SearchHeader() {
     <h1 className="text-4xl font-bold tracking-tight text-gray-900">
       {query ? (
         <>
-          Search results for{" "}
-          <span className="text-primary-600">&quot;{query}&quot;</span>
+          Pesquisar por <span className="text-brand">&quot;{query}&quot;</span>
         </>
       ) : (
-        "Products"
+        "Nossos Produtos"
       )}
     </h1>
   );

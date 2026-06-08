@@ -1,18 +1,24 @@
-import * as Sentry from "@sentry/nextjs";
 import Medusa from "@medusajs/js-sdk";
 import type { HttpTypes } from "@medusajs/types";
+import * as Sentry from "@sentry/nextjs";
 import { HIDDEN_PRODUCT_TAG, TAGS } from "lib/constants";
 import { FOOTER_CONFIG } from "lib/constants/footer";
 import { DEFAULT_NAVIGATION } from "lib/constants/navigation";
-import type { Cart, Collection, Navigation, Page, Product } from "lib/types";
 import { sanitizeEnvUrl, sanitizeEnvValue } from "lib/env";
-import { cacheLife, cacheTag, revalidateTag, unstable_cache } from "next/cache";
+import type { Cart, Collection, Navigation, Page, Product } from "lib/types";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getAuthHeaders, getCartId, removeCartId, setCartId } from "./cookies";
 import { medusaError } from "./error";
 import { transformCart, transformCollection, transformProduct } from "./transforms";
+
+const timeAtBuild = async () => {
+	"use cache";
+
+	return new Date().toISOString();
+};
 
 const STATIC_PAGE_LINKS = [
 	...FOOTER_CONFIG.company,
@@ -45,6 +51,15 @@ type ProductFetchQuery = {
 	q?: string;
 	order?: string;
 	collection_id?: string[];
+	category_id?: string[];
+};
+
+type CategorySummary = {
+	id: string;
+	name: string;
+	handle: string;
+	path: string;
+	updatedAt: string;
 };
 
 const CATALOG_REVALIDATE_SECONDS = 60 * 60 * 24;
@@ -77,7 +92,7 @@ async function getDefaultRegion(): Promise<HttpTypes.StoreRegion> {
 		throw new Error("No regions found in Medusa. Create at least one region.");
 	}
 
-	// Prefer region specified by env var, then USD region, then first region
+	// Prefer region specified by env var, then BRL region, then USD, then first region
 	const preferredId = process.env.NEXT_PUBLIC_DEFAULT_REGION_ID;
 	const preferred = preferredId ? regions.find((r) => r.id === preferredId) : undefined;
 	const firstRegion = regions[0];
@@ -88,16 +103,24 @@ async function getDefaultRegion(): Promise<HttpTypes.StoreRegion> {
 		throw new Error("No regions found in Medusa. Create at least one region.");
 	}
 
-	cachedRegion = preferred ?? regions.find((r) => r.currency_code === "usd") ?? firstRegion;
+	cachedRegion =
+		preferred ??
+		regions.find((r) => r.currency_code === "brl") ??
+		regions.find((r) => r.currency_code === "usd") ??
+		firstRegion;
 	return cachedRegion;
 }
 
 // --- Product Fields ---
 
-const PRODUCT_FIELDS = "*variants.calculated_price,*variants.images,+metadata,+tags";
+const PRODUCT_FIELDS =
+	"*variants.calculated_price,*variants.images,+collection.handle,+collection.title,+metadata,+tags";
 
 const CART_FIELDS =
 	"*items,*items.product,*items.variant,*items.thumbnail,+items.total,*promotions,+shipping_methods.name";
+
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+const DEFAULT_SALES_CHANNEL_ID = process.env.NEXT_PUBLIC_DEFAULT_SALES_CHANNEL_ID;
 
 // --- Shared Helpers ---
 
@@ -145,6 +168,7 @@ const getProductCached = unstable_cache(
 			});
 
 			const product = products[0];
+
 			if (!product) return undefined;
 
 			return transformProduct(product);
@@ -173,11 +197,15 @@ const getProductsCached = unstable_cache(
 		reverse,
 		sortKey,
 		limit = 100,
+		categoryId,
+		collectionId,
 	}: {
 		query?: string;
 		reverse?: boolean;
 		sortKey?: string;
 		limit?: number;
+		categoryId?: string;
+		collectionId?: string;
 	}): Promise<Product[]> => {
 		try {
 			const region = await getDefaultRegion();
@@ -191,6 +219,8 @@ const getProductsCached = unstable_cache(
 
 			if (query) fetchQuery.q = query;
 			if (order) fetchQuery.order = order;
+			if (categoryId) fetchQuery.category_id = [categoryId];
+			if (collectionId) fetchQuery.collection_id = [collectionId];
 
 			const { products } = await sdk.client.fetch<{
 				products: HttpTypes.StoreProduct[];
@@ -226,13 +256,24 @@ export async function getProducts({
 	reverse,
 	sortKey,
 	limit = 100,
+	categoryId,
+	collectionId,
 }: {
 	query?: string;
 	reverse?: boolean;
 	sortKey?: string;
 	limit?: number;
+	categoryId?: string;
+	collectionId?: string;
 }): Promise<Product[]> {
-	return getProductsCached({ query, reverse, sortKey, limit });
+	return getProductsCached({
+		query,
+		reverse,
+		sortKey,
+		limit,
+		categoryId,
+		collectionId,
+	});
 }
 
 export async function getProductsByHandles(handles: string[]): Promise<Product[]> {
@@ -473,18 +514,15 @@ export async function getCollectionProducts({
 	return getCollectionProductsCached({ collection, reverse, sortKey });
 }
 
-export async function getCollections(): Promise<Collection[]> {
-	"use cache";
-	cacheTag(TAGS.collections);
-	cacheLife("days");
-
+async function loadCollections(): Promise<Collection[]> {
 	const allCollection: Collection = {
+		id: "",
 		handle: "",
-		title: "All",
+		title: "Todos",
 		description: "All products",
 		seo: { title: "All", description: "All products" },
 		path: "/products",
-		updatedAt: new Date().toISOString(),
+		updatedAt: await timeAtBuild(),
 	};
 
 	try {
@@ -507,6 +545,63 @@ export async function getCollections(): Promise<Collection[]> {
 		});
 		return [allCollection];
 	}
+}
+
+const getCollectionsCached = unstable_cache(loadCollections, ["medusa-collections"], {
+	tags: [TAGS.collections],
+	revalidate: CATALOG_REVALIDATE_SECONDS,
+});
+
+export async function getCollections(): Promise<Collection[]> {
+	return IS_PRODUCTION ? getCollectionsCached() : loadCollections();
+}
+
+async function loadCategories(): Promise<CategorySummary[]> {
+	const allCategory: CategorySummary = {
+		id: "",
+		name: "Todos",
+		handle: "",
+		path: "/products",
+		updatedAt: await timeAtBuild(),
+	};
+
+	try {
+		const { product_categories } = await sdk.client.fetch<{
+			product_categories: HttpTypes.StoreProductCategory[];
+		}>("/store/product-categories", {
+			method: "GET",
+			query: { limit: 100, fields: "id,name,handle,updated_at" },
+			cache: "force-cache",
+			next: { tags: [TAGS.collections] },
+		});
+
+		const categories = product_categories
+			.filter((category) => category.handle && category.name)
+			.map((category) => ({
+				id: category.id,
+				name: category.name,
+				handle: category.handle,
+				path: `/products?category=${encodeURIComponent(category.handle)}`,
+				updatedAt: category.updated_at,
+			}));
+
+		return [allCategory, ...categories];
+	} catch (error) {
+		Sentry.captureException(error, {
+			tags: { action: "get_categories" },
+			level: "warning",
+		});
+		return [allCategory];
+	}
+}
+
+const getCategoriesCached = unstable_cache(loadCategories, ["medusa-categories"], {
+	tags: [TAGS.collections],
+	revalidate: CATALOG_REVALIDATE_SECONDS,
+});
+
+export async function getCategories(): Promise<CategorySummary[]> {
+	return IS_PRODUCTION ? getCategoriesCached() : loadCategories();
 }
 
 // --- Cart ---
@@ -540,8 +635,13 @@ async function requireCartId(context: string): Promise<string> {
 export async function createCart(): Promise<Cart> {
 	const region = await getDefaultRegion();
 	const headers = await getAuthHeaders();
+	const salesChannelId = DEFAULT_SALES_CHANNEL_ID;
 
-	const data = await sdk.store.cart.create({ region_id: region.id }, {}, headers);
+	if (!salesChannelId) {
+		throw new Error("NEXT_PUBLIC_DEFAULT_SALES_CHANNEL_ID is required");
+	}
+
+	const data = await sdk.store.cart.create({ region_id: region.id, sales_channel_id: salesChannelId }, {}, headers);
 
 	const { cart } = data;
 
@@ -561,7 +661,14 @@ export async function getOrSetCart(): Promise<Cart> {
 }
 
 export async function addToCart(lines: { merchandiseId: string; quantity: number }[]): Promise<Cart> {
-	const cartId = await requireCartId("adding to cart");
+	const existingCartId = await getCartId();
+	const createdCart = existingCartId ? undefined : await createCart();
+	const cartId = existingCartId ?? createdCart?.id;
+
+	if (!cartId) {
+		throw new Error("Cart ID unavailable after creation");
+	}
+
 	const headers = await getAuthHeaders();
 
 	for (const line of lines) {
@@ -755,11 +862,7 @@ export async function getOrder(orderId: string): Promise<StoreOrderDetail | null
 
 // --- Navigation ---
 
-export async function getNavigation(): Promise<Navigation> {
-	"use cache";
-	cacheTag(TAGS.collections);
-	cacheLife("days");
-
+async function loadNavigation(): Promise<Navigation> {
 	const collections = await getCollections();
 
 	if (collections.length <= 1) {
@@ -783,6 +886,15 @@ export async function getNavigation(): Promise<Navigation> {
 					],
 		pages: DEFAULT_NAVIGATION.pages,
 	};
+}
+
+const getNavigationCached = unstable_cache(loadNavigation, ["medusa-navigation"], {
+	tags: [TAGS.collections],
+	revalidate: CATALOG_REVALIDATE_SECONDS,
+});
+
+export async function getNavigation(): Promise<Navigation> {
+	return IS_PRODUCTION ? getNavigationCached() : loadNavigation();
 }
 
 // --- Pages ---

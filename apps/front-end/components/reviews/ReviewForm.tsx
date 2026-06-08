@@ -176,7 +176,7 @@ export function ReviewForm({
                   type="text"
                   id="review-title"
                   name="title"
-                  className="focus:outline-primary-600 mt-2 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+                  className="focus:outline-brand mt-2 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
                   placeholder="Summarize your experience"
                 />
               </div>
@@ -193,7 +193,7 @@ export function ReviewForm({
                   name="content"
                   rows={4}
                   required
-                  className="focus:outline-primary-600 mt-2 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+                  className="focus:outline-brand mt-2 block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
                   placeholder="What did you like or dislike about this product?"
                 />
               </div>
@@ -245,7 +245,7 @@ export function ReviewForm({
                   "w-full rounded-md px-4 py-2.5 text-sm font-semibold text-white shadow-sm",
                   isDisabled
                     ? "cursor-not-allowed bg-gray-300"
-                    : "bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2",
+                    : "bg-brand hover:bg-brand-500 focus-visible:outline-brand cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2",
                 )}
               >
                 {submitButtonLabel()}

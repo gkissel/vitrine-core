@@ -1,8 +1,9 @@
 "use client";
 
 import type { Cart, CartItem, Product, ProductVariant } from "lib/types";
-import React, {
+import {
   createContext,
+  useCallback,
   use,
   useContext,
   useMemo,
@@ -100,7 +101,7 @@ function updateCartTotals(
     (sum, item) => sum + Number(item.cost.totalAmount.amount),
     0,
   );
-  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "USD";
+  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "BRL";
 
   return {
     totalQuantity,
@@ -119,9 +120,9 @@ function createEmptyCart(): Cart {
     totalQuantity: 0,
     lines: [],
     cost: {
-      subtotalAmount: { amount: "0", currencyCode: "USD" },
-      totalAmount: { amount: "0", currencyCode: "USD" },
-      totalTaxAmount: { amount: "0", currencyCode: "USD" },
+      subtotalAmount: { amount: "0", currencyCode: "BRL" },
+      totalAmount: { amount: "0", currencyCode: "BRL" },
+      totalTaxAmount: { amount: "0", currencyCode: "BRL" },
     },
   };
 }
@@ -213,20 +214,29 @@ export function useCart() {
   );
   const [, startTransition] = useTransition();
 
-  const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
-    startTransition(() => {
-      updateOptimisticCart({
-        type: "UPDATE_ITEM",
-        payload: { merchandiseId, updateType },
+  const updateCartItem = useCallback(
+    (merchandiseId: string, updateType: UpdateType) => {
+      startTransition(() => {
+        updateOptimisticCart({
+          type: "UPDATE_ITEM",
+          payload: { merchandiseId, updateType },
+        });
       });
-    });
-  };
+    },
+    [updateOptimisticCart],
+  );
 
-  const addCartItem = (variant: ProductVariant, product: Product) => {
-    startTransition(() => {
-      updateOptimisticCart({ type: "ADD_ITEM", payload: { variant, product } });
-    });
-  };
+  const addCartItem = useCallback(
+    (variant: ProductVariant, product: Product) => {
+      startTransition(() => {
+        updateOptimisticCart({
+          type: "ADD_ITEM",
+          payload: { variant, product },
+        });
+      });
+    },
+    [updateOptimisticCart],
+  );
 
   return useMemo(
     () => ({
@@ -234,6 +244,6 @@ export function useCart() {
       updateCartItem,
       addCartItem,
     }),
-    [optimisticCart],
+    [optimisticCart, updateCartItem, addCartItem],
   );
 }

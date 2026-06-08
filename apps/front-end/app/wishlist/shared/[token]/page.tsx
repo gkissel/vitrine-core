@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import {
   HeartIcon,
   ExclamationTriangleIcon,
-  ShoppingBagIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,7 +41,7 @@ export default async function SharedWishlistPage({
           <div className="mt-8">
             <Link
               href="/products"
-              className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="bg-brand hover:bg-brand-500 focus-visible:outline-brand inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Browse Products
             </Link>
@@ -59,7 +59,7 @@ export default async function SharedWishlistPage({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <HeartIcon className="text-primary-600 size-6" />
+            <HeartIcon className="text-brand size-6" />
             <h1 className="text-2xl font-bold tracking-tight text-gray-900">
               {wishlist.name || "Shared Wishlist"}
             </h1>
@@ -80,7 +80,7 @@ export default async function SharedWishlistPage({
         </div>
       ) : (
         <div className="mt-16 text-center">
-          <ShoppingBagIcon className="mx-auto size-12 text-gray-400" />
+          <ShoppingCartIcon className="mx-auto size-12 text-gray-400" />
           <p className="mt-4 text-sm text-gray-500">This wishlist is empty.</p>
         </div>
       )}
@@ -98,7 +98,7 @@ export default async function SharedWishlistPage({
           <div className="mt-4">
             <Link
               href="/account/login"
-              className="bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600 inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="bg-brand hover:bg-brand-500 focus-visible:outline-brand inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Sign In
             </Link>
@@ -136,7 +136,7 @@ function SharedWishlistItemCard({ item }: { item: WishlistItem }) {
         </Link>
       ) : (
         <div className="flex aspect-[3/4] w-full items-center justify-center bg-gray-100 sm:aspect-auto sm:h-72">
-          <ShoppingBagIcon className="size-12 text-gray-300" />
+          <ShoppingCartIcon className="size-12 text-gray-300" />
         </div>
       )}
 

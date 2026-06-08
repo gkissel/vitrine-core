@@ -12,7 +12,7 @@ export const metadata = {
 export default async function CheckoutPage() {
   const cart = await getCheckoutCart();
 
-  if (!cart || !cart.items?.length) {
+  if (!cart?.items?.length) {
     redirect("/");
   }
 

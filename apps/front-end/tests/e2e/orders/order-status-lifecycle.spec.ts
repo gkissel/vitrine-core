@@ -249,7 +249,7 @@ async function assertStorefrontProgress(
           .textContent();
 
         const activeLabels = await page
-          .locator(".hidden.grid-cols-4 div.text-primary-600")
+          .locator(".hidden.grid-cols-4 div.text-brand")
           .count();
 
         return JSON.stringify({
