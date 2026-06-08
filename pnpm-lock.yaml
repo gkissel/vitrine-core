@@ -190,16 +190,22 @@ importers:
         version: 2.13.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(typescript@5.9.3)
       '@medusajs/draft-order':
         specifier: 2.13.1
-        version: 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.13.1(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.15.5(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@medusajs/framework':
         specifier: 2.13.1
         version: 2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3)
+      '@medusajs/icons':
+        specifier: ^2.15.5
+        version: 2.15.5(react@18.3.1)
       '@medusajs/medusa':
         specifier: 2.13.1
-        version: 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.13.1(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@swc/core@1.15.33(@swc/helpers@0.5.21))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(awilix@8.0.1)(lightningcss@1.32.0)(posthog-node@5.33.2(rxjs@7.8.2))(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(terser@5.46.2)(typescript@5.9.3)(yalc@1.0.0-pre.53)
+        version: 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.15.5(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@swc/core@1.15.33(@swc/helpers@0.5.21))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(awilix@8.0.1)(lightningcss@1.32.0)(posthog-node@5.33.2(rxjs@7.8.2))(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(terser@5.46.2)(typescript@5.9.3)(yalc@1.0.0-pre.53)
       '@medusajs/types':
         specifier: 2.13.1
         version: 2.13.1(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))
+      '@medusajs/ui':
+        specifier: ^4.1.15
+        version: 4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@react-pdf/renderer':
         specifier: ^4.5.1
         version: 4.5.1(react@18.3.1)
@@ -1978,6 +1984,11 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
+  '@medusajs/icons@2.15.5':
+    resolution: {integrity: sha512-cFPNZ26BeXt4joE3nQbMnlmszlWrJitNgOSwEZ7cK+1B483CjhcLtXYzo60OvtYsHB6flBQ9My7JkCtUAFYnEQ==}
+    peerDependencies:
+      react: ^18.3.1 || ^19.0.0
+
   '@medusajs/index@2.13.1':
     resolution: {integrity: sha512-VxQgvY01SuN5RO3EfLmYEFv5FjRwm0eBBPFvsjFyM9ZIEP/tWgF+nFIVuOwuGajrSSLJOWZcHyota3lFVsBCbQ==}
     engines: {node: '>=20'}
@@ -2187,6 +2198,12 @@ packages:
 
   '@medusajs/ui@4.1.1':
     resolution: {integrity: sha512-vNDp6Qer0+vyG9ZoNz94iXQImJkT5gOoSaaX03UzGFxb3Nh+KYD3j86UgHP1lc4ZPbcyr7CpiGYScfv1LaX17w==}
+    peerDependencies:
+      react: ^18.3.1
+      react-dom: ^18.3.1
+
+  '@medusajs/ui@4.1.15':
+    resolution: {integrity: sha512-8m+J54uMjA934BBWXqb7lKlg+Ja1cudcAbdXJp4GQgd0TSru+hEvkhAlH5baKeADB6tqo2H5BkBIwIFcJMxxnA==}
     peerDependencies:
       react: ^18.3.1
       react-dom: ^18.3.1
@@ -11653,7 +11670,7 @@ snapshots:
       - supports-color
       - tedious
 
-  '@medusajs/draft-order@2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.13.1(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@medusajs/draft-order@2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.15.5(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@ariakit/react': 0.4.26(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@babel/runtime': 7.29.2
@@ -11671,9 +11688,9 @@ snapshots:
     optionalDependencies:
       '@medusajs/admin-sdk': 2.13.1
       '@medusajs/cli': 2.13.1(@types/node@25.6.0)
-      '@medusajs/icons': 2.13.1(react@18.3.1)
+      '@medusajs/icons': 2.15.5(react@18.3.1)
       '@medusajs/test-utils': 2.13.1(@medusajs/core-flows@2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3)))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/medusa@2.13.1)
-      '@medusajs/ui': 4.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+      '@medusajs/ui': 4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router-dom: 6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -11768,6 +11785,10 @@ snapshots:
     dependencies:
       react: 18.3.1
 
+  '@medusajs/icons@2.15.5(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+
   '@medusajs/index@2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))':
     dependencies:
       '@medusajs/framework': 2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3)
@@ -11805,7 +11826,7 @@ snapshots:
     dependencies:
       '@medusajs/framework': 2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3)
 
-  '@medusajs/medusa@2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.13.1(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@swc/core@1.15.33(@swc/helpers@0.5.21))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(awilix@8.0.1)(lightningcss@1.32.0)(posthog-node@5.33.2(rxjs@7.8.2))(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(terser@5.46.2)(typescript@5.9.3)(yalc@1.0.0-pre.53)':
+  '@medusajs/medusa@2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.15.5(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@swc/core@1.15.33(@swc/helpers@0.5.21))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(awilix@8.0.1)(lightningcss@1.32.0)(posthog-node@5.33.2(rxjs@7.8.2))(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(terser@5.46.2)(typescript@5.9.3)(yalc@1.0.0-pre.53)':
     dependencies:
       '@inquirer/checkbox': 2.5.0
       '@inquirer/input': 2.3.0
@@ -11826,7 +11847,7 @@ snapshots:
       '@medusajs/core-flows': 2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))
       '@medusajs/currency': 2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))
       '@medusajs/customer': 2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))
-      '@medusajs/draft-order': 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.13.1(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@medusajs/draft-order': 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.15.5(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@medusajs/event-bus-local': 2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))
       '@medusajs/event-bus-redis': 2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))
       '@medusajs/file': 2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))
@@ -12037,7 +12058,7 @@ snapshots:
       ulid: 2.4.0
     optionalDependencies:
       '@medusajs/core-flows': 2.13.1(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))
-      '@medusajs/medusa': 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.13.1(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@swc/core@1.15.33(@swc/helpers@0.5.21))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(awilix@8.0.1)(lightningcss@1.32.0)(posthog-node@5.33.2(rxjs@7.8.2))(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(terser@5.46.2)(typescript@5.9.3)(yalc@1.0.0-pre.53)
+      '@medusajs/medusa': 2.13.1(@medusajs/admin-sdk@2.13.1)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@medusajs/framework@2.13.1(@aws-sdk/client-dynamodb@3.1041.0)(@medusajs/cli@2.13.1(@types/node@25.6.0))(@types/node@25.6.0)(connect-dynamodb@3.0.5)(ioredis@5.10.1)(vite@5.4.21(@types/node@25.6.0)(lightningcss@1.32.0)(terser@5.46.2))(zod@4.4.3))(@medusajs/icons@2.15.5(react@18.3.1))(@medusajs/test-utils@2.13.1)(@medusajs/ui@4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@swc/core@1.15.33(@swc/helpers@0.5.21))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(awilix@8.0.1)(lightningcss@1.32.0)(posthog-node@5.33.2(rxjs@7.8.2))(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(terser@5.46.2)(typescript@5.9.3)(yalc@1.0.0-pre.53)
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -12072,6 +12093,34 @@ snapshots:
       clsx: 1.2.1
       copy-to-clipboard: 3.3.3
       cva: 1.0.0-beta.1(typescript@5.9.3)
+      prism-react-renderer: 2.4.1(react@18.3.1)
+      prismjs: 1.30.0
+      radix-ui: 1.1.2(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-aria: 3.48.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-currency-input-field: 3.10.0(react@18.3.1)
+      react-dom: 18.3.1(react@18.3.1)
+      react-stately: 3.46.0(react@18.3.1)
+      sonner: 1.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tailwind-merge: 2.6.1
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - typescript
+
+  '@medusajs/ui@4.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+    dependencies:
+      '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/sortable': 8.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/utilities': 3.2.2(react@18.3.1)
+      '@medusajs/icons': 2.15.5(react@18.3.1)
+      '@radix-ui/react-dialog': 1.1.4(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dismissable-layer': 1.1.4(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-table': 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      clsx: 1.2.1
+      copy-to-clipboard: 3.3.3
+      cva: 1.0.0-beta.1(typescript@5.9.3)
+      lodash.isequal: 4.5.0
       prism-react-renderer: 2.4.1(react@18.3.1)
       prismjs: 1.30.0
       radix-ui: 1.1.2(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
