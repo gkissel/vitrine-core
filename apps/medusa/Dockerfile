@@ -56,4 +56,4 @@ COPY --from=builder --chown=node:node /repo/apps/medusa/.medusa/server ./
 USER node
 EXPOSE 9000
 
-CMD ["sh", "-c", "./node_modules/.bin/medusa db:migrate && ./node_modules/.bin/medusa start"]
+CMD ["sh", "-c", "./node_modules/.bin/medusa start"]
