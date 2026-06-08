@@ -215,6 +215,9 @@ importers:
       '@sentry/profiling-node':
         specifier: ^10.51.0
         version: 10.51.0(@opentelemetry/exporter-trace-otlp-http@0.200.0(@opentelemetry/api@1.9.1))
+      '@tanstack/react-query':
+        specifier: 5.64.2
+        version: 5.64.2(react@18.3.1)
       express:
         specifier: ^5.1.0
         version: 5.2.1
