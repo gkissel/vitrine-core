@@ -7,7 +7,7 @@ export type SiteBrandConfig = {
 
 export const siteBrand: SiteBrandConfig = {
 	bodyClassName: "bg-neutral-50",
-	companyName: "CrowCommerce",
+	companyName: "Erva Mate para o Brasil",
 	locale: "pt-BR",
-	siteName: "CrowCommerce",
+	siteName: "Erva Mate para o Brasil",
 };

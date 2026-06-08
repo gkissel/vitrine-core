@@ -11,7 +11,7 @@ const channels = [
     description:
       "Questions about your order, delivery status, or account? Our support team responds within one business day.",
     linkLabel: "Email support",
-    href: "mailto:support@crowcommerce.com",
+    href: "mailto:suporte@erva-mate-brasil.com.br",
   },
   {
     icon: ArrowPathIcon,
@@ -19,7 +19,7 @@ const channels = [
     description:
       "Need to return something? We make it easy — no questions asked within 30 days of delivery.",
     linkLabel: "Start a return",
-    href: "mailto:returns@crowcommerce.com",
+    href: "mailto:trocas@erva-mate-brasil.com.br",
   },
   {
     icon: BuildingStorefrontIcon,
@@ -27,7 +27,7 @@ const channels = [
     description:
       "Interested in carrying our products in your store or buying in bulk? We'd love to talk.",
     linkLabel: "Get in touch",
-    href: "mailto:wholesale@crowcommerce.com",
+    href: "mailto:atacado@erva-mate-brasil.com.br",
   },
 ];
 

@@ -193,6 +193,7 @@ export default withSentryConfig(
 				...(process.env.NODE_ENV !== "production" ? [{ protocol: "https" as const, hostname: "placehold.co" }] : []),
 			],
 		},
+		allowedDevOrigins: process.env.NEXT_ALLOWED_DEV_ORIGIN ? [process.env.NEXT_ALLOWED_DEV_ORIGIN] : [],
 	} satisfies NextConfig,
 	{
 		authToken: sentryBuildConfig.authToken,

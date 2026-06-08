@@ -21,7 +21,7 @@ Sentry.init({
 
 export function register() {
   registerOtel({
-    serviceName: "crowcommerce-backend",
+    serviceName: "erva-mate-brasil-backend",
     instrument: {
       http: true,
       workflows: true,

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Erva Mate para o Brasil">
+  <defs>
+    <linearGradient id="bg" x1="164" y1="98" x2="860" y2="918" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F1C9"/>
+      <stop offset="0.48" stop-color="#92A855"/>
+      <stop offset="1" stop-color="#294925"/>
+    </linearGradient>
+    <linearGradient id="gourd" x1="326" y1="338" x2="664" y2="826" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7E9B46"/>
+      <stop offset="0.52" stop-color="#496F37"/>
+      <stop offset="1" stop-color="#253D22"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <circle cx="512" cy="512" r="366" fill="#F7F4E8" opacity="0.24"/>
+  <path d="M308 383c54-124 174-191 306-169 73 12 131 48 178 100-79 2-146 22-200 60-50 36-86 86-108 150-48-82-108-126-176-141Z" fill="#1F4D2A"/>
+  <path d="M500 246c72 61 119 137 141 228 25 103 9 201-46 294" fill="none" stroke="#F4E8AC" stroke-width="42" stroke-linecap="round"/>
+  <path d="M315 467c0-55 44-99 99-99h196c55 0 99 44 99 99v59c0 152-88 276-197 276S315 678 315 526v-59Z" fill="url(#gourd)"/>
+  <path d="M292 457h440" stroke="#F7F4E8" stroke-width="54" stroke-linecap="round"/>
+  <path d="M391 471c38 27 80 41 126 41 45 0 85-14 120-41" fill="none" stroke="#2A4826" stroke-width="30" stroke-linecap="round"/>
+  <path d="M607 243 758 755" stroke="#D3DEE7" stroke-width="35" stroke-linecap="round"/>
+  <path d="M721 724h81" stroke="#D3DEE7" stroke-width="35" stroke-linecap="round"/>
+</svg>

@@ -1,6 +1,6 @@
 import { siteBrand } from "@repo/site-config";
 import { GeistSans } from "geist/font/sans";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { ReactNode, Suspense } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
@@ -15,6 +15,7 @@ import {
   NotificationProvider,
 } from "components/notifications";
 import { PostHogProvider } from "components/providers/posthog-provider";
+import { PwaServiceWorkerRegistrar } from "components/pwa-service-worker-registrar";
 import { SentryUserProvider } from "components/providers/sentry-user-provider";
 import { SearchDialog, SearchProvider } from "components/search-command";
 import { getStorefrontConsentState } from "lib/consent/server";
@@ -27,6 +28,11 @@ import { isStorefrontConsentFoundationEnabled } from "lib/consent/shared";
 import { getPostHogAnonId } from "lib/posthog-cookies";
 
 export const metadata: Metadata = rootMetadata;
+
+export const viewport: Viewport = {
+  themeColor: "#436939",
+  colorScheme: "light",
+};
 
 async function AppProviders({ children }: { children: ReactNode }) {
   const cartPromise = getCart();
@@ -86,6 +92,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang={siteBrand.locale} className={GeistSans.variable}>
       <body className={siteBrand.bodyClassName}>
+        <PwaServiceWorkerRegistrar />
         <NuqsAdapter>
           <Suspense>
             <AppProviders>{children}</AppProviders>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-label="Vitrine de produtos da Erva Mate para o Brasil">
+  <rect width="1280" height="720" fill="#F7F4E8"/>
+  <rect x="72" y="64" width="1136" height="88" rx="12" fill="#436939"/>
+  <text x="112" y="120" fill="#F7F4E8" font-family="Georgia, serif" font-size="36" font-weight="700">Erva Mate para o Brasil</text>
+  <rect x="72" y="204" width="512" height="380" rx="8" fill="#294925"/>
+  <text x="112" y="310" fill="#F8F1C9" font-family="Georgia, serif" font-size="64" font-weight="700">Mate de verdade, direto para casa.</text>
+  <text x="112" y="396" fill="#F7F4E8" font-family="Arial, sans-serif" font-size="24">Erva-mate, cuias, bombas e acessórios selecionados para o ritual brasileiro.</text>
+  <g transform="translate(650 204)">
+    <rect width="250" height="180" rx="8" fill="#DDE6B9"/>
+    <circle cx="126" cy="84" r="56" fill="#436939"/>
+    <rect x="48" y="212" width="250" height="180" rx="8" fill="#E7D49A"/>
+    <circle cx="174" cy="296" r="56" fill="#7E9B46"/>
+    <rect x="330" y="0" width="250" height="180" rx="8" fill="#F0C66D"/>
+    <circle cx="456" cy="84" r="56" fill="#294925"/>
+    <rect x="378" y="212" width="250" height="180" rx="8" fill="#9BBEA4"/>
+    <circle cx="504" cy="296" r="56" fill="#436939"/>
+  </g>
+</svg>

@@ -46,7 +46,7 @@ export type SiteSchemaConfig = {
 
 const SCHEMA_CONTEXT = "https://schema.org" as const;
 export const DEFAULT_SITE_DESCRIPTION =
-  "Loja virtual de alta performance construída com Next.js, Vercel e Medusa.";
+  "Loja brasileira de erva-mate, cuias, bombas e acessórios para preparar um mate de verdade.";
 
 function toAbsoluteUrl(url: string): string {
   return new URL(url, createAbsoluteUrl("/")).toString();
@@ -89,7 +89,7 @@ function buildReviewJsonLd(
 export function getSiteSchemaConfig(
   overrides: Partial<SiteSchemaConfig> = {},
 ): SiteSchemaConfig {
-  const siteName = process.env.SITE_NAME || "Store";
+  const siteName = process.env.SITE_NAME || "Erva Mate para o Brasil";
   const sameAs = process.env.SITE_COMPANY_SAME_AS?.split(",")
     .map((entry) => entry.trim())
     .filter(Boolean);

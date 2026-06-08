@@ -14,6 +14,8 @@ export const defaultSocialImage = {
 
 export const rootMetadata: Metadata = {
   metadataBase: new URL(baseUrl),
+  applicationName: siteName,
+  manifest: "/manifest.webmanifest",
   title: {
     default: siteName,
     template: `%s | ${siteName}`,
@@ -36,5 +38,23 @@ export const rootMetadata: Metadata = {
   robots: {
     follow: true,
     index: true,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: siteName,
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      {
+        url: "/icons/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
   },
 };
