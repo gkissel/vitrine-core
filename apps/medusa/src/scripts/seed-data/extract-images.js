@@ -15,9 +15,9 @@ const COMPONENTS_PATH = path.resolve(
 );
 const SEED_DATA_PATH = path.resolve(__dirname, "tailwindui-products.json");
 
-// Generous path - try relative to CrowCommerce root too
+// Generous path - try relative to the project root too
 const ALT_COMPONENTS_PATH =
-  "/Users/itsjusteric/CrowCommerce/Resources/TailwindUI/tailwindplus-components.json";
+  "/Users/itsjusteric/ErvaMateBrasil/Resources/TailwindUI/tailwindplus-components.json";
 
 console.log(
   "🔍 Phase 1: Extracting all image URLs from TailwindUI components...\n",

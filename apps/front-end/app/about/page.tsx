@@ -8,7 +8,7 @@ import { AboutTeam } from "components/about/about-team";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about our mission, values, and the team behind CrowCommerce.",
+    "Conheça a missão, os valores e a equipe da Erva Mate para o Brasil.",
   alternates: {
     canonical: "/about",
   },

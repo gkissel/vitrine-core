@@ -46,13 +46,13 @@ describe("resolveStorefrontSentryEnvironment", () => {
 describe("getStorefrontSentryBuildConfig", () => {
   it("sanitizes whitespace and trailing newlines from build-time env vars", () => {
     vi.stubEnv("SENTRY_AUTH_TOKEN", " token-with-newline \n");
-    vi.stubEnv("SENTRY_ORG", "crow-commerce\r\n");
-    vi.stubEnv("SENTRY_PROJECT", "crowcommerce-storefront \n");
+    vi.stubEnv("SENTRY_ORG", "erva-mate-brasil\r\n");
+    vi.stubEnv("SENTRY_PROJECT", "erva-mate-brasil-storefront \n");
 
     expect(getStorefrontSentryBuildConfig()).toEqual({
       authToken: "token-with-newline",
-      org: "crow-commerce",
-      project: "crowcommerce-storefront",
+      org: "erva-mate-brasil",
+      project: "erva-mate-brasil-storefront",
     });
   });
 });

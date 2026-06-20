@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-label="Experiência mobile da loja Erva Mate para o Brasil">
+  <rect width="390" height="844" fill="#F7F4E8"/>
+  <rect x="20" y="24" width="350" height="64" rx="10" fill="#436939"/>
+  <text x="40" y="66" fill="#F7F4E8" font-family="Georgia, serif" font-size="22" font-weight="700">Erva Mate</text>
+  <rect x="20" y="126" width="350" height="248" rx="8" fill="#294925"/>
+  <text x="44" y="198" fill="#F8F1C9" font-family="Georgia, serif" font-size="36" font-weight="700">Mate brasileiro</text>
+  <text x="44" y="244" fill="#F7F4E8" font-family="Arial, sans-serif" font-size="16">Erva-mate, cuias e bombas para o seu ritual.</text>
+  <rect x="20" y="414" width="160" height="180" rx="8" fill="#DDE6B9"/>
+  <circle cx="100" cy="492" r="42" fill="#436939"/>
+  <rect x="210" y="414" width="160" height="180" rx="8" fill="#E7D49A"/>
+  <circle cx="290" cy="492" r="42" fill="#7E9B46"/>
+  <rect x="20" y="626" width="160" height="180" rx="8" fill="#F0C66D"/>
+  <circle cx="100" cy="704" r="42" fill="#294925"/>
+  <rect x="210" y="626" width="160" height="180" rx="8" fill="#9BBEA4"/>
+  <circle cx="290" cy="704" r="42" fill="#436939"/>
+</svg>

@@ -1,56 +1,14 @@
-# Erva Mate para o Brasil
+# Local PWA HTTPS On A Phone
 
-Turborepo workspace for the Erva Mate para o Brasil storefront and Medusa backend.
-
-## Apps
-
-- `apps/front-end`: Next.js storefront and PWA.
-- `apps/medusa`: Medusa backend.
-- `packages/site-config`: shared brand/site configuration.
-
-## Requirements
-
-- Node.js 20+
-- pnpm 10+
-- Docker, for the local Postgres database
-- `mkcert`, for local HTTPS/PWA testing on phones
-
-## Database
-
-The Compose file intentionally runs only the database:
-
-```sh
-docker compose up -d postgres
-```
-
-Postgres is exposed on:
-
-```text
-localhost:5435
-```
-
-## Storefront Development
-
-From the repo root:
-
-```sh
-pnpm install
-pnpm dev:front-end
-```
-
-For local PWA testing on a phone, use the HTTPS flow below.
-
-## Local PWA HTTPS On A Phone
-
-The PWA install prompt requires a secure origin. For local network testing, use a certificate generated for your computer's LAN IP and install the local CA on the phone.
-
-Current LAN URL:
+This guide runs the storefront on your local network with a trusted HTTPS certificate for:
 
 ```text
 https://192.168.209.236:3000
 ```
 
-### 1. Get Your Computer IP
+The PWA install prompt requires a secure origin. A self-signed certificate works only after the phone trusts the local CA that signed it.
+
+## 1. Get Your Computer IP
 
 On Linux:
 
@@ -58,7 +16,7 @@ On Linux:
 ip -4 addr show | grep -oP '(?<=inet\s)(192\.168|10\.|172\.(1[6-9]|2[0-9]|3[0-1]))[0-9.]+'
 ```
 
-Current IP:
+Your current IP is:
 
 ```text
 192.168.209.236
@@ -66,21 +24,21 @@ Current IP:
 
 If this IP changes, regenerate the certificate and pass the new IP to `pnpm dev:https`.
 
-### 2. Install mkcert
+## 2. Install mkcert On Your Computer
 
-Arch-based systems:
+Install `mkcert` with your system package manager. On Arch-based systems:
 
 ```sh
 sudo pacman -S mkcert nss
 ```
 
-Debian/Ubuntu:
+On Debian/Ubuntu:
 
 ```sh
 sudo apt install libnss3-tools
 ```
 
-Then install `mkcert` from your package manager or the mkcert releases page.
+Then install `mkcert` from your package manager, Homebrew, or the mkcert releases page.
 
 Initialize the local CA:
 
@@ -88,13 +46,13 @@ Initialize the local CA:
 mkcert -install
 ```
 
-The local root CA is created at:
+This creates the local root CA at:
 
 ```text
 ~/.local/share/mkcert/rootCA.pem
 ```
 
-### 3. Generate The IP Certificate
+## 3. Generate The IP Certificate
 
 From `apps/front-end`:
 
@@ -106,26 +64,26 @@ mkcert \
   192.168.209.236
 ```
 
-Generated cert files:
+The generated files are ignored by git:
 
 ```text
 apps/front-end/certificates/192.168.209.236-key.pem
 apps/front-end/certificates/192.168.209.236.pem
 ```
 
-These files are ignored by git.
+## 4. Export The CA For Your Phone
 
-### 4. Export The CA For Your Phone
+From any directory:
 
 ```sh
 cp ~/.local/share/mkcert/rootCA.pem ~/Downloads/erva-mate-local-rootCA.crt
 ```
 
-Send `~/Downloads/erva-mate-local-rootCA.crt` to your phone by USB, email, cloud storage, or another file transfer method.
+Send `~/Downloads/erva-mate-local-rootCA.crt` to the phone by USB, email, cloud storage, or another file transfer method.
 
-### 5. Install The CA On Android
+## 5. Install The CA On Android
 
-Menu names vary by vendor, but the usual path is:
+Menu names vary by vendor, but the path is usually:
 
 1. Open `Settings`.
 2. Go to `Security & privacy`.
@@ -137,13 +95,13 @@ Menu names vary by vendor, but the usual path is:
 8. Confirm the warning.
 9. Restart Chrome.
 
-Also check:
+Also verify:
 
 1. Open `Settings`.
 2. Search for `Private DNS`.
 3. Set `Private DNS` to `Off` or `Automatic`.
 
-### 6. Install The CA On iPhone
+## 6. Install The CA On iPhone
 
 Send `erva-mate-local-rootCA.crt` to the iPhone, then:
 
@@ -166,7 +124,7 @@ Then enable full trust:
 
 Restart Safari or Chrome after trusting the CA.
 
-### 7. Run The Storefront With The IP Cert
+## 7. Run The Storefront
 
 From `apps/front-end`:
 
@@ -189,7 +147,7 @@ https://192.168.209.236:3000
 
 If the browser still shows a certificate warning, the phone either does not trust the mkcert CA yet, or the IP changed and the certificate no longer matches the URL.
 
-### 8. Install The PWA
+## 8. Install The PWA
 
 Android Chrome:
 
@@ -221,27 +179,18 @@ IP Address:192.168.209.236
 Reset generated Next files if the dev server reports lockfile permission errors:
 
 ```sh
-sudo rm -rf apps/front-end/.next
+sudo rm -rf .next
 ```
 
 Then run again:
 
 ```sh
-cd apps/front-end
 pnpm dev:https --192.168.209.236
 ```
 
 Clear old service workers on Android Chrome:
 
-1. Clear site data for `192.168.209.236` in Chrome settings.
+1. Open `chrome://serviceworker-internals` if available, or clear site data for `192.168.209.236`.
 2. Reload `https://192.168.209.236:3000`.
 
-The PWA will not install from an untrusted HTTPS page. The page must load without certificate warnings before Chrome/Safari will treat it as installable.
-
-## Useful Commands
-
-```sh
-pnpm build
-pnpm check-types
-pnpm lint
-```
+For installability, the page must load without a certificate warning. The PWA will not install from an untrusted HTTPS page.

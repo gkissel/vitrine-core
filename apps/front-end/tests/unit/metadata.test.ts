@@ -5,9 +5,9 @@ describe("root metadata", () => {
   it("provides default open graph metadata for non-product pages", () => {
     expect(rootMetadata.openGraph).toMatchObject({
       type: "website",
-      title: "CrowCommerce",
+      title: "Erva Mate para o Brasil",
       description:
-        "High-performance ecommerce store built with Next.js, Vercel, and Medusa.",
+        "Loja brasileira de erva-mate, cuias, bombas e acessórios para preparar um mate de verdade.",
       images: [
         {
           url: "/opengraph-image",
@@ -21,9 +21,9 @@ describe("root metadata", () => {
   it("provides a default summary large image twitter card", () => {
     expect(rootMetadata.twitter).toMatchObject({
       card: "summary_large_image",
-      title: "CrowCommerce",
+      title: "Erva Mate para o Brasil",
       description:
-        "High-performance ecommerce store built with Next.js, Vercel, and Medusa.",
+        "Loja brasileira de erva-mate, cuias, bombas e acessórios para preparar um mate de verdade.",
       images: ["/opengraph-image"],
     });
   });
