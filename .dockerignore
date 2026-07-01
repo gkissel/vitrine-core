@@ -1,5 +1,7 @@
 .git
 .github
+android
+ios
 .data
 .data/paradedb_data
 .data/paradedb_data/**
