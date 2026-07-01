@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-ARG NODE_VERSION=22-slim
+ARG NODE_VERSION=22.14.0-bookworm-slim
 ARG PNPM_VERSION=10.28.2
 ARG TURBO_VERSION=2.9.8
 
@@ -10,7 +10,8 @@ ENV CI=true \
     PNPM_HOME=/pnpm \
     TURBO_TELEMETRY_DISABLED=1
 ENV PATH="${PNPM_HOME}:${PATH}"
-RUN npm install -g pnpm@${PNPM_VERSION}
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+RUN apt-get update -y && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 
 FROM base AS pruner
 WORKDIR /repo
@@ -56,4 +57,5 @@ COPY --from=builder --chown=node:node /repo/apps/medusa/.medusa/server ./
 USER node
 EXPOSE 9000
 
-CMD ["sh", "-c", "./node_modules/.bin/medusa start"]
+# Apply pending database migrations before starting the API.
+CMD ["sh", "-c", "./node_modules/.bin/medusa db:migrate && ./node_modules/.bin/medusa start"]
