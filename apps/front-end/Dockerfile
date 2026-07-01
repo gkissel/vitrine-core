@@ -20,14 +20,13 @@ RUN pnpm config set store-dir /pnpm/store
 # and this layer caches until a package.json changes.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY apps/front-end/package.json apps/front-end/
-COPY apps/medusa/package.json apps/medusa/
 COPY packages/biome-config/package.json packages/biome-config/
 COPY packages/env/package.json packages/env/
 COPY packages/revalidation/package.json packages/revalidation/
 COPY packages/site-config/package.json packages/site-config/
 COPY packages/typescript-config/package.json packages/typescript-config/
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --filter @repo/storefront...
 
 FROM deps AS build
 
