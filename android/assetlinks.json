@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "br.com.ervamateparaobrasil.app.twa",
+        "sha256_cert_fingerprints": ["83:0C:66:31:FD:A0:F3:CA:2E:0E:DF:EF:4C:38:B2:B9:8B:E4:3F:19:79:26:A1:D0:E3:69:2E:57:8F:F7:E7:66"]
+      }
+    }]
